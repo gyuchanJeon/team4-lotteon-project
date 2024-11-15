@@ -1,0 +1,184 @@
+<link rel="stylesheet" th:href="@{/css/admin/include/style_admin_article_aside.css}">
+<link rel="stylesheet" th:href="@{/css/cs/style_cs_aside.css}">
+<!--
+    날짜 : 2024/10/28(월)
+    담당자 : 황수빈
+    내용 : 주소값에 맞게 hover 처리
+-->
+<style>
+    /* 메뉴 항목 hover 스타일 */
+    .sidebar-menu a:hover {
+        font-weight: bold !important;
+    }
+
+    /* 서브메뉴 항목 hover 스타일 */
+    .submenu a:hover {
+        font-weight: 700;
+        background-color: #eaeaea;
+    }
+
+    /* 활성화된 메뉴 및 서브 메뉴 스타일 */
+    .sidebar-menu li.active > a {
+        font-weight: bold !important;
+        background-color: #eaeaea;
+        color: black;
+    }
+
+    .submenu li.active a {
+        font-weight: bold !important;
+        color: black;
+        background-color: #dcdcdc;
+    }
+</style>
+
+<aside>
+    <ul class="sidebar-menu">
+        <li class="asideTitle">자주묻는질문</li>
+        <li>        <a th:href="@{/cs/faq/list}">전체</a></li>
+        <!-- 회원 메뉴 -->
+        <li>
+            <a th:href="@{/cs/faq/list/1}">회원</a>
+            <ul class="submenu">
+                <li><a th:href="@{/cs/faq/list/8}">회원가입</a></li>
+                <li><a th:href="@{/cs/faq/list/9}">회원등급</a></li>
+                <li><a th:href="@{/cs/faq/list/10}">회원정보</a></li>
+                <li><a th:href="@{/cs/faq/list/11}">회원탈퇴</a></li>
+            </ul>
+        </li>
+
+        <!-- 쿠폰/이벤트 메뉴 -->
+        <li>
+            <a th:href="@{/cs/faq/list/2}">쿠폰/이벤트</a>
+            <ul class="submenu">
+                <li><a th:href="@{/cs/faq/list/12}">쿠폰</a></li>
+                <li><a th:href="@{/cs/faq/list/13}">이벤트</a></li>
+            </ul>
+        </li>
+
+        <!-- 주문/결제 메뉴 -->
+        <li>
+            <a th:href="@{/cs/faq/list/3}">주문/결제</a>
+            <ul class="submenu">
+                <li><a th:href="@{/cs/faq/list/14}">주문</a></li>
+                <li><a th:href="@{/cs/faq/list/15}">결제</a></li>
+            </ul>
+        </li>
+
+        <!-- 배송 메뉴 -->
+        <li>
+            <a th:href="@{/cs/faq/list/4}">배송</a>
+            <ul class="submenu">
+                <li><a th:href="@{/cs/faq/list/16}">신청/이용방법</a></li>
+                <li><a th:href="@{/cs/faq/list/17}">변경/해지</a></li>
+            </ul>
+        </li>
+
+        <!-- 취소/반품/교환 메뉴 -->
+        <li>
+            <a th:href="@{/cs/faq/list/5}">취소/반품/교환</a>
+            <ul class="submenu">
+                <li><a th:href="@{/cs/faq/list/18}">취소</a></li>
+                <li><a th:href="@{/cs/faq/list/19}">반품</a></li>
+                <li><a th:href="@{/cs/faq/list/20}">교환</a></li>
+            </ul>
+        </li>
+
+        <!-- 여행/숙박/항공 메뉴 -->
+        <li>
+            <a th:href="@{/cs/faq/list/6}">여행/숙박/항공</a>
+            <ul class="submenu">
+                <li><a th:href="@{/cs/faq/list/21}">여행</a></li>
+                <li><a th:href="@{/cs/faq/list/22}">숙박</a></li>
+                <li><a th:href="@{/cs/faq/list/23}">항공</a></li>
+            </ul>
+        </li>
+
+        <!-- 안전거래 메뉴 -->
+        <li>
+            <a th:href="@{/cs/faq/list/7}">안전거래</a>
+            <ul class="submenu">
+                <li><a th:href="@{/cs/faq/list/24}">안전거래</a></li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+
+<section id="section_wrapper">
+    <div id="titleAndTable">
+        <div id="category">
+            <p id="category-title">전체<br><span>자주 묻는 질문 전체 내용입니다.</span></p>
+            <div class="breadcrumb">
+                <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/faq/list}">자주 묻는 질문</a> >
+                <a id="breadcrumb-location" class="location" href="#">전체</a>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // 현재 URL을 가져와 상위 및 서브 메뉴 항목을 활성화 상태로 설정하고 카테고리, breadcrumb 설정
+        const currentUrl = window.location.href;
+
+        // 상위 메뉴 활성화 및 category, breadcrumb 업데이트
+        document.querySelectorAll('.sidebar-menu > li > a').forEach(function (link) {
+            if (currentUrl === link.href) {
+                // 상위 메뉴 활성화
+                link.parentElement.classList.add('active');
+
+                // 카테고리 및 breadcrumb 업데이트
+                const categoryTitle = document.getElementById("category-title");
+                const breadcrumbLocation = document.getElementById("breadcrumb-location");
+
+                categoryTitle.innerHTML = link.innerText + "<br><span>" + link.innerText + " 관련 자주 묻는 질문입니다.</span>";
+                breadcrumbLocation.innerText = link.innerText;
+                breadcrumbLocation.href = link.href;
+
+                // 서브 메뉴를 표시
+                const submenu = link.parentElement.querySelector('.submenu');
+                if (submenu) submenu.style.display = 'block';
+            }
+        });
+
+        // 서브 메뉴 활성화 및 category, breadcrumb 업데이트
+        document.querySelectorAll('.submenu a').forEach(function (sublink) {
+            if (currentUrl === sublink.href) {
+                // 서브 메뉴 항목 활성화
+                sublink.parentElement.classList.add('active');
+
+                // 상위 메뉴도 활성화
+                const parentMenu = sublink.closest('.sidebar-menu > li');
+
+
+                // 카테고리 및 breadcrumb 업데이트
+                const categoryTitle = document.getElementById("category-title");
+                const breadcrumbLocation = document.getElementById("breadcrumb-location");
+
+                categoryTitle.innerHTML = sublink.innerText + "<br><span>" + sublink.innerText + "에 대한 자주 묻는 질문입니다.</span>";
+                breadcrumbLocation.innerText = sublink.innerText;
+                breadcrumbLocation.href = sublink.href;
+
+                // 서브 메뉴를 표시
+                const submenu = parentMenu.querySelector('.submenu');
+                if (submenu) submenu.style.display = 'block';
+            }
+        });
+
+        // 서브메뉴 hover 시 표시되도록 설정
+        document.querySelectorAll('.sidebar-menu > li').forEach(function (menuItem) {
+            menuItem.addEventListener('mouseenter', function () {
+                const submenu = menuItem.querySelector('.submenu');
+                if (submenu) submenu.style.display = 'block';
+            });
+
+            menuItem.addEventListener('mouseleave', function () {
+                const submenu = menuItem.querySelector('.submenu');
+                const isActive = menuItem.classList.contains('active');
+                if (!isActive) {
+                    if (submenu) submenu.style.display = 'none';
+                } else {
+                    // 상위 메뉴의 hover 스타일 제거
+                    menuItem.classList.remove('hover');
+                }
+            });
+        });
+    </script>

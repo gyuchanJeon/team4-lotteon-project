@@ -1,0 +1,70 @@
+
+aside {
+    box-sizing: border-box;
+    width: 220px;
+    background-color: #ffffff;
+    padding: 20px;
+    min-height: 650px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 3px;
+    position: relative;
+}
+.asideTitle {
+    margin-bottom : 20px !important;
+    color: #2b2e4a;
+    box-sizing: border-box;
+    font-size: 26px !important;
+}
+.sidebar-menu a {
+    text-decoration: none;
+    color: #2b2e4a;
+    font-size: 17px;
+    padding: 10px;
+    display: block;
+    background-color: #ffffff;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    margin-top: 12px;
+    font-weight: 500 !important;
+}
+
+.sidebar-menu a:hover {
+    font-weight:bold !important;
+}
+.submenu a:hover {
+    font-weight: 700;
+    background-color: #eaeaea;
+}
+
+
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    display: none; /* 처음에는 서브메뉴가 보이지 않음 */
+}
+
+.submenu li {
+    margin-bottom: -13px;
+}
+
+.submenu a {
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.submenu a:hover {
+    font-weight: 700;
+    background-color: #eaeaea;
+}
+
+.form {
+    padding-left: 15px;
+    padding-right: 15px;}

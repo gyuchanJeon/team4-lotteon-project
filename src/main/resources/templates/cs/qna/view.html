@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>공지사항 목록</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cs/cs_view.css}"/>
+</head>
+
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+
+<main>
+  <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
+  <section id="section_wrapper">
+    <div id="category">
+      <p>나의문의<br><span class="subtitle">고객님이 작성하신 문의 내용입니다.</span></p>
+      <div class="breadcrumb">
+        <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/view}" class="location">나의문의</a>
+      </div>
+    </div>
+    <form id="myForm" th:action="@{/cs/qna/write}" method="POST">
+      <table>
+        <tr>
+          <td>문의유형</td>
+          <td>[[${board.cate.parent.name}]]  |  [[${board.cate.name}]]</td>
+        </tr>
+
+        <tr>
+          <td>작성자</td>
+          <td>[[${board.user.uid}]]</td>
+        </tr>
+        <tr>
+          <td>제목</td>
+          <td>[[${board.title}]]</td>
+        </tr>
+        <tr>
+          <td>내용</td>
+          <td class="board_content"><span>[[${board.content}]]</span></td>
+        </tr>
+        <tr th:if="${board.comment != null}"> <!-- th:if 답변이 있다면 출력-->
+          <td>[답변]</td>
+          <td class="board_content">[[${board.comment}]]</td>
+        </tr>
+
+      </table>
+
+      <div class="btnDiv">
+        <a th:href="@{/cs/qna/list}"><button id="toList">목록</button></a>
+      </div>
+    </form>
+  </section>
+</main>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
+</html>

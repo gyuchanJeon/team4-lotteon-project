@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" th:href="@{/css/my/myInfo.css}" />
+</head>
+
+<body>
+  <div id="wrapper">
+
+    <main>
+      <header th:replace="~{/include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{/my/my_aside.html}"></div>
+
+      <section class="myInfo_sec">
+
+        <div th:replace="~{/my/banner.html}"></div>
+
+        
+        <!-- 쿠폰내역 -->
+        <article class="myInfo_PointRecode myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>쿠폰내역</span></div>
+          <table class="myInfo_PointTable myInfo_Table">
+            <thead>
+              <tr>
+
+                <th>쿠폰종류</th>
+                <th>쿠폰명</th>
+                <th>혜택</th>
+                <th>상태</th>
+
+                <th>발급일</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 반복 block -->
+              <tr th:each ="coupon : ${coupons}">
+                <td th:text="${coupon.coupon.type}"></td>
+                <td th:text=" ${coupon.coupon.name}"></td>
+                <td th:if ="${coupon.coupon.benefit} < 100 ">[[${coupon.coupon.benefit}]]% 할인</td>
+                <td th:if ="${coupon.coupon.benefit} >= 1000 ">[[${coupon.coupon.benefit}]]원 할인</td>
+                <td th:if="${coupon.status eq 0}">
+                 사용불가
+                </td>
+
+                <td th:if="${coupon.status eq 1}">
+                  사용가능
+                </td>
+                <td th:if="${coupon.coupon.getDDate() ne 0}">
+                  [[${coupon.dDate}]]
+                </td>
+                <td th:text="${coupon.uDate}"></td>
+              </tr>
+              
+            </tbody>
+          </table>
+
+          <div class="pagination">
+            <button class="page-btn"
+                    th:disabled="${currentPage == 0}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+              이전
+            </button>
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+            <button class="page-btn"
+                    th:disabled="${currentPage + 1 == totalPages}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+              다음
+            </button>
+          </div>
+        </article>
+        <ul class="terms">
+          <li>순금 / 골드바 / 돌반지 / 상품권 등 환금성 카테고리 및 중고상품 및 일부 프로모션 상품에는 쿠폰사용이 제한됩니다.</li>
+          <li>쿠론 적용 가능한 금액 기준은 판매자 상품별할인과 Gr마케 추가할인이 모두 포함된 할인 적용가 입니다.</li>
+          <li>중복쿠폰은 판매자 할인, G마켓 할인과 중복 적용 가능하며 하나의 상품당 한장의 중복만 사용가능 합니다.</li>
+          <li>항공 할인이 항공권 전용 할인으로 결제시점에 할인 혜택을 받을 수 있습니다.</li>
+          <li>항공권 예약 취소 또는 환불시 적용했던 항공할인은 id당 1회 한하여 다시 발급됩니다.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{/include/footer.html}"></footer>
+</body>
+
+</html>

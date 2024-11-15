@@ -1,0 +1,167 @@
+
+main {
+  margin-top:20px;
+}
+#category > p {
+  margin-left : 10px;
+}
+
+/* 사이드바 스타일 */
+aside {
+  border: 1px solid #ede6db;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 220px;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  margin-bottom: 3px;
+  position: relative;
+}
+
+.sidebar-menu a {
+  text-decoration: none;
+  color: #2b2e4a;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 10px;
+  display: block;
+  background-color: #ffffff;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+  background-color: #f5f5f5;
+  font-weight: 900;
+}
+#section_wrapper {
+
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 975px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin-left: 10px;
+}
+.location {
+  font-weight: bold;
+}
+#titleAndTable{
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left:10px;
+}
+
+.breadcrumb {
+  margin-right: 20px;
+  float: right;
+}
+table {
+  width: 100%;
+  height: 560px;
+  min-height: 300px;
+  border-top: 2px solid #e9e9e9;
+  box-sizing: border-box;
+  border-collapse: collapse;
+}
+
+tr {
+  min-height: 50px;
+  padding: 10px;
+  border-bottom: 1px solid gainsboro;
+}
+td {
+  width: 780px;
+
+}
+tr > td:first-child {
+  margin-top:10px;
+  width: 80px;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 900;
+  text-align: left;
+
+}
+
+
+.btnDiv{
+  text-align: center;
+}
+
+#btnCancel {
+  width: 100px;
+  height: 40px;
+  margin-top: 20px;
+  border: 1px solid #d82a2a;
+  color: #d82a2a;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#btnSubmit {
+  width: 100px;
+  height: 40px;
+  margin-top: 20px;
+  border: none;
+  color: white;
+  background-color: #d82a2a;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+select {
+  border: 2px solid rgb(212, 210, 210);
+  border-radius: 5px;
+  width: 120px;
+  height: 30px;
+}
+
+.writeTitle {
+  border: 1px solid white;
+  width: 95%;
+  height: 20px;
+  font-size: 15px;
+  padding: 3px;
+  resize: none;
+}
+
+#writeContent {
+  width: 95%;
+  height: 370px;
+  text-align: left;
+  font-size: 15px;
+  border: 2px solid rgb(212, 210, 210);
+  padding: 5px;
+  resize: none;
+}
+
+#btnSubmit:hover{
+  background-color: rgba(216, 42, 42, 0.58)
+}
+#btnSubmit:active{
+  background-color: #d82a2a;
+}
+#btnCancel:hover{
+  background-color: rgba(211, 208, 208, 0.5);
+}
+#btnCancel:active{
+  background-color: white;
+}

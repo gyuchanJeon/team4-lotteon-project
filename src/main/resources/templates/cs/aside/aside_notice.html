@@ -1,0 +1,80 @@
+<link rel="stylesheet" th:href="@{/css/admin/include/style_admin_article_aside.css}">
+<link rel="stylesheet" th:href="@{/css/cs/style_cs_aside.css}">
+
+<style>
+    /* 활성화된 메뉴 항목 스타일 */
+    .sidebar-menu li.active a {
+        font-weight: bold !important;
+        background-color: #eaeaea;
+        color: black; /* 원하는 색상으로 변경 */
+    }
+</style>
+
+<aside>
+    <ul class="sidebar-menu">
+        <li class="asideTitle">공지사항</li>
+        <li>
+            <a th:href="@{/cs/notice/list}">전체</a>
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list/27}">고객서비스</a>
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list/28}">안전거래</a>
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list/29}">위해상품</a>
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list/30}">이벤트당첨</a>
+        </li>
+    </ul>
+</aside>
+<section id="section_wrapper">
+    <div id="titleAndTable">
+        <div id="category">
+            <p id="category-title">전체<br><span class="subtitle">공지사항 전체 내용입니다.</span></p>
+            <div class="breadcrumb">
+                <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/notice/list}">공지사항</a> >
+                <a id="breadcrumb-location" class="location" href="#">전체</a>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    // 현재 URL을 가져와 메뉴 항목과 비교하여 'active' 클래스를 추가 및 카테고리, breadcrumb 설정
+    const currentUrl = window.location.href;
+
+    document.querySelectorAll('.sidebar-menu > li > a').forEach(function (link) {
+        if (currentUrl === link.href) {
+            // 'active' 클래스 추가
+            link.parentElement.classList.add('active');
+
+            // category와 breadcrumb에 텍스트 설정
+            const categoryTitle = document.getElementById("category-title");
+            const breadcrumbLocation = document.getElementById("breadcrumb-location");
+
+            categoryTitle.innerHTML = link.innerText + "<br><span class='subtitle'>" + link.innerText + "에 대한 내용입니다.</span>";
+            breadcrumbLocation.innerText = link.innerText;
+            breadcrumbLocation.href = link.href; // breadcrumb-location에 링크 추가
+        }
+    });
+
+    // 서브메뉴를 hover에 반응하도록 설정
+    document.querySelectorAll('.sidebar-menu > li').forEach(function (menuItem) {
+        menuItem.addEventListener('mouseenter', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'block';
+            }
+        });
+
+        menuItem.addEventListener('mouseleave', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'none';
+            }
+        });
+    });
+</script>

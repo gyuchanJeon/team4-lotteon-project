@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{/include/common_head}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/policy/style.css}"/>
+
+    <script src="https://kit.fontawesome.com/20962f3e4b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="wrapper">
+    <header th:replace="~{/include/header.html}"></header>
+
+
+    <main id="termsPolicy">
+
+        <section layout:fragment="content">
+            <nav>
+                <h1>LotteON 서비스 이용약관</h1>
+                <ul>
+                    <li class="on"><a th:href="@{/policy/buyer}">구매회원 약관</a></li>
+                    <li><a th:href="@{/policy/seller}">판매회원 약관</a></li>
+                    <li><a th:href="@{/policy/finance}">전자금융거래 약관</a></li>
+                    <li><a th:href="@{/policy/location}">위치정보이용 약관</a></li>
+                    <li><a th:href="@{/policy/privacy}">개인정보수집 방침</a></li>
+                </ul>
+            </nav>
+            <article>
+                <h2>구매회원 이용약관</h2>
+                <p th:each="TermList : ${terms}">
+                    <span class="tit">[[${TermList[0]}]]</span><br>
+                    <span style=" max-height: 300px; overflow-y: auto;" class="content">
+                        [[${TermList[1]}]]
+                    </span>
+                </p>
+            </article>
+        </section> <!-- 여기가 컨텐츠 영역-->
+
+    </main>
+
+    <footer th:replace="~{/include/footer.html}">
+    </footer>
+</div>
+</body>
+</html>

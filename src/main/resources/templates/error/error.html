@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #1e2b37;
+        }
+        .error-container {
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .error-status {
+            font-size: 80px;
+            font-weight: bold;
+        }
+        .error-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .error-actions {
+            margin-top: 30px;
+        }
+        .error-actions .btn {
+            margin: 5px;
+        }
+        .btn{
+            background-color: #EF2A23;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            text-decoration: none;
+        }
+        .status{
+            color: #EF2A23;
+        }
+    </style>
+</head>
+<body>
+<div class="container error-container">
+    <!-- 에러 상태 표시 -->
+    <div class="error-status">
+        <span class="status">ERROR</span>
+    </div>
+    <div class="error-message">
+        <span>예기치 못한 에러가 발생했습니다!</span>
+    </div>
+    <p>관리자에게 문의해주세요!</p>
+
+    <!-- 에러 처리 액션 버튼들 -->
+    <div class="error-actions">
+        <a th:href="@{/index}" class="btn" onclick="history.back();">메인화면으로</a>
+        <a href="#" class="btn" onclick="history.back();">뒤로가기</a>
+    </div>
+</div>
+
+</body>
+</html>

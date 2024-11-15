@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의하기 보기</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_view.css}"/>
+
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/faq/list}">문의하기</a> > <a th:href="@{/admin/qna/reply}" class="location">문의하기</a>
+            </div>
+            <h3>문의하기 보기</h3>
+            <div class="form">
+                <div class="inquiry-section">
+                    <form th:action="@{/admin/cs/qna/reply/{boardId}(boardId=${board.boardId})}" method="POST">
+                    <table class="inquiry-table">
+                        <tr>
+                            <td class="label">유형</td>
+                            <td>[[${board.cate.parent.name}]]&nbsp;-&nbsp;[[${board.cate.name}]]</td>
+                        </tr>
+                        <tr>
+                            <td class="label">제목</td>
+                            <td th:text="${board.title}"></td>
+                        </tr>
+                        <tr class="content">
+                            <td class="label">내용</td>
+                            <td th:text="${board.content}"></td>
+                        </tr>
+                        <tr class="answer">
+                            <td class="label">답변</td>
+                            <td>
+                               <textarea name="comment" id="comment" rows="5" cols="50" required></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="buttons">
+                        <a th:href="@{/admin/cs/qna/list}" class="back-btn">목록</a>
+                        <button class="delete-btn" disabled>삭제</button>
+                        <button type="submit" class="write_btn">답변등록</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+        </section><!--/section-->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+
+</body>
+</html>

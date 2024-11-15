@@ -1,0 +1,128 @@
+
+/* 상품 리스트 스타일 : grid*/
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개의 상품 배치 */
+    gap: 15px;
+
+}
+/* 각 상품 아이템 스타일 */
+.product-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.product-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px; /* 이미지 높이 설정 */
+    object-fit: cover; /* 이미지가 정사각형 안에 꽉 차도록 설정 */
+    margin-bottom: 10px;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지 비율 유지 */
+    border-radius: 8px;
+}
+
+.product-details {
+    margin-top: 10px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+    height: 42px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: keep-all;
+}
+
+.product-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+    height: 37px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: keep-all;
+}
+
+.price-info {
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: inline-grid;
+    height: 51px;
+}
+
+.product-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ef2a23;
+}
+.product-price::after {
+    content: "원";
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    height: 15px;
+}
+
+.discount-rate {
+    color: #ef2a23;
+    height: 15px;
+}
+
+.shipping-info {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+
+/* 판매자 정보 */
+.seller-info {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+
+.seller-badge {
+    background-color: #ffecb3;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    padding :5px;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+
+.rating {
+    margin-top: 5px;
+    font-size: 12px;
+    color: darkgray;
+}

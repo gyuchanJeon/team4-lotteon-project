@@ -1,0 +1,6 @@
+<link rel="stylesheet" th:href="@{/css/my/myInfo_banner.css}" />
+<div class="myInfo_banner" id="myBanner" th:each="banner : ${banners}" th:if="${banner.location == 'MY1'}">
+    <a th:href="${banner.link}">
+        <img th:src="@{'/uploads/config/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+    </a>
+</div>

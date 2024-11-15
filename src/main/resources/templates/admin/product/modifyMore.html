@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품상세수정</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" th:value="1"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_registerMore.css}" th:value="1"/>
+    <script th:src="@{/js/my/admin_product/product_modifyMore.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a
+                    th:href="@{/admin/product/register}" class="location">상품목록</a>
+            </div>
+            <h3>상품상세수정</h3>
+            <form>
+                <table class="inquiry-table">
+                    <tr>
+                        <th th:each="optionName : ${optionNames}" th:text="${optionName}"></th>
+                        <th>제품고유명</th>
+                        <th>가격</th>
+                        <th>수량</th>
+                    </tr>
+                    <tr id="inputAll">
+                        <td th:each="optionName : ${optionNames}"></td>
+                        <td><input type="text" id="inputAll_sku"><br>
+                            <button class="btnInputAll" data-type="sku">일괄수정</button>
+                        </td>
+                        <td><input type="text" id="inputAll_price"><br>
+                            <button class="btnInputAll" data-type="price">일괄수정</button>
+                        </td>
+                        <td><input type="text" id="inputAll_stock"><br>
+                            <button class="btnInputAll" data-type="stock">일괄수정</button>
+                        </td>
+                    </tr>
+                    <tr th:each="productVariants: ${productVariantsList}" class="optionValues">
+                        <input class="productVariantsId" type="hidden" th:value="${productVariants.variant_id}">
+                        <th:block th:each="entry : ${productVariants.getOptions().entrySet()}">
+                            <td class="mixedValue" th:each="values : ${entry.getValue()}"
+                                th:text="${values}"></td>
+                        </th:block>
+                        <td><input th:value="${productVariants.sku}" type="text" class="prodOName"></td>
+                        <td><input th:value="${productVariants.price}" type="text" class="prodPrice"></td>
+                        <td><input th:value="${productVariants.stock}" type="text" class="prodStock"></td>
+                    </tr>
+                </table>
+                <input id="optionNames" type="hidden" th:value="${optionNames}">
+                <input id="productId" type="hidden" th:value="${productId}">
+                <div class="buttons">
+                    <button type="submit" class="write-btn" id="product_submit">등록</button>
+                </div>
+            </form>
+        </section>
+        <!-- /Section -->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

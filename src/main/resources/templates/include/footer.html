@@ -1,0 +1,40 @@
+<footer>
+    <link rel="stylesheet" th:href="@{/css/include/footer.css}"/>
+    <ul>
+        <li><a th:href="@{/company/index}" class="policy">회사소개</a></li>
+        <li><a th:href="@{/policy/buyer}" class="policy">서비스이용약관</a></li>
+        <li><a th:href="@{/policy/privacy}" class="policy">개인정보처리방침</a></li>
+        <li><a th:href="@{/policy/finance}" class="policy">전자금융거래약관</a></li>
+    </ul>
+    <div>
+        <p class="logo-section"> <img class="logo-image" th:src="@{'/uploads/config/' + ${info.footerLogo}}" alt="LOTTE ON"></p>
+        <p>
+            <strong>[[${info.companyName}]]</strong><br/>
+            [[${info.companyAddress}]]<br>
+            대표이사 : [[${info.companyCeo}]]<br/>
+            사업자등록번호 : [[${info.CompanyBusinessNumber}]]<br/>
+            호스팅 서비스사업자 : [[${info.companyName}]]
+        </p>
+        <p>
+            <strong>고객센터</strong><br/>
+            Tel : [[${info.csHp}]] [[${info.csWorkingHours}]]<br/>
+            전자금융거래 분쟁 담당 : [[${info.consumer}]](365일 09:00 ~ 18:00)<br/>
+            App Version : [[${appInfo.appVersion}]]
+        </p>
+    </div>
+</footer>
+<button type="button" id="top" class="scroll_move"><img th:src="@{/images/main/Red_Arrow2.png}" alt="상단이동"/></button>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 버튼 클릭 이벤트 리스너 추가
+        const scrollButton = document.getElementById('top');
+        scrollButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            // 최상단으로 스크롤
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // 부드러운 스크롤 효과
+            });
+        });
+    });
+</script>

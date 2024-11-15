@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 수정</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_write.css}"/>
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">공지사항</a>
+            </div>
+            <h3>공지사항 수정</h3>
+
+            <div class="form">
+                <form th:action="@{/admin/cs/notice/modify}" method="post"> <!-- form 추가 -->
+                    <div class="inquiry-section">
+                        <table class="inquiry-table">
+                            <tr>
+                                <td class="label">유형</td>
+                                <td id="dropdown">
+                                    <select id="category1" name = "cate">
+                                        <option>1차 유형</option>
+                                        <option th:each="cate : ${cates}"
+                                                th:value="${cate.boardCateId}"
+                                                th:text="${cate.name}"
+                                                th:selected="${cate.boardCateId == board.cate.boardCateId}">
+                                        </option>
+                                    </select>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제목</td>
+                                <td><input type="text" name="title" th:value="${board.title}"/><input type="hidden" name="boardId" th:value="${board.boardId}"></td>
+                            </tr>
+
+                            <tr class="content">
+                                <td class="label">내용</td>
+                                <td><textarea type="text" name="content" rows="5" cols="50" th:text="${board.content}"></textarea></td>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                    <div class="buttons">
+                        <a th:href="@{/admin/cs/notice/list}" class="cancel-btn">취소하기</a>
+                        <button class="save-btn">수정하기</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <!--/section-->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

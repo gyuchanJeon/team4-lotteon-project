@@ -1,0 +1,169 @@
+<!-- 카테고리/베스트 상품 영역 -->
+<!-- aside css -->
+<link rel="stylesheet" th:href="@{/css/aside/aside_main.css}" />
+<!-- 아이콘 스크립트 -->
+<script src="https://kit.fontawesome.com/20962f3e4b.js" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let main = document.querySelector('.body-section');
+        let height = main.offsetHeight;
+        let aside = document.querySelector('.aside');
+        aside.style.height = height+"px";
+    });
+</script>
+<style>/* fadeIn 애니메이션을 정의 */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px); /* 리스트가 아래에서 위로 나타나는 효과 */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* 원래 위치로 돌아옴 */
+    }
+}
+
+/* 애니메이션을 적용할 리스트 항목 스타일 */
+#top5-list li {
+    animation: fadeIn 0.5s ease-out forwards; /* 0.5초 동안 fadeIn 애니메이션 적용 */
+    opacity: 0; /* 초기 상태는 투명 */
+    margin-bottom: 10px; /* 항목 간 간격 */
+}
+
+/* 애니메이션이 여러 항목에 순차적으로 적용되도록 하기 위해 딜레이 설정 */
+#top5-list li:nth-child(1) {
+    animation-delay: 0s;
+}
+#top5-list li:nth-child(2) {
+    animation-delay: 0.1s;
+}
+#top5-list li:nth-child(3) {
+    animation-delay: 0.2s;
+}
+#top5-list li:nth-child(4) {
+    animation-delay: 0.3s;
+}
+#top5-list li:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+/* fadeOut 애니메이션 정의 */
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0); /* 원래 위치 */
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px); /* 위로 밀려서 사라짐 */
+    }
+}
+
+/* 삭제될 항목에 적용될 스타일 */
+li.fadeOut {
+    animation: fadeOut 1s ease-in forwards;
+}
+
+</style>
+<aside class="aside">
+    <!-- 베스트상품 배너 -->
+    <article class="best">
+        <div class="best-item-container">
+            <i><img th:src="@{/images/main/best_item.jpg}" class="best-item"></i>
+            <h1>베스트 상품</h1>
+        </div>
+
+        <ol id="top5-list">
+            <!-- 상품만큼 반복 -->
+            <!-- 반복시 i값(인덱스) 증가 필요 -->
+            <!-- 반복 블럭 시작 -->
+            <li th:each="product, i : ${SoldList}">
+                <a th:href="@{/product/view(productId = ${product.productId})}">
+                    <div class="best_num">
+                        <i>[[${i.index}+1]]</i>
+                    </div>
+                    <div class="thumb">
+                        <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="item1" />
+                    </div>
+                    <div class="aside_desc">
+                        <h2>[[${product.name}]]</h2>
+                        <div class="org_price">
+                            <!-- 기본가격 -->
+                            <del>[[${product.price}]]</del>
+                            <!-- 깎이는 퍼센트 -->
+                            <span>[[${product.discount}]]</span>
+                        </div>
+                        <div class="dis_price">
+                            <!-- 계산된 가격 -->
+                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <!-- 반복 블럭 끝 -->
+        </ol>
+    </article>
+</aside>
+<script>
+    // SSE 연결 설정
+    const eventSource = new EventSource("/lotteon/sse/top5");
+
+    eventSource.onopen = function(event) {
+        console.log("SSE 연결이 열렸습니다.");
+    };
+
+
+    eventSource.onerror = (error) => {
+        // console.error("SSE 연결 오류:", error);
+        if (eventSource.readyState === EventSource.CLOSED) {
+            console.error("연결이 닫혔습니다.");
+        }
+    };
+
+
+    // 서버에서 데이터가 전송되면 실행
+    eventSource.onmessage = function(event) {
+        const currentTop5 = JSON.parse(event.data);
+        const top5ListElement = document.getElementById('top5-list');
+
+        // 기존 리스트 항목들에 fadeOut 애니메이션을 적용하여 사라지게 함
+        const existingItems = top5ListElement.querySelectorAll('li');
+        existingItems.forEach(item => {
+            item.classList.add('fadeOut');
+            item.addEventListener('animationend', () => {
+                item.remove();  // 애니메이션 종료 후 항목을 제거
+            });
+        });
+
+
+        top5ListElement.innerHTML = '';  // 기존 리스트 초기화
+
+        // 상위 5개 제품을 리스트에 추가
+        currentTop5.forEach((product, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <a href="/lotteon/product/view?productId=${product.productId}">
+                    <div class="best_num">
+                        <i>${index + 1}</i>  <!-- 순위 표시 -->
+                    </div>
+                    <div class="thumb">
+                        <img src="/lotteon/uploads/product/${product.img1}" alt="${product.name}" />
+<!--                        <img src="" alt="${product.name}" />-->
+                    </div>
+                    <div class="aside_desc">
+                        <h2>${product.name}</h2>
+                        <div class="org_price">
+                            <del>${product.price}</del>
+                            <span>${product.discount}</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>${(product.price * (1 - product.discount / 100.0)).toFixed(0)}</ins>
+                        </div>
+                    </div>
+                </a>
+                `;
+            top5ListElement.appendChild(li);
+        });
+    };
+</script>
+<!-- aside 끝! -->

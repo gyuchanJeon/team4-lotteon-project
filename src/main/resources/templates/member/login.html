@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lotteOn::login</title>
+    <link rel="stylesheet" th:href="@{/css/member/login.css}"/>
+</head>
+
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+<main>
+    <div class="login-container">
+        <h2 class="titlogin">
+            <span class="tit">로그인</span>
+        </h2>
+        <div class="login-section" style="padding-top: 20px;">
+            <div class="login-container2"> <!-- 새 컨테이너 추가 -->
+                <!-- 로그인 폼 -->
+                <div class="login-form">
+                    <div class="login-input">
+                        <div id="success-message" th:if="${success}" th:text="${success}" style="display: none;"></div>
+                        <form th:action="@{/member/login}" method="post" name="loginForm">
+                            <div class="input-group">
+                                <input type="text" name="uid" id="userid" placeholder="아이디를 입력해주세요">
+                            </div>
+                            <div class="input-group">
+                                <input type="password" name="pass" id="userpwd" placeholder="비밀번호를 입력해주세요">
+                            </div>
+                            <input type="submit" value="로그인하기" class="loginbtn"/>
+                            <div class="options">
+                                <input type="checkbox" id="auto-login" name="remember-me" class="auto-login">
+                                <label for="auto-login">자동로그인</label>
+                                <span>|</span>
+                                <a th:href="@{/member/find_id_select}">아이디 찾기</a>
+                                <span>|</span>
+                                <a th:href="@{/member/find_pass_select}">비밀번호 찾기</a>
+                                <span>|</span>
+                                <a th:href="@{/member/join}">회원가입</a>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="social">
+            <span class="tit2">간편하게 시작하기</span>
+        </div>
+        <div class="sociallogin_section">
+            <a th:href="@{/oauth2/authorization/kakao}" class="kakao_login">
+                <img th:src="@{/images/member/kakaosocial_icon.png}" alt="Kakao Login" />
+            </a>
+            <a th:href="@{/oauth2/authorization/naver}" class="naver_login">
+                <img th:src="@{/images/member/naversocial_icon.png}" alt="Naver Login" />
+            </a>
+            <a th:href="@{/oauth2/authorization/google}" class="google_login">
+                <img th:src="@{/images/member/googlesocial_icon.png}" alt="Google Login" />
+            </a>
+            <div class="login_text">
+                <span class="tit3">카카오</span>
+                <span class="tit4">네이버</span>
+                <span class="tit5">구글</span>
+            </div>
+        </div>
+    </div>
+    <!-- banner section-->
+
+    <div class="certifi_logo">
+        <img th:src="@{/images/member/member_certifi_logo.gif}">
+    </div>
+    <div class="banner-section" th:each="banner : ${banners}" th:if="${banner.location == 'MEMBER1'}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/config/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
+    </div>
+</main>
+<footer th:replace="~{/include/footer.html}"></footer>
+
+</body>
+
+<script>
+    window.onload = function() {
+
+        // URL에서 쿼리 파라미터 읽기
+        const urlParams = new URLSearchParams(window.location.search);
+        const success = urlParams.get('success');
+
+        // 성공 파라미터에 따라 alert 표시
+        if (success === '400') {
+            alert('회원 탈퇴가 완료되었습니다.');
+        } else if(success === '102') {
+            alert('비밀번호가 성공적으로 변경되었습니다. 다시 로그인해 주세요.');
+        } else if(success === '100') {
+            alert('로그인에 실패하였습니다. 아이디, 비밀번호를 확인해주세요.');
+        } else if(success === '101') {
+            alert('로그아웃 완료되었습니다.');
+        } else if(success === '401') {
+            alert('탈퇴한 회원입니다.');
+        }
+
+        // success-message 요소가 존재하는지 확인(비밀번호가 성공적으로 변경되었습니다.)
+        const successMessageElement = document.getElementById("success-message");
+        if (successMessageElement) { // 요소가 존재할 경우에만 메시지 가져오기
+            const successMessage = successMessageElement.textContent;
+            if (successMessage) {
+                alert(successMessage); // alert 창으로 에러 메시지 표시
+            }
+        }
+    };
+</script>
+
+</html>

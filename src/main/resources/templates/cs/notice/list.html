@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>공지사항 목록</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/cs/cs_list.css}"/>
+</head>
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+<main>
+    <th:block th:replace="~{/cs/aside/aside_notice.html}"></th:block>
+
+    <table>
+        <thead>
+        <tr>
+            <th>&nbsp;</th>
+            <th>유형</th>
+            <th>내용</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 게시물이 있을 경우 목록 출력 -->
+        <tr th:each="board : ${boards}" th:unless="${#lists.isEmpty(boards)}">
+            <td th:text="${board.rowNumber}"></td>
+            <td th:text="${board.cate.name}"></td>
+            <td class="title">
+                [안내]&nbsp;<a th:href="@{/cs/notice/view/{id}(id=${board.boardId})}" th:text="${board.title}"></a>
+            </td>
+            <td th:text="관리자"></td>
+            <td th:text="${board.regDate}"></td>
+        </tr>
+
+        <!-- 게시물이 없을 경우 메시지 출력 -->
+        <tr th:if="${#lists.isEmpty(boards)}">
+            <td colspan="5" style="text-align: center;">해당하는 글이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이지네이션: 게시물이 있을 때만 표시 -->
+    <div class="pagination" th:if="${totalPages > 1}">
+        <button class="page-btn"
+                th:disabled="${currentPage == 0}"
+                th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+            이전
+        </button>
+
+        <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <button class="page-num"
+                    th:classappend="${i == currentPage} ? 'active'"
+                    th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                    th:text="${i + 1}">1</button>
+        </span>
+
+        <button class="page-btn"
+                th:disabled="${currentPage + 1 == totalPages}"
+                th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+            다음
+        </button>
+    </div>
+</main>
+
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
+</html>

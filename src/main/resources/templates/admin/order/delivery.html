@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송현황</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_order_delivery.css}"/>
+
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">주문관리</a> > <a href="#" class="location">배송현황</a>
+            </div>
+            <h3>배송현황</h3>
+            <div class="form">
+                <div class="search-bar">
+                    <select id="search-category" class="dropdown">
+                        <option>송장번호</option>
+                        <option>택배사</option>
+                        <option>수령인</option>
+                    </select>
+                    <input type="text" placeholder="검색어 입력" class="search-input">
+                    <button class="search-btn">검색</button>
+                </div>
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 11%">
+                        <col style="width: 10%">
+                        <col style="width: 9%">
+                        <col style="width: 10%">
+                        <col style="width: 7%">
+                        <col style="width: 10%">
+                        <col style="width: 10%">
+                        <col style="width: 11%">
+                        <col style="width: 10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>송장번호</th>
+                        <th>택배사</th>
+                        <th>주문번호</th>
+                        <th>수령인</th>
+                        <th>상품명</th>
+                        <th>건수</th>
+                        <th>물품합계</th>
+                        <th>배송비</th>
+                        <th>배송상태</th>
+                        <th>접수일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="delivery : ${deliverys}">
+                        <td>
+                            <a href="#"
+                               class="open-modal-link"
+                               th:if="${delivery.deliveryWaybill != null}"
+                               th:attr="data-waybill=${delivery.deliveryWaybill}"
+                               th:text="${delivery.deliveryWaybill}">
+                                송장번호 확인
+                            </a>
+
+                            <!-- 송장번호가 null인 경우 스타일을 희미하게 표시 -->
+                            <span th:if="${delivery.deliveryWaybill == null}"
+                                  style="color: lightgray; cursor: not-allowed;">
+                                송장번호 없음
+                            </span>
+                        </td>
+                        <td th:text="${delivery == null || delivery.getDeliveryCompany() == null ? '지정안됨'
+                                     : (delivery.getDeliveryCompany() == '롯데택배' ? '롯데택배'
+                                     : (delivery.getDeliveryCompany() == '로젠택배' ? '로젠택배'
+                                     : (delivery.getDeliveryCompany() == 'CJ대한통운' ? 'CJ대한통운' : '지정안됨')))}">
+                        </td>
+                        <td th:if="${delivery.getOrderItem() == null || delivery.getOrderItem().order == null}"
+                            style="color: gray; text-align: center;">
+                            주문내역 없음
+                        </td>
+                        <td th:if="${delivery.getOrderItem() != null && delivery.getOrderItem().order != null}"
+                            th:text="${delivery.getOrderItem().order.orderId}">
+                        </td>
+
+                        <td th:if="${delivery.getOrderItem() == null || delivery.getOrderItem().order == null || delivery.getOrderItem().order.getRecipName() == null}"
+                            style="color: gray; text-align: center;">
+                            수령인 없음
+                        </td>
+                        <td th:if="${delivery.getOrderItem() != null && delivery.getOrderItem().order != null && delivery.getOrderItem().order.getRecipName() != null}"
+                            th:text="${delivery.getOrderItem().order.getRecipName()}">
+                        </td>
+                        <td th:text="${delivery?.getOrderItem()?.order?.getProductVariants()?.getSku() != null ? delivery.getOrderItem().order.getProductVariants().getSku() : '선택안됨'}">
+                        </td>
+                        <td th:text="${#lists.size(delivery.getOrderItem().order.orderItems)}">3</td>
+                        <td th:text="${#numbers.formatInteger(delivery.orderItem.order.getTotalPrice(), '0', 'COMMA')}">68,400</td>
+                        <td th:text="${delivery?.orderItem?.deliveryFee != null ? #numbers.formatInteger(delivery.orderItem.deliveryFee, '0', 'COMMA') : '적용 안됨'}">
+                        </td>
+                        <td th:text="${delivery.orderItem.status == 1 ? '송장 준비중' :
+                                      (delivery.orderItem.status == 2 ? '배송준비' :
+                                      (delivery.orderItem.status == 3 ? '배송완료' :
+                                      (delivery.orderItem.status == 4 ? '수취확인' :
+                                      (delivery.orderItem.status == 5 ? '취소' :
+                                      (delivery.orderItem.status == 6 ? '교환' :
+                                      (delivery.orderItem.status == 7 ? '반품' : '미결제 상태'))))))}">
+                        </td>
+                        <td th:text="${#temporals.format(delivery.orderItem.order.buyDate, 'yyyy-MM-dd HH:mm:ss')}">2024-10-17 10:00:06</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <span class="page-btn" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a th:if="${currentPage > 0}"
+                           th:href="@{/admin/order/delivery(page=${currentPage - 1}, size=${pageSize})}">이전</a>
+                        <span th:if="${currentPage == 0}">이전</span>
+                    </span>
+                    <span style="margin-top: 10px" th:with="startPage=${T(java.lang.Math).max(0, currentPage - 2)},
+                       endPage=${T(java.lang.Math).min(totalPages - 1, currentPage + 2)}">
+                        <span th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                              th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-num" th:href="@{/admin/order/delivery(page=${i}, size=${pageSize})}" th:text="${i + 1}">1</a>
+                        </span>
+                    </span>
+                    <span class="page-btn" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                        <a th:if="${currentPage + 1 < totalPages}"
+                           th:href="@{/admin/order/delivery(page=${currentPage + 1}, size=${pageSize})}">다음</a>
+                        <span th:if="${currentPage + 1 == totalPages}">다음</span>
+                    </span>
+                </div>
+            </div>
+        </section>
+        <!-- /Section -->
+    </div>
+</main>
+ 배송상세 모달
+<div id="versionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>배송상세</h4>
+            <span id="versionModalClose" class="close">&times;</span> <!-- id 추가 -->
+        </div>
+        <div class="modal-body">
+            <div>
+                <h2 class="sub-title">상품정보</h2>
+                <table class="product-info-table">
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 2%">
+                        <col style="width: 13%">
+                        <col style="width: 10%">
+                        <col style="width: 9%">
+                        <col style="width: 6%">
+                        <col style="width: 7%">
+                        <col style="width: 7%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>상품이미지</th>
+                        <th>상품번호</th>
+                        <th>상품명</th>
+                        <th>판매자</th>
+                        <th>가격</th>
+                        <th>수량</th>
+                        <th>배송비</th>
+                        <th>결제금액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><img id="modalProductImg" src="" alt="상품 사진" class="product-image"></td>
+                        <td id="modalProductNo">상품번호</td>
+                        <td id="modalProductName">상품명</td>
+                        <td id="modalSeller">판매자</td>
+                        <td id="modalPrice">가격</td>
+                        <td id="modalCount">수량</td>
+                        <td id="modalDeliveryFee">배송비</td>
+                        <td id="modalTotalPrice">결제금액</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <h2 class="sub-title3">배송정보</h2>
+                <table class="delivery-info-table">
+                    <colgroup>
+                        <col style="width: 13%;">
+                        <col style="width: 75%;">
+                    </colgroup>
+                    <tr>
+                        <th>주문번호</th>
+                        <td id="modalOrderId">주문번호</td>
+                    </tr>
+                    <tr>
+                        <th>수령인</th>
+                        <td id="modalRecipName">수령인</td>
+                    </tr>
+                    <tr>
+                        <th>연락처</th>
+                        <td id="modalRecipHp">연락처</td>
+                    </tr>
+                    <tr>
+                        <th>배송지 주소</th>
+                        <td id="modalRecipAddr">배송지 주소</td>
+                    </tr>
+                    <tr>
+                        <th>택배사</th>
+                        <td id="modalDeliveryCompany">택배사</td>
+                    </tr>
+                    <tr>
+                        <th>송장번호</th>
+                        <td id="modalWaybill">송장번호</td>
+                    </tr>
+                    <tr class="last-tr">
+                        <th>기타</th>
+                        <td id="modalContent">기타</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+<script>
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('open-modal-link')) {
+            event.preventDefault();
+            const versionModal = document.getElementById('versionModal');
+            versionModal.style.display = 'block';
+        }
+
+        const versionModalClose = document.getElementById('versionModalClose');
+        if (versionModalClose && event.target === versionModalClose) {
+            const versionModal = document.getElementById('versionModal');
+            versionModal.style.display = 'none';
+        }
+
+        const versionModal = document.getElementById('versionModal');
+        if (event.target === versionModal) {
+            versionModal.style.display = 'none';
+        }
+    });
+</script>
+</html>
+

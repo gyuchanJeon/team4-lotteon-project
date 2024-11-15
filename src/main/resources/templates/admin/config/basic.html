@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기본설정</title>
+
+  <!--공통 css 부분-->
+  <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+  <!--각 페이지(section) 개별 css-->
+  <link rel="stylesheet" th:href="@{/css/admin/style_admin_config_basic.css}"/>
+
+</head>
+<body>
+<header>
+  <div class="header-top">
+    <a href="#" class="logo">
+      <img th:src="@{/images/logo.png}" alt="Logo"/>
+    </a>
+    <nav>
+      <a href="#">로그아웃</a>
+      <a href="#">고객센터</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div id="wrapper">
+    <aside>
+      <ul class="sidebar-menu">
+        <li><a href="#">환경설정</a></li>
+        <li><a href="#">상품관리</a></li>
+        <li><a href="#">회원관리</a></li>
+        <li><a href="#">주문관리</a></li>
+        <li><a href="#">고객센터</a></li>
+      </ul>
+    </aside>
+
+    <!--section-->
+    <section>
+      <div class="breadcrumb">
+        <a href="#">Home</a> > <a href="#">환경설정</a> > <a href="#" class="location">기본설정</a>
+      </div>
+      <h3>기본설정</h3>
+
+      <div class="form">
+        <div class="version-header">
+          <h4>버전정보</h4>
+          <p class="sub-title">현재 사이트 버전입니다.</p>
+        </div>
+
+        <div class="inquiry-section">
+          <table class="inquiry-table">
+            <tr>
+              <td class="label">사이트 버전</td>
+              <td>
+                1.0.1-RELEASE
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="version-header">
+          <h4>사이트</h4>
+          <p class="sub-title">브라우저 탭, 헤더 및 푸터 노출 정보입니다</p>
+        </div>
+        <form method="post" th:action="@{/admin/config/info}" >
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">제목</td>
+                <td>
+                  <input type="text" name="title" value="롯데 ON"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">부제</td>
+                <td>
+                  <input type="text" name="subtitle" value="더나은쇼핑위한선택"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>로고</h4>
+          <p class="sub-title">브라우저 탭, 헤더 및 푸터 노출 로고입니다</p>
+        </div>
+        <form method="post" action="#" enctype="multipart/form-data">
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">헤더로고</td>
+                <td>
+                  <div class="file-upload file">
+                    <input type="file" id="productImage" name="productImages" />
+                    크기 370 x 76 권장
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">푸터로고</td>
+                <td>
+                  <div class="file-upload file">
+                    <input type="file" id="productImage" name="productImages" />
+                    크기 155 x 36 권장
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">파비콘</td>
+                <td>
+                  <div class="file-upload file">
+                    <input type="file" id="productImage" name="productImages" />
+                    크기 32 x 32 권장
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>기업정보</h4>
+          <p class="sub-title">푸터에 노출되는 기업 정보입니다.</p>
+        </div>
+        <form method="post" action="#" enctype="multipart/form-data">
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">상호명</td>
+                <td>
+                  <input type="text" name="company" value="롯데쇼핑주식회사"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">대표이사</td>
+                <td>
+                  <input type="text" name="ceo" value="홍길동" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">사업자등록번호</td>
+                <td>
+                  <input type="text" name="eid" value="123-12-12345" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">통신판매업신고</td>
+                <td>
+                  <input type="text" name="" value="2024-서울강남-1234" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">기본주소</td>
+                <td>
+                  <input type="text" name="addr1" value="서울특별시강남구테헤란로 507" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">상세주소</td>
+                <td>
+                  <input type="text" name="addr2" value="{삼성동, WeWork 빌딩} 7층" />
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>고객센터 정보</h4>
+          <p class="sub-title">푸터에 노출되는 고객센터 정보입니다.</p>
+        </div>
+        <form method="post" action="#" >
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">전화번호</td>
+                <td>
+                  <input type="text" name="company" value="02-1234-5678"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">업무시간</td>
+                <td>
+                  <input type="text" name="ceo" value="평일 09:00 ~ 18:00" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">이메일</td>
+                <td>
+                  <input type="text" name="eid" value="lotteon@lotte.net" />
+                </td>
+              </tr>
+              <tr>
+                <td class="label">전자금융거래 분쟁담당</td>
+                <td>
+                  <input type="text" name="" value="1234-1234" />
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>카피라이트</h4>
+          <p class="sub-title">푸터에 노출되는 카피라이트 정보입니다.</p>
+        </div>
+        <form method="post" action="#" >
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">카피라이트</td>
+                <td>
+                  <input type="text" name="copyright" value="Copyright LotteON. All rights reserved"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <!-- /Section -->
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2024 롯데ON. All rights reserved.</p>
+</footer>
+</body>
+</html>
+
+<script>
+  // 버전확인 모달 동작
+  document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById("versionModal");
+    var btns = document.querySelectorAll(".edit-btn"); // "확인" 버튼들
+    var versionCloseBtn = document.getElementById("versionModalClose"); // 버전 모달 닫기 버튼
+    var closeButton = document.getElementById("versionCloseBtn");
+
+    // "확인" 버튼 클릭 시 모달 열기
+    btns.forEach(function(btn) {
+      btn.onclick = function() {
+        modal.style.display = "block";
+      };
+    });
+
+    // 닫기 버튼(X) 클릭 시 모달 닫기
+    versionCloseBtn.onclick = function() {
+      modal.style.display = "none";
+    };
+
+    // 하단 닫기 버튼 클릭 시 모달 닫기
+    closeButton.onclick = function() {
+      modal.style.display = "none";
+    };
+
+    // 모달 외부 클릭 시 모달 닫기
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+  });
+
+  // 버전 등록 모달 동작
+  document.addEventListener('DOMContentLoaded', function() {
+    var registerModal = document.getElementById("versionRegisterModal");
+    var registerBtn = document.getElementById("openRegisterModalBtn"); // 등록 버튼
+    var registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
+    var closeButton = document.getElementById("registerCloseBtn"); // 하단 닫기 버튼
+    var confirmButton = document.getElementById("registerConfirmBtn");
+
+    // 등록 버튼 클릭 시 모달 열기
+    registerBtn.onclick = function() {
+      registerModal.style.display = "block";
+    };
+
+    // 닫기 버튼(X) 클릭 시 모달 닫기
+    registerCloseBtn.onclick = function() {
+      registerModal.style.display = "none";
+    };
+
+    // 하단 닫기 버튼 클릭 시 모달 닫기
+    closeButton.onclick = function() {
+      registerModal.style.display = "none";
+    };
+
+    // 모달 외부 클릭 시 모달 닫기
+    window.onclick = function(event) {
+      if (event.target == registerModal) {
+        registerModal.style.display = "none";
+      }
+    };
+
+    // 등록 확인 버튼 클릭 시
+    confirmButton.onclick = function() {
+      var version = document.getElementById("versionInput").value;
+      var changelog = document.getElementById("changelogInput").value;
+
+      if (version && changelog) {
+        // 등록 로직 추가 (서버 전송 또는 콘솔 출력)
+        console.log("버전:", version);
+        console.log("변경내역:", changelog);
+
+        // 등록 완료 후 모달 닫기
+        registerModal.style.display = "none";
+      } else {
+        alert("모든 필드를 입력해주세요.");
+      }
+    };
+  });
+
+
+</script>

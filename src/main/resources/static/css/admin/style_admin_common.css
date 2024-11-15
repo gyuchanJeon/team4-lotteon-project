@@ -1,0 +1,138 @@
+
+/* 湲곕낯 �ㅽ��� */
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+/* Wrapper �ㅼ젙 */
+#wrapper {
+    display: flex;
+    width: 1200px;
+    margin: 40px auto;
+}
+
+/* 硫붿씤 而⑦뀗痢� �뱀뀡 */
+section {
+    height: auto;
+    flex: 1;
+    border: 1px solid #ede6db;
+    margin-left: 8px;
+    box-sizing: border-box;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+h3 {
+    margin-top: 0;
+    font-size: 25px;
+    font-weight: bold;
+    color: #2b2e4a;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #d82a2a; /* 諛묒쨪 異붽� */
+    padding-bottom: 7.12px; /* �띿뒪�몄� 諛묒쨪 媛꾩쓽 媛꾧꺽 */
+}
+
+
+.breadcrumb {
+    font-size: 14px;
+    color: #6c757d;
+    float: right;
+    margin-top: 17px;
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #6c757d;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .location {
+    font-weight: bold;
+}
+
+.title {
+    text-align: left !important;
+}
+
+/* �낅젰�� �� �뚮몢由� �� 蹂�寃� */
+textarea:focus {
+    border-color: #d82a2a !important;
+    outline: none !important; /* 湲곕낯 �ъ빱�� �꾩썐�쇱씤 �쒓굅 */
+}
+
+
+/* �낅젰�� �� �뚮몢由� �� 蹂�寃� */
+input:focus {
+    border-color: #d82a2a !important;
+    outline: none !important; /* 湲곕낯 �ъ빱�� �꾩썐�쇱씤 �쒓굅 */
+}
+
+select:focus {
+    border-color: #d82a2a !important;
+    outline: none !important; /* 湲곕낯 �ъ빱�� �꾩썐�쇱씤 �쒓굅 */
+}
+
+/* input �붿냼 �ㅽ��� */
+input:not([type="file"]):not([type="radio"]) {
+    width: 65%; /* �덈퉬瑜� �뚯씠釉� ���� 留욎땄 */
+    height: 29px; /* �먰븯�� �믪씠濡� �ㅼ젙 */
+    padding: 10px; /* �덉そ �щ갚 */
+    font-family: 'Inter', sans-serif; /* �고듃 �ㅽ��� �좎� */
+    font-size: 13px;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    box-sizing: border-box; /* �⑤뵫�� �ы븿�� �ш린 怨꾩궛 */
+}
+
+/* inputmini �붿냼 �ㅽ��� */
+.inputmini {
+    width: 13% !important;
+    height: 29px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px !important;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.date {
+    width: 29% !important;
+    height: 29px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px !important;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+textarea {
+    width: 100%;
+    height: 192px;
+    padding: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    border: 1px solid #e9e9e9;
+    border-radius: 5px;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.chkbox {
+    margin-left: 1px;
+}
+
+.file {
+    margin-top: 5px;
+}

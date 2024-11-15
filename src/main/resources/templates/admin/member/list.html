@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원목록</title>
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" />
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_member_list.css}" />
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  </head>
+  <body>
+  <header th:replace="~{/admin/include/header.html}"></header>
+    <main>
+      <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <section>
+          <div class="breadcrumb">
+            <a href="#">Home</a> > <a href="#">회원관리</a> >
+            <a href="#" class="location">회원목록</a>
+          </div>
+          <h3>회원목록</h3>
+          <div class="form">
+            <div class="search-bar">
+              <form action="#" th:action="@{/admin/member/list}" method="get"> <!-- GET 방식으로 폼 전송 -->
+                <select id="search-category" name="searchCategory" class="dropdown"> <!-- name 속성 추가 -->
+                  <option value="all" th:selected="${searchCategory == ''}">전체</option>
+                  <option value="uid" th:selected="${searchCategory == 'uid'}">아이디</option>
+                  <option value="name" th:selected="${searchCategory == 'name'}">이름</option>
+                  <option value="email" th:selected="${searchCategory == 'email'}">이메일</option>
+                  <option value="hp" th:selected="${searchCategory == 'hp'}">휴대폰</option>
+                </select>
+                <input
+                        type="text"
+                        name="keyword"
+                        placeholder="키워드 입력"
+                        class="search-input"
+                        th:value="${keyword}"
+                />
+                <button type="submit" class="search-btn">검색</button> <!-- type을 submit으로 설정 -->
+              </form>
+            </div>
+
+            <table class="inquiry-table">
+              <colgroup>
+                <col style="width: 4%" />
+                <col style="width: 5%" />
+                <col style="width: 7%" />
+                <col style="width: 6%" />
+                <col style="width: 5%" />
+                <col style="width: 9%" />
+                <col style="width: 6%" />
+                <col style="width: 14%" />
+                <!--<col style="width: 9%" />-->
+                <col style="width: 10%" />
+                <col style="width: 5%" />
+                <col style="width: 8%" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAll" name="userList" onclick="toggleSelectAll(this)" class="chkbox" /></th>
+                  <th>번호</th>
+                  <th>아이디</th>
+                  <th>이름</th>
+                  <th>성별</th>
+                  <th>등급</th>
+                  <th>포인트</th>
+                  <th>이메일</th>
+                  <!--<th>휴대폰</th>-->
+                  <th>가입일</th>
+                  <th>상태</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr th:each="user, i : ${userList}">
+                <td><input type="checkbox" class="checkboxes" th:value="${user.memberInfo.memberInfoId}" onclick="toggleCheckbox(this)"></td>
+                <td th:text="${startNo - i.index}"></td>
+                <td>[[${user.uid}]]</td>
+                  <td>[[${user.memberInfo.name}]]</td>
+                  <td>[[${user.memberInfo.gender == 0 ? 'M' : 'F'}]]</td>
+                <td>
+                  <select name="grade" class="grade" th:id="'grade-' + ${user.memberInfo.memberInfoId}">
+                    <option value="VVIP" th:selected="${user.memberInfo.grade == 'VVIP'}">VVIP</option>
+                    <option value="VIP" th:selected="${user.memberInfo.grade == 'VIP'}">VIP</option>
+                    <option value="GOLD" th:selected="${user.memberInfo.grade == 'GOLD'}">GOLD</option>
+                    <option value="SILVER" th:selected="${user.memberInfo.grade == 'SILVER'}">SILVER</option>
+                    <option value="FAMILY" th:selected="${user.memberInfo.grade == 'FAMILY'}">FAMILY</option>
+                  </select>
+                </td>
+                <td>[[${user.memberInfo.point}]]</td>
+                  <td>[[${user.memberInfo.email}]]</td>
+                  <!--<td>[[${user.memberInfo.hp}]]</td>-->
+                <td th:text="${#strings.substring(user.memberInfo.updatedAt, 0, 19)}"></td>
+                <td th:text="${user.memberInfo.status}"
+                    th:classappend="${user.memberInfo.status == '정상'} ? 'normal' :
+                   (${user.memberInfo.status == '중지'} ? 'stop' :
+                   (${user.memberInfo.status == '휴면' or user.memberInfo.status == '탈퇴'} ? 'out' : 'userStatus'))">
+                </td>
+                <td>
+                  <a href="#" th:attr="data-uid=${user.uid}" class="edit-btn">수정</a><br/>
+                  <!-- 상태가 '정상'일 때: 중지 버튼 -->
+                  <button th:if="${user.memberInfo.status == '정상'}"
+                          class="deletebtn"
+                          th:text="'중지'">
+                  </button>
+                  <!-- 상태가 '중지' 또는 '휴면'일 때: 재개 버튼 -->
+                  <button th:if="${user.memberInfo.status == '중지' or user.memberInfo.status == '휴면'}"
+                          class="deletebtn"
+                          th:text="'재개'">
+                  </button>
+                  <!-- 상태가 '탈퇴'일 때: 비활성 버튼 (비활성화 처리) -->
+                  <button th:if="${user.memberInfo.status == '탈퇴'}"
+                          class="deletebtn"
+                          th:text="'비활성'"
+                          disabled>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="buttons">
+              <a href="#" id="openRegisterModalBtn" onclick="updateSelectedGrades()" class="write-btn">선택수정</a>
+            </div>
+
+            <div class="pagination" th:if="${totalElements > 0}">
+              <button class="page-btn"
+                      th:disabled="${currentPage == 0}"
+                      th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=5\''">
+                이전
+              </button>
+              <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <button class="page-num"
+                        th:classappend="${i == currentPage} ? 'active'"
+                        th:onclick="'window.location.href=\'?page=' + ${i} + '&size=5\''"
+                        th:text="${i + 1}">1</button>
+              </span>
+              <button class="page-btn"
+                      th:disabled="${currentPage + 1 == totalPages}"
+                      th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=5\''">
+                다음
+              </button>
+            </div>
+
+          </div>
+        </section>
+      </div>
+    </main>
+    <div id="versionRegisterModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>회원수정</h4>
+          <span id="registerModalClose" class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+          <form id="versionRegisterForm">
+            <table class="modal-table">
+              <input type="hidden" id="memberInfoId"/>
+              <tr>
+                <th>아이디</th>
+                <td id="userId" class="modalUid">
+
+                </td>
+              </tr>
+              <tr>
+                <th>이름</th>
+                <td>
+                  <input
+                    type="text"
+                    id="userName"
+                    name="name"
+                    placeholder="#유저이름"
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>성별</th>
+                <td>
+                  <input type="radio" class="modal_sex" name="gender" value="0" />남
+                  <input type="radio" class="modal_sex" name="gender" value="1" />여
+                </td>
+              </tr>
+              <tr>
+                <th>등급</th>
+                <td>
+                  <input
+                    type="text"
+                    id="userGrade"
+                    name="grade"
+                    placeholder="#유저등급"
+                    required
+                    readonly
+                  />
+                  &nbsp;등급 수정은 회원 목록에서 선택수정 가능
+                </td>
+              </tr>
+              <tr></tr>
+              <tr>
+                <th>상태</th>
+                <td id="userStatus"></td>
+              </tr>
+              <tr>
+                <th>EMAIL</th>
+                <td>
+                  <input
+                    type="text"
+                    id="userEmail"
+                    name="email"
+                    placeholder="#유저이메일"
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>휴대폰</th>
+                <td>
+                  <input
+                    type="text"
+                    id="userHp"
+                    name="hp"
+                    placeholder="#유저휴대폰"
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>우편번호</th>
+                <td>
+                  <input
+                    type="text"
+                    id="userZipcode"
+                    name="zipCode"
+                    placeholder="#유저우편번호"
+                    required
+                  />
+                  <button type="button" id="btnZip" class="register-btns">우편번호 찾기</button>
+                </td>
+              </tr>
+              <tr>
+                <th>기본주소</th>
+                <td>
+                  <input
+                    type="text"
+                    id="userAddr1"
+                    name="addr1"
+                    placeholder="#유저기본주소"
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>상세주소</th>
+                <td>
+                  <input
+                    type="text"
+                    id="userAddr2"
+                    name="addr2"
+                    placeholder="#유저상세주소"
+                    required
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>가입일</th>
+                <td id="userUpdatedAt"></td>
+              </tr>
+              <tr>
+                <th>최근로그인날짜</th>
+                <td id="userLastLoginAt"></td>
+              </tr>
+              <tr>
+                <th>기타</th>
+                <td>
+                  <textarea
+                    name="etc"
+                    id="userEtc"
+                    placeholder="회원에대한기타정보입력"
+                    class="etc"
+                  ></textarea>
+                </td>
+              </tr>
+            </table>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="confirm-btn">수정하기</button>
+        </div>
+      </div>
+    </div>
+  <footer th:replace="~{/admin/include/footer.html}"></footer>
+
+  <script>
+
+    // 전체 선택 체크박스 클릭 시 전체 선택
+    function toggleSelectAll(selectAllCheckbox) {
+      // 체크박스를 모두 불러옴
+      const checkboxes = document.querySelectorAll(".checkboxes")
+      checkboxes.forEach(function (checkbox) {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
+    }
+
+    // 개별 체크박스 클릭 시
+    function toggleCheckbox(checkbox) {
+      const checkboxes = document.querySelectorAll(".checkboxes");
+      const selectAllCheckbox = document.getElementById("selectAll");
+      const allChecked = Array.from(checkboxes).every(function(cb) {
+        return cb.checked;
+      });
+      selectAllCheckbox.checked = allChecked;
+    }
+
+    // 등급 선택 수정
+    function updateSelectedGrades() {
+      const selectedGrades = [];
+      const checkboxes = document.querySelectorAll('.checkboxes:checked');
+
+      checkboxes.forEach(checkbox => {
+        const memberInfoId = checkbox.value;
+        const gradeSelect = document.getElementById('grade-' + memberInfoId);
+        const grade = gradeSelect.value;
+
+        selectedGrades.push({
+          memberInfoId: memberInfoId,
+          grade: grade
+        });
+      });
+
+      if (selectedGrades.length === 0) {
+        alert("선택된 회원이 없습니다.");
+        return;
+      }
+
+      // 수정 확인 알림
+      const confirmUpdate = confirm("수정하시겠습니까?");
+      if (!confirmUpdate) {
+        return; // 사용자가 수정하지 않겠다고 하면 함수를 종료
+      }
+
+      fetch('/lotteon/admin/member/update-grades', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedGrades),
+      })
+              .then(response => {
+                if (response.ok) {
+                  alert("등급이 성공적으로 수정되었습니다.");
+                  location.reload(); // 페이지 새로 고침
+                } else {
+                  alert("등급 업데이트에 실패했습니다.");
+                }
+              })
+              .catch(error => {
+                console.error("Error:", error);
+                alert("서버 오류가 발생했습니다.");
+              });
+    }
+
+    // 우편번호 검색 기능
+    document.getElementById('btnZip').onclick = function () {
+      new daum.Postcode({
+        oncomplete: function (data) {
+          document.getElementById('userZipcode').value = data.zonecode;
+          document.getElementById('userAddr1').value = data.roadAddress || data.jibunAddress;
+          document.getElementById('userAddr2').focus();
+        }
+      }).open();
+    };
+
+    // 회원 수정 모달 동작
+      const registerModal = document.getElementById("versionRegisterModal");
+      const registerCloseBtn = document.getElementById("registerModalClose");
+      const confirmButton = document.querySelector(".confirm-btn");
+
+      // 수정 버튼 클릭 시 모달 열기 및 정보 조회
+      const editBtns = document.querySelectorAll(".edit-btn");
+      editBtns.forEach(function(btn) {
+        btn.onclick = function(event) {
+          event.preventDefault(); // 기본 링크 동작 방지
+
+          // UID 가져오기
+          const uid = this.getAttribute('data-uid');
+          console.log('uid:', uid);  // UID 값 확인
+
+          // AJAX 요청으로 사용자 정보 조회
+          fetch(`/lotteon/admin/member/list/${uid}`)
+                  .then(response => response.json())
+                  .then(data => {
+                    console.log('data : ', data);
+
+                    // 사용자 정보가 성공적으로 가져와지면 모달에 채우기
+                    document.getElementById("userId").textContent = data.uid; // 아이디
+                    document.getElementById("memberInfoId").value = data.memberInfo.memberInfoId; // 아이디
+                    document.getElementById("userName").value = data.memberInfo.name; // 이름
+
+                    // 성별 값에 따라 라디오 버튼 체크 (0: 남, 1: 여)
+                    const gender = data.memberInfo.gender;
+                    const genderRadios = document.querySelectorAll("input[name='gender']");
+                    // 라디오 버튼 체크 상태 설정
+                    genderRadios.forEach(radio => {
+                      if (gender === 0 && radio.value === "0") {
+                        radio.checked = true; // 남 체크
+                      } else if (gender === 1 && radio.value === "1") {
+                        radio.checked = true; // 여 체크
+                      }
+                    });
+
+                    document.getElementById("userGrade").value = data.memberInfo.grade; // 등급
+                    const userStatusElement = document.getElementById("userStatus");
+                    const status = data.memberInfo.status;
+                    // 상태에 따라 텍스트와 클래스 설정
+                    userStatusElement.textContent = status;
+                    if (status === "정상") {
+                      userStatusElement.className = "normal";
+                    } else if (status === "중지") {
+                      userStatusElement.className = "stop";
+                    } else if (status === "휴면" || status === "탈퇴") {
+                      userStatusElement.className = "out";
+                    } else {
+                      userStatusElement.className = "userStatus"; // 기본 클래스
+                    }
+                    document.getElementById("userEmail").value = data.memberInfo.email; // 이메일
+                    document.getElementById("userHp").value = data.memberInfo.hp; // 휴대폰
+                    document.getElementById("userZipcode").value = data.memberInfo.address.zipCode; // 우편번호
+                    document.getElementById("userAddr1").value = data.memberInfo.address.addr1; // 기본주소
+                    document.getElementById("userAddr2").value = data.memberInfo.address.addr2; // 상세주소
+                    const updatedAt = data.memberInfo.updatedAt;  // 가입일
+                    const formattedDate = updatedAt.substring(0, 19);
+                    document.getElementById("userUpdatedAt").textContent = formattedDate;
+                    const lastLoginAt = data.memberInfo.lastLoginAt;  // 가입일
+                    const formattedLoginDate = lastLoginAt.substring(0, 19);
+                    document.getElementById("userLastLoginAt").textContent = formattedLoginDate;
+                    document.getElementById("userEtc").value = data.memberInfo.etc;
+
+                    // 모달 열기
+                    registerModal.style.display = "block";
+                  })
+                  .catch(error => {
+                    console.error('Error fetching user data:', error);
+                  });
+        };
+      });
+
+      // 모달 닫기 버튼
+      registerCloseBtn.onclick = function() {
+        registerModal.style.display = "none";
+      };
+
+      // 수정하기 버튼 클릭 시 처리
+      confirmButton.onclick = function() {
+        const updatedData = {
+          uid: document.getElementById("userId").value,
+          memberInfoId: document.getElementById("memberInfoId").value,
+          name: document.getElementById("userName").value,
+          gender: document.querySelector("input[name='gender']:checked").value,
+          email: document.getElementById("userEmail").value,
+          hp: document.getElementById("userHp").value,
+          etc: document.getElementById("userEtc").value,
+          address: {
+            zipCode: document.getElementById("userZipcode").value,
+            addr1: document.getElementById("userAddr1").value,
+            addr2: document.getElementById("userAddr2").value
+          }
+        };
+
+        // AJAX로 수정 요청
+        fetch(`/lotteon/admin/member/update`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedData),
+        })
+                .then(response => {
+                  if (response.ok) {
+                    alert("정상적으로 수정되었습니다.");
+                    // 성공적으로 업데이트 후 모달 닫기
+                    registerModal.style.display = "none";
+
+                    location.reload(); // 페이지 새로 고침
+                  } else {
+                    // 에러 처리
+                    console.error('Error updating user data:', response.statusText);
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                });
+    };
+  </script>
+
+  </body>
+</html>

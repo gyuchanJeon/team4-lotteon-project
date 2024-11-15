@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" th:href="@{/css/my/myInfo.css}" />
+  <link rel="stylesheet" th:href="@{/css/my/myInfo_qna.css}" />
+</head>
+
+<body>
+  <div id="wrapper">
+
+    <main>
+      <header th:replace="~{/include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{/my/my_aside.html}"></div>
+      <section class="myInfo_sec">
+
+        <div th:replace="~{/my/banner.html}"></div>
+
+
+        <!-- 나의 문의 -->
+        <article class="myInfo_Qna myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>나의문의</span></div>
+
+            <div id="titleAndTable">
+              <table class="inquiry-table">
+                <colgroup>
+
+                  <col style="width: 8%">
+                  <col style="width: 37%">
+                  <col style="width: 9%">
+                  <col style="width: 10%">
+                  <col style="width: 20%">
+
+                </colgroup>
+                <thead>
+                <tr>
+                  <th><input type="checkbox" class="chkbox-select-all"></th>
+                  <th>이름</th>
+                  <th>상태</th>
+                  <th>작성자</th>
+                  <th>작성일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 문의 내역이 있을 경우 목록 출력 -->
+                <tr class="qna" th:each="board : ${boards}" th:unless="${#lists.isEmpty(boards)}">
+                  <input type="hidden" th:value="${board.boardId}">
+                  <td><input type="checkbox" class="chkbox" th:data-board-id="${board.boardId}"></td>
+                  <td class="title">
+                    <span>[</span>[[${board.cate.name}]]<span>]&nbsp;</span>
+                    <a th:href="@{/cs/qna/view/{id}(id=${board.boardId})}" th:text="${board.title}">개인회원과 법인회원에 차이가 있나요?</a>
+                  </td>
+                  <td class="st1" th:if="${board.state == 0}">검토중</td>
+                  <td class="st2" th:if="${board.state == 1}">답변완료</td>
+                  <td th:text="${board.user.uid}"></td>
+                  <td th:text="${#strings.substring(board.regDate, 0, 10)}"></td>
+
+                </tr>
+
+                <!-- 문의 내역이 없을 경우 메시지 출력 -->
+                <tr th:if="${#lists.isEmpty(boards)}">
+                  <td colspan="6" style="text-align: center;">문의 내역이 없습니다.</td>
+                </tr>
+                </tbody>
+
+              </table>
+              <div class="buttons">
+                <button class="delete-btn" disabled>선택 삭제</button>
+                <a th:href="@{/cs/qna/write}" id="toQnaWrite"><button id="btnQNA">문의하기</button></a>
+              </div>
+            </div>
+            <div class="pagination">
+              <button class="page-btn"
+                      th:disabled="${currentPage == 0}"
+                      th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+                이전
+              </button>
+              <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+              <button class="page-btn"
+                      th:disabled="${currentPage + 1 == totalPages}"
+                      th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+                다음
+              </button>
+            </div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{/include/footer.html}"></footer>
+</body>
+
+</html>

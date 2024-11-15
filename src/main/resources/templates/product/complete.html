@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <th:block th:replace="~{/include/common_head}"></th:block>
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product/style_product_complete.css}"/>
+</head>
+
+<body>
+<div id="bannerTop" class="on">
+    <article th:each="banner : ${banners}" th:if="${banner.location == 'MAIN1'}" th:style="'background: ' + ${banner.background}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/config/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
+    </article>
+</div>
+<div id="wrapper">
+    <header th:replace="~{/include/header.html}"></header>
+    <main class="mainIn cf">
+        <aside th:replace="~{/main_aside.html}"></aside>
+        <!-- 주문하기 영역 -->
+        <section class="cart-section body-section">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a th:href="@{/index}">Home</a> &gt;
+                <a th:href="@{/product/cart}">장바구니</a> &gt;
+                <a th:href="@{/product/order}">주문하기</a>
+                <section class="order-section">
+            </div>
+            <!-- 주문완료 제목 -->
+            <h2 class="section-title">주문완료</h2>
+            <!-- 주문 상품목록 -->
+            <div class ="order-text">
+                <h2 class="section-title">고객님의 주문이 정상적으로 완료되었습니다</h2>
+                <p>즐거운 쇼핑이 되셨나요? 항상 고객님을 위한 롯데ON이 되겠습니다.</p>
+            </div>
+            <div class="cart-">
+                <table class="cart-table">
+                    <thead>
+                    <tr>
+                        <th>상품정보</th>
+                        <th>옵션</th>
+                        <th>판매가</th>
+                        <th>수량</th>
+                        <th>구매가</th>
+                        <th>배송정보</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cart : ${cartList}" th:attr="data-variant-id=${cart.productVariants.variant_id}">
+                        <td class="product-info" style="width: 150px">
+                            <img th:src="@{'/uploads/product/' + ${cart.productVariants.product.img1}}" alt="상품 이미지">
+                            <div class="product-details" th:text="${cart.productVariants.product.name}"></div>
+                        </td>
+                        <td>
+                            <div th:text="${cart.sku}" class="option1"></div>
+                        </td>
+                        <td class="price" th:text="${cart.price} + '원'"></td>
+                        <td>
+                            <div class="quantity">
+                                <!--                                <p id="quantity" th:text="${cart.count}"></p>-->
+                                <p id="quantity" th:text="${cart.count}"></p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="price-info">
+                                <del th:text="${cart.price}"></del>
+                                <span style="color: red" class="discount" th:text="${cart.price - (cart.price * cart.productVariants.product.discount / 100)} + '원'">
+                                </span>
+                            </div>
+                        </td>
+                        <td class="shipping-info deliveryFee" th:text="${cart.productVariants.product.deliveryFee != null ? cart.productVariants.product.deliveryFee + '원' : '무료배송'}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div> <!--cart--->
+
+            <div class="forDiv">
+                <section class="order-right">
+
+                    <!-- 최종 결제 금액-->
+                    <aside class="checkout-summary">
+                        <div class="checkout-details">
+                            <table class="checkout-row">
+                                <th><p class="tableTitle">최종 결제</p></th>
+                                <tr class="checkout-column">
+                                    <th>총 판매가</th>
+                                    <td id="all__sold"></td>
+                                </tr>
+                                <tr class="checkout-column">
+                                    <th>총 할인금액</th>
+                                    <td class="discount" id="all__discount" ></td>
+                                </tr>
+                                <tr class="checkout-column">
+                                    <th>배송비</th>
+                                    <td id="all__deliveryfee" ></td>
+                                </tr>
+                                <tr class="checkout-column">
+                                    <th>결제방법</th>
+                                    <td th:switch="${orderDTO[0].getPayment()}">
+                                        <span th:case="1">카카오페이</span>
+                                        <span th:case="2">토스</span>
+                                        <span th:case="3">페이코</span>
+                                        <span th:case="4">무통장입금</span>
+                                        <span th:case="5">네이버페이</span>
+                                    </td>
+                                </tr>
+                                <tr class="checkout-column">
+                                    <th>결제일시</th>
+                                    <td id="buyDate" th:text="${orderDTO[0].getBuyDate()}">0000년 00월 00일 00:00:00</td>
+                                </tr>
+                                <tr class="checkout-price">
+                                    <th>총 결제 금액</th>
+                                    <td id="final__price" th:text="${orderDTO[0].totalPrice}">23,760원</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </aside>
+                </section> <!-- order-right -->
+            </div>
+            <!-- 배송 정보 -->
+            <section class = "order-left">
+                <div class="shipping-section">
+                    <form>
+
+                        <table class="shipping-table">
+                            <th> <p class="tableTitle">주문 정보</p></th>
+                            <tr>
+                                <th>주문자</th>
+                                <td>
+                                    <p th:text="${#authentication.principal.user.memberInfo.name + '님'}"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>휴대폰</th>
+                                <td>
+                                    <p th:text="${#authentication.principal.user.memberInfo.hp}"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>기본주소</th>
+                                <td>
+                                    <p th:text="${#authentication.principal.user.memberInfo.Address.addr1}"></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div><!-- shipping-section-->
+                <div class="shipping-section">
+                    <form>
+                        <table class="shipping-table">
+                            <thead>
+                            <tr><th colspan="2"><p class="tableTitle">배송 정보</p></th></tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th>수령자</th>
+                                <td><p th:text="${orderDTO[0].recipName}">이름 미입력</p></td>
+                            </tr>
+                            <tr>
+                                <th>휴대폰</th>
+                                <td><p th:text="${orderDTO[0].recipHp}">휴대폰 미입력</p></td>
+                            </tr>
+                            <tr>
+                                <th>우편번호</th>
+                                <td><p th:text="${orderDTO[0].recipZip}">우편번호 미입력</p></td>
+                            </tr>
+                            <tr>
+                                <th>기본주소</th>
+                                <td>
+                                    <p th:text="${orderDTO[0].recipAddr1 + ' ' + orderDTO[0].recipAddr2}">주소 미입력</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div><!-- shipping-section-->
+            </section><!-- order-left -->
+        </section>
+    </main>
+    <footer th:replace="~{/include/footer.html}"></footer>
+</div>
+</body>
+<script>
+    window.onload = function () {
+        const all__sold = document.getElementById("all__sold");
+        const all__discount = document.getElementById("all__discount");
+        const all__deliveryfee = document.getElementById("all__deliveryfee");
+
+        // 합계를 계산하는 함수 정의
+        function totalPrice() {
+            const originPrices = document.querySelectorAll(".price");
+            let total = Array.from(originPrices).reduce((acc, priceElement) => {
+                const price = parseFloat(priceElement.innerText.replace(/,/g, '')) || 0;
+                return acc + price;
+            }, 0);
+            all__sold.innerText = `${total.toLocaleString()}원`;
+            console.log('전체 판매금액:', total);
+            return total;
+        }
+
+        function deliveryPrice() {
+            const deliveryPriceElements = document.querySelectorAll(".deliveryFee");
+            deliveryPriceElements.forEach((element, index) => {
+                console.log(`Element ${index} delivery fee:`, element.innerText);
+            });
+            let total = Array.from(deliveryPriceElements).reduce((acc, priceElement) => {
+                const price = parseFloat(priceElement.innerText.replace(/,/g, '')) || 0;
+                return acc + price;
+            }, 0);
+            all__deliveryfee.innerText = `${total.toLocaleString()}원`;
+            console.log('개별 배송금액:', deliveryPriceElements);
+            console.log('전체 배송금액 :', total);
+        }
+
+        function totalDiscount() {
+            const discountElements = document.querySelectorAll(".discount");
+            let totalDiscount = Array.from(discountElements).reduce((acc, discountElement) => {
+                const discount = parseFloat(discountElement.innerText.replace(/,/g, '')) || 0;
+                return acc + discount;
+            }, 0);
+            const finalPrice = totalPrice() - totalDiscount;
+            all__discount.innerText = `${finalPrice.toLocaleString()}원`;
+            console.log('전체 할인금액:', totalDiscount);
+            return totalDiscount;
+        }
+
+        // 함수 호출
+        totalPrice();
+        deliveryPrice();
+        totalDiscount();
+
+        const buyDateElement = document.getElementById("buyDate");
+        const rawDate = buyDateElement.getAttribute("data-date");
+
+        if (rawDate) {
+            const formattedDate = new Date(rawDate).toISOString().slice(0, 19).replace('T', ' ');
+            buyDateElement.textContent = formattedDate;
+        }
+    };
+</script>
+</html>

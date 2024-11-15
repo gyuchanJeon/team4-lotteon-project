@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>약관관리</title>
+
+  <!--날짜 : 2024/10/28
+  이름 : 강은경
+  내용 : policy 생성
+
+  수정이력
+  - 2024/10/28 강은경 - terms 출력&수정 완료 -->
+
+  <!--공통 css 부분-->
+  <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+  <!--각 페이지(section) 개별 css-->
+  <link rel="stylesheet" th:href="@{/css/admin/style_admin_config_policy.css}"/>
+
+
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+  <div id="wrapper">
+    <aside th:replace="~{/admin/include/aside.html}"></aside>
+    <!--section-->
+    <section>
+      <div class="breadcrumb">
+        <a href="#">Home</a> > <a href="#">환경설정</a> > <a href="#" class="location">약관관리</a>
+      </div>
+      <h3>약관관리</h3>
+
+      <div class="form">
+        <div class="version-header">
+          <h4>구매회원 약관</h4>
+          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+        </div>
+        <form class="json-form" id="termForm" th:action="@{/admin/config/term}" method="post" >
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">약관내용</td>
+                <td>
+                  <textarea name="term" rows="5" cols="50" th:text="${termsDTO.term}" th:attr="data-original=${termsDTO.term}"></textarea>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>판매회원 약관</h4>
+          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+        </div>
+        <form class="json-form" id="taxForm" th:action="@{/admin/config/tax}" method="post" >
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">약관내용</td>
+                <td>
+                  <textarea name="tax" rows="5" cols="50" th:text="${termsDTO.tax}" th:attr="data-original=${termsDTO.tax}"></textarea>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>전자금융거래 약관</h4>
+          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+        </div>
+        <form class="json-form" id="financeForm" th:action="@{/admin/config/finance}" method="post" >
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">약관내용</td>
+                <td>
+                  <textarea name="finance" rows="5" cols="50" th:text="${termsDTO.finance}" th:attr="data-original=${termsDTO.finance}" ></textarea>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>위치정보 이용약관</h4>
+          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+        </div>
+        <form class="json-form" id="locationForm" th:action="@{/admin/config/location}" method="post" >
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">약관내용</td>
+                <td>
+                  <textarea name="location" rows="5" cols="50" th:text="${termsDTO.location}" th:attr="data-original=${termsDTO.location}" ></textarea>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>개인정보처리방침</h4>
+          <p class="sub-title">회원가입 및 정책 페이지 노출 약관입니다.</p>
+        </div>
+        <form class="json-form" id="privacyForm" th:action="@{/admin/config/privacy}" method="post" >
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">약관내용</td>
+                <td>
+                  <textarea name="privacy" rows="5" cols="50" th:text="${termsDTO.privacy}" th:attr="data-original=${termsDTO.privacy}" ></textarea>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <!-- /Section -->
+  </div>
+</main>
+
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const submitJsonForm = (form) => {
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        let isModified = false;
+
+        form.querySelectorAll('textarea').forEach(input => {
+          const originalValue = input.getAttribute('data-original');
+          const currentValue = input.value;
+          if (originalValue !== currentValue) {
+            isModified = true;
+          }
+        });
+
+        if (!isModified) {
+          alert('변경된 사항이 없습니다.');
+          return;
+        }
+
+        const isConfirmed = confirm('정말 수정하시겠습니까?');
+        if (!isConfirmed) return;
+
+        const formData = new FormData(form);
+        const jsonData = {};
+        formData.forEach((value, key) => jsonData[key] = value);
+
+        fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonData),
+        })
+                .then(response => {
+                  if (!response.ok) throw new Error('네트워크 오류 발생');
+                  return response.json();
+                })
+                .then(responseData => {
+                  alert('수정이 완료되었습니다.');
+                  window.location.reload();
+                })
+                .catch(error => alert('수정 중 오류가 발생했습니다.'));
+      });
+    };
+    // 일반 폼에 적용
+    const jsonForms = document.querySelectorAll('.json-form');
+    jsonForms.forEach(submitJsonForm);
+
+  });
+
+
+</script>

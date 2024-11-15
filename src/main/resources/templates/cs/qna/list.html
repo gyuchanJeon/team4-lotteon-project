@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>문의사항 목록</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cs/cs_list.css}"/>
+<style>
+ </style>
+</head>
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+<main>
+  <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
+  <section id="section_wrapper">
+    <div id="titleAndTable">
+      <div id="category">
+        <p>문의내역<br><span class="subtitle">고객님이 작성하신 문의 내용입니다.</span></p>
+        <div class="breadcrumb">
+          <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/list}" class="location">나의문의</a>
+        </div>
+      </div>
+      <table class="inquiry-table">
+        <colgroup>
+
+          <col style="width: 8%">
+          <col style="width: 37%">
+          <col style="width: 9%">
+          <col style="width: 10%">
+          <col style="width: 20%">
+
+        </colgroup>
+        <thead>
+        <tr>
+          <th><input type="checkbox" class="chkbox-select-all"></th>
+          <th>이름</th>
+          <th>상태</th>
+          <th>작성자</th>
+          <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 문의 내역이 있을 경우 목록 출력 -->
+        <tr class="qna" th:each="board : ${boards}" th:unless="${#lists.isEmpty(boards)}">
+          <input type="hidden" th:value="${board.boardId}">
+          <td><input type="checkbox" class="chkbox" th:data-board-id="${board.boardId}"></td>
+          <td class="title">
+            <span>[</span>[[${board.cate.name}]]<span>]&nbsp;</span>
+            <a th:href="@{/cs/qna/view/{id}(id=${board.boardId})}" th:text="${board.title}">개인회원과 법인회원에 차이가 있나요?</a>
+          </td>
+          <td class="st1" th:if="${board.state == 0}">검토중</td>
+          <td class="st2" th:if="${board.state == 1}">답변완료</td>
+          <td th:text="${board.user.uid}"></td>
+          <td th:text="${board.regDate}"></td>
+        </tr>
+
+        <!-- 문의 내역이 없을 경우 메시지 출력 -->
+        <tr th:if="${#lists.isEmpty(boards)}">
+          <td colspan="6" style="text-align: center;">문의 내역이 없습니다.</td>
+        </tr>
+        </tbody>
+
+      </table>
+      <div class="buttons">
+        <button class="delete-btn" disabled>선택 삭제</button>
+        <a th:href="@{/cs/qna/write}" id="toQnaWrite"><button id="btnQNA">문의하기</button></a>
+      </div>
+
+    </div>
+    <div class="pagination">
+      <button class="page-btn"
+              th:disabled="${currentPage == 0}"
+              th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+        이전
+      </button>
+      <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+      <button class="page-btn"
+              th:disabled="${currentPage + 1 == totalPages}"
+              th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+        다음
+      </button>
+    </div>
+  </section>
+</main>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
+</html>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // 모든 체크박스 요소 가져오기
+    const selectAllCheckbox = document.querySelector('.chkbox-select-all');
+    const individualCheckboxes = document.querySelectorAll('.chkbox');
+    const deleteSelectedButton = document.querySelector('.delete-btn');
+
+    // 전체 선택 체크박스 클릭 이벤트
+    selectAllCheckbox.addEventListener('click', function() {
+      individualCheckboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
+      toggleDeleteButtonState(); // 선택 삭제 버튼 상태 업데이트
+    });
+
+    // 개별 체크박스 클릭 이벤트
+    individualCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('click', function() {
+        // 모든 체크박스가 선택되어 있는지 확인
+        const allChecked = Array.from(individualCheckboxes).every(chk => chk.checked);
+        selectAllCheckbox.checked = allChecked;
+
+        toggleDeleteButtonState(); // 선택 삭제 버튼 상태 업데이트
+      });
+    });
+
+    // 선택 삭제 버튼 상태 업데이트
+    function toggleDeleteButtonState() {
+      const anyChecked = Array.from(individualCheckboxes).some(chk => chk.checked);
+      deleteSelectedButton.disabled = !anyChecked;
+    }
+
+    // 선택 삭제 버튼 클릭 이벤트
+    deleteSelectedButton.addEventListener('click', function() {
+      if (confirm('선택한 항목을 삭제하시겠습니까?')) {
+        // 선택된 항목의 boardId 수집
+        const selectedBoardIds = Array.from(individualCheckboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.getAttribute('data-board-id'));
+
+        // 선택된 게시물 삭제 요청
+        Promise.all(selectedBoardIds.map(boardId => {
+          return fetch(`/lotteon/admin/cs/board/delete/${boardId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+        }))
+                .then(responses => {
+                  if (responses.every(response => response.ok)) {
+                    alert('선택한 항목이 삭제되었습니다.');
+                    // 삭제된 항목 제거
+                    selectedBoardIds.forEach(boardId => {
+                      const row = document.querySelector(`.chkbox[data-board-id="${boardId}"]`).closest('tr');
+                      if (row) {
+                        row.remove();
+                      }
+                    });
+                  } else {
+                    alert('일부 항목 삭제에 실패했습니다.');
+                  }
+                })
+                .catch(error => {
+                  console.error('선택 삭제 중 오류 발생:', error);
+                  alert('삭제 중 오류가 발생했습니다.');
+                });
+      }
+    });
+
+    // 개별 삭제 버튼 클릭 이벤트
+    const deleteButtons = document.querySelectorAll('.deletebtn');
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const boardId = this.getAttribute('data-board-id');
+        if (confirm('이 게시물을 삭제하시겠습니까?')) {
+          fetch(`/lotteon/admin/cs/board/delete/${boardId}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+                  .then(response => {
+                    if (response.ok) {
+                      alert('게시물이 성공적으로 삭제되었습니다.');
+                      const row = this.closest('tr');
+                      if (row) {
+                        row.remove();
+                      }
+                    } else {
+                      alert('게시물 삭제에 실패했습니다.');
+                    }
+                  })
+                  .catch(error => {
+                    console.error('삭제 중 오류 발생:', error);
+                    alert('삭제 중 오류가 발생했습니다.');
+                  });
+        }
+      });
+    });
+  });
+</script>

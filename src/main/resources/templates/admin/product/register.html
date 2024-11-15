@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:replace="~{/include/common_head}"></th:block>
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_register.css}"/>
+    <script th:src="@{/js/my/admin_product/product_register.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a
+                    th:href="@{/admin/product/register}" class="location">상품목록</a>
+            </div>
+            <h3>상품등록</h3>
+
+            <form>
+                <div class="form">
+                    <div class="version-header">
+                        <h4>상품분류</h4>
+                        <p class="sub-title">1차, 2차 카테고리 기본분류는 반드시 선택하셔야 합니다.</p>
+                    </div>
+
+                    <div class="inquiry-section">
+                        <table class="inquiry-table">
+                            <tr>
+                                <td class="label">1차 분류</td>
+                                <td>
+                                    <select class="dropdown" id="category1" required>
+                                        <option value="" disabled selected hidden>1차분류 선택</option>
+                                        <option th:each="cate1 : ${productCate1List}" th:value="${cate1.productCateId}"
+                                                th:text="${cate1.name}"></option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">2차 분류</td>
+                                <td>
+                                    <select class="dropdown" id="category2" required>
+                                        <option value="" disabled selected hidden>2차분류 선택</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">3차 분류</td>
+                                <td>
+                                    <select class="dropdown" id="category3">
+                                        <option value="" disabled selected hidden>3차분류 선택</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="version-header">
+                        <h4>기본정보</h4>
+                        <p class="sub-title">기본정보는 반드시 선택하셔야 합니다.</p>
+                    </div>
+
+                    <div class="inquiry-section">
+                        <table class="inquiry-table">
+                            <tr>
+                                <td class="label">상품명</td>
+                                <td>
+                                    <input type="text" name="name" id="name" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">기본설명</td>
+                                <td>
+                                    <input type="text" name="description" id="description" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조사</td>
+                                <td>
+                                    <input type="text" name="company" id="company" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">상품금액</td>
+                                <td>
+                                    <input type="text" name="price" class="inputmini" id="price" required/> 원
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">할인율</td>
+                                <td>
+                                    <input type="text" name="discount" class="inputmini" id="discount"
+                                           required/> %
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">포인트</td>
+                                <td>
+                                    <input type="text" name="point" class="inputmini" id="point"  required/> 원
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">배송비</td>
+                                <td>
+                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee"
+                                           required/>
+                                    원
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">상품 이미지</td>
+                                <td>
+                                    <div class="file-upload file">
+                                        <input type="file" id="prod_img1" name="img1" accept="image/*" required/>
+                                        크기 190 x 190, 상품 목록에 출력될 이미지입니다.
+                                    </div>
+                                    <div class="file-upload file">
+                                        <input type="file" id="prod_img2" name="img2" accept="image/*" required/>
+                                        크기 190 x 190, 상품 메인에 출력될 이미지입니다.
+                                    </div>
+                                    <div class="file-upload file">
+                                        <input type="file" id="prod_img3" name="img3" accept="image/*" required/>
+                                        크기 190 x 190, 상품 상세에 출력될 이미지입니다.
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">상품 상세정보</td>
+                                <td>
+                                    <div class="file-upload">
+                                        <input type="file" id="prod_detail" name="detail"
+                                               accept="image/*" required/>
+                                        크기 가로 940px, 높이 제약없음, 크기 최대 1MB
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="option_tr">
+                                <td class="label">
+                                    상품 옵션 설정
+                                </td>
+                                <td>
+                                    <div id="option">
+                                        <div>
+                                            <span>옵션명 :</span>
+                                            <input type="text" class="option-name op" placeholder="옵션명을 입력하세요" required>
+                                        </div>
+                                        <div class="option-values">
+                                            <span>옵션값 :</span>
+                                            <div class="fake_input op">
+                                                <input type="text" class="option-value-input op"
+                                                       placeholder="옵션값 입력 후 엔터">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" id="addOption">옵션 추가</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="version-header">
+                        <h4>상품정보 제공고시</h4>
+                        <p class="sub-title">[전자상거래에 관한 상품정보 제공에 관한 고시] 항목에 의거 등록해야 되는 정보입니다.</p>
+                    </div>
+                    <div class="inquiry-section">
+                        <table class="inquiry-table">
+                            <tr>
+                                <td class="label">상품상태</td>
+                                <td>
+                                    <input type="text" name="condition" class="inputmini"
+                                           id="condition" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">부가세 면세여부</td>
+                                <td>
+                                    <input type="text" name="duty" class="inputmini"
+                                           id="duty" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">영수증 발행</td>
+                                <td>
+                                    <input type="text" name="receipt"
+                                           id="receipt" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">사업자구분</td>
+                                <td>
+                                    <input type="text" name="sellerType" id="sellerType" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">브랜드</td>
+                                <td>
+                                    <input type="text" name="brand" id="brand" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">원산지</td>
+                                <td>
+                                    <input type="text" name="coa" class="inputmini"
+                                           id="coa" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조자 / 수입국</td>
+                                <td>
+                                    <input type="text" name="creator" class="inputmini"
+                                           id="creator" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조국</td>
+                                <td>
+                                    <input type="text" name="country" class="inputmini"
+                                           id="country" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">취급시주의사항</td>
+                                <td>
+                                    <input type="text" name="warning" class="inputmini"
+                                           id="warning" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조연월</td>
+                                <td>
+                                    <input type="text" name="createDate" class="inputmini"
+                                           id="createDate" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">품질보증기준</td>
+                                <td>
+                                    <input type="text" name="quality" class="inputmini"
+                                           id="quality" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">A/S 책임자</td>
+                                <td>
+                                    <input type="text" name="as" class="inputmini"
+                                           id="as" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">전화번호</td>
+                                <td>
+                                    <input type="text" name="asPhone" class="inputmini"
+                                           id="asPhone" required/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="desc">
+                        <p class="sub-title-desc">전자상거래등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성들을 양식에 따라 입력할 수
+                            있습니다.</p>
+                    </div>
+                    <div class="buttons">
+                        <button type="submit" class="write-btn" id="product_submit">등록</button>
+                    </div>
+                </div>
+                <input id="sellerInfoId" type="hidden"
+                       th:value="${#authentication.principal.user.sellerInfo.sellerInfoId}">
+            </form>
+        </section>
+        <!-- /Section -->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

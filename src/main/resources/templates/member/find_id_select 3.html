@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" th:href="@{/css/user/common.css}" />
+    <link rel="stylesheet" th:href="@{/css/member/findIdSelect.css}" />
+</head>
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+    <main>
+        <div class="join_container">
+            <div class="headtxt">
+                <span>아이디 찾기</span>
+            </div>
+            <h3 class="choose">찾으실 회원 유형을 선택해 주세요.</h3>
+            <div class="option_section">
+                <a th:href="@{/member/find_member_id}" class="option-select">개인구매회원</a>
+                <a href="#" class="option-select seller-select">사업자 판매회원</a>
+            </div>
+        </div>
+    </main>
+    <!--<footer>
+        <ul>
+            <li><a href="/company/index">회사소개</a></li>
+            <li><a href="#">서비스이용약관</a></li>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">전자금융거래약관</a></li>
+        </ul>
+        <div>
+            <p><img th:src="@{images/main/footer_logo.png}" alt="로고"/></p>
+            <p>
+                <strong>(주)롯데ON</strong><br/>- bxSlider
+                대표이사 : 김사무엘상현, 정준호, 강성현<br/>
+                사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
+                통신판매업 신고 : 서울송파 제0158호<br>
+                호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+            </p>
+            <p>
+                <strong>고객센터</strong><br/>
+                Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
+                Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
+                App Version:[[${appInfo}]]
+            </p>
+        </div>
+    </footer>-->
+</body>
+
+</html>

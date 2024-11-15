@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠폰목록</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_coupon_list.css}"/>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">쿠폰관리</a> >
+                <a href="#" class="location">쿠폰목록</a>
+            </div>
+            <h3>쿠폰목록</h3>
+            <div class="form">
+                <div class="search-bar">
+                    <select id="search-category" class="dropdown">
+                        <option>쿠폰번호</option>
+                        <option>쿠폰명</option>
+                        <option>발급자</option>
+                    </select>
+                    <input
+                            type="text"
+                            placeholder="검색어 입력"
+                            class="search-input"
+                    />
+                    <button class="search-btn">검색</button>
+                </div>
+
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 11%" />
+                        <col style="width: 13%" />
+                        <col style="width: 17%" />
+                        <col style="width: 10%" />
+                        <col style="width: 13%" />
+                        <col style="width: 11%" />
+                        <col style="width: 7%" />
+                        <col style="width: 7%" />
+                        <col style="width: 8%" />
+                        <col style="width: 12%" />
+                        <col style="width: 9%" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>쿠폰번호</th>
+                        <th>쿠폰종류</th>
+                        <th>쿠폰명</th>
+                        <th>혜택</th>
+                        <th>사용기간</th>
+                        <th>발급자</th>
+                        <th>발급수</th>
+                        <th>사용수</th>
+                        <th>상태</th>
+                        <th>발급일</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--반복 구간-->
+                    <tr th:each="coupon : ${couponDTOList}">
+                        <td>
+                            <a href="#" onclick="openCouponDetailModal()">[[${coupon.couponId}]]</a>
+                        </td>
+                        <td>[[${coupon.type}]]</td>
+                        <td>[[${coupon.name}]]</td>
+                        <td th:if ="${coupon.benefit} < 100 ">[[${coupon.benefit}]]% 할인</td>
+                        <td th:if ="${coupon.benefit} >= 1000 ">[[${coupon.benefit}]]원 할인</td>
+                        <td th:if="${coupon.getDDate() eq 0}">
+                            [[${coupon.sDate}]] ~ [[${coupon.eDate}]]
+                        </td>
+                        <td th:if="${coupon.getDDate() ne 0}">
+                            [[${coupon.dDate}]]일
+                        </td>
+                        <td th:if="${coupon.getUsers().getRole()} eq 'seller'">
+                            [[${coupon.users.sellerInfo.comName}]]
+                        </td>
+                        <td th:if="${coupon.getUsers().getRole()} ne 'seller'">
+                            최고관리자
+                        </td>
+                        <td>[[${coupon.totalIssued}]]</td>
+                        <td>[[${coupon.totalUsed}]]</td>
+                        <th:block th:if="${coupon.getStatus()} eq 1">
+                            <td class="issued">발급중</td>
+                        </th:block>
+                        <th:block th:if="${coupon.getStatus()} eq 0">
+                            <td class="end">종료</td>
+                        </th:block>
+                        <td>[[${coupon.IDate}]]</td>
+                        <td>
+                            <button class="end-btn">종료</button>
+                        </td>
+                    </tr>
+                    <!-- 반복 구간 끝 -->
+                    </tbody>
+                </table>
+                <div class="buttons">
+                    <a href="#" id="openRegisterModalBtn" class="write-btn">쿠폰등록</a>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn">이전</button>
+                    <button class="page-num">1</button>
+                    <button class="page-num">2</button>
+                    <button class="page-num">3</button>
+                    <button class="page-num">4</button>
+                    <button class="page-num">5</button>
+                    <button class="page-btn">다음</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<!-- 쿠폰정보 모달 -->
+<div id="couponModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>쿠폰정보</h4>
+            <span id="couponModalClose" class="close">&times;</span> <!-- id 추가 -->
+        </div>
+        <div class="modal-body">
+            <table class="modal-table">
+                <tr>
+                    <th>쿠폰번호</th>
+                    <td>10121211341</td>
+                    <th>발급처</th>
+                    <td>(주)다있어</td>
+                </tr>
+                <tr>
+                    <th>쿠폰종류</th>
+                    <td colspan="3">개별상품 할인</td>
+                </tr>
+                <tr>
+                    <th>쿠폰명</th>
+                    <td colspan="3">10월 한달 감사 쿠폰 이벤트</td>
+                </tr>
+                <tr>
+                    <th>혜택</th>
+                    <td colspan="3">2,000원 할인</td>
+                </tr>
+                <tr>
+                    <th>사용기간</th>
+                    <td colspan="3">2024-10-17 ~ 2024-10-22</td>
+                </tr>
+                <tr>
+                    <th>유의사항</th>
+                    <td colspan="3" style="white-space: pre-line;">상품 중복 할인 쿠폰
+                        - 상품 1개에 대해 사용 가능
+                        - 판매자 즉시할인/상품할인 쿠폰과 중복 사용 가능
+
+                        사용처
+                        - (주)다있어
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button id="modalCloseBtn" class="close-btn">닫기</button> <!-- id 추가 -->
+        </div>
+    </div>
+</div>
+<!-- 쿠폰 등록 모달 -->
+<div id="couponRegisterModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>쿠폰등록</h4>
+            <span id="registerModalClose" class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="couponRegisterForm">
+                <table class="modal-table">
+                    <tr>
+                        <th>발급처</th>
+                        <td th:if="${#authentication.principal.user.role} == 'seller'">
+                            <input type="text" id="company" th:value="${#authentication.principal.user.sellerInfo.comName}" readonly required>
+                        </td>
+                        <td th:if="${#authentication.principal.user.role} == 'ADMIN'">
+                            <input type="text" id="admin" th:value="관리자" readonly required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>쿠폰종류</th>
+                        <td>
+                            <div style="display: inline-block;">
+                                <select id="type-select" class="dropdown" onchange="toggleProductSelect()">
+                                    <option>종류 선택</option>
+                                    <option th:if="${#authentication.principal.user.role} == 'seller'">판매자상품할인</option>
+                                    <option id="select-product" th:if="${#authentication.principal.user.role} == 'seller'">개별상품할인</option>
+                                    <option th:if="${#authentication.principal.user.role} == 'ADMIN'">전체주문할인</option>
+                                    <option>배송비 무료</option>
+                                </select>
+                            </div>
+                            <div style="display: inline-block;">
+                                <select id="product-select" class="dropdown" style="display: none;">
+                                    <option>상품 선택</option>
+                                    <option th:each="product : ${sellerProducts}" th:text="${product.name}" th:value="${product.productId}"></option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <script>
+                        function toggleProductSelect() {
+                            const typeSelect = document.getElementById("type-select");
+                            const productSelect = document.getElementById("product-select");
+
+                            // '개별상품할인' 선택 시만 상품 선택 드롭다운을 표시
+                            if (typeSelect.value === "개별상품할인") {
+                                productSelect.style.display = "inline-block";
+                            } else {
+                                productSelect.style.display = "none";
+                            }
+                        }
+                    </script>
+
+                    <tr>
+                        <th>쿠폰명</th>
+                        <td><input type="text" id="couponName" required> <input type="hidden" id="uid" th:value="${#authentication.principal.user.uid}"></td>
+                    </tr>
+                    <tr>
+                        <th>혜택</th>
+                        <td>
+                            <div class="radio-group" id="benefit">
+                                <label><input type="radio" name="benefit" value="1000"> 1,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="2000"> 2,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="3000"> 3,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="4000"> 4,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="5000"> 5,000원 할인</label>
+                                <label><input type="radio" name="benefit" value="10"> 10% 할인</label>
+                                <label><input type="radio" name="benefit" value="20"> 20% 할인</label>
+                                <label><input type="radio" name="benefit" value="30"> 30% 할인</label>
+                                <label><input type="radio" name="benefit" value="40"> 40% 할인</label>
+                                <label><input type="radio" name="benefit" value="50"> 50% 할인</label>z
+                                <label><input type="radio" name="benefit" value="0"> 배송비 무료</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>사용기간</th>
+                        <td>
+                            <input type="date" id="startDate" class="date" required>
+                            ~
+                            <input type="date" id="endDate" class="date"  required>
+                            <br><span style="display: block; margin-top: 10px;">또는 발급일로부터
+                            <input type="text" id="dDate" class="inputmini"> 이내</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>유의사항</th>
+                        <td><textarea id="descInput" rows="4" required></textarea></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <a href="#" id="registerCancelBtn" class="cancel-btn">취소</a>
+            <button id="registerConfirmBtn" class="confirm-btn">등록</button>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>
+<script>
+
+    // 전역 변수로 모달 선언
+    const modal = document.getElementById("couponModal");
+
+    // 쿠폰정보 모달 열기 함수
+    function openCouponDetailModal() {
+        modal.style.display = "block";
+    }
+
+    // 버전확인 모달 동작
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById("couponModal");
+        const btns = document.querySelectorAll(".edit-btn"); // "확인" 버튼들
+        const modalCloseBtn = document.getElementById("couponModalClose"); // 버전 모달 닫기 버튼
+        const closeButton = document.getElementById("modalCloseBtn");
+
+
+        // 닫기 버튼(X) 클릭 시 모달 닫기
+        modalCloseBtn.onclick = function() {
+            modal.style.display = "none";
+        };
+
+        // 하단 닫기 버튼 클릭 시 모달 닫기
+        closeButton.onclick = function() {
+            modal.style.display = "none";
+        };
+
+        // 모달 외부 클릭 시 모달 닫기
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    });
+
+
+    // 쿠폰 등록 모달 동작
+    document.addEventListener('DOMContentLoaded', function() {
+        const registerModal = document.getElementById("couponRegisterModal");
+        const registerBtn = document.getElementById("openRegisterModalBtn"); // 등록 버튼
+        const registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
+        const closeButton = document.getElementById("registerCloseBtn"); // 하단 닫기 버튼
+        const confirmButton = document.getElementById("registerConfirmBtn");
+        const cancelButton = document.getElementById("registerCancelBtn"); // 취소 버튼
+
+        // 등록 버튼 클릭 시 모달 열기
+        registerBtn.onclick = function() {
+            registerModal.style.display = "block";
+        };
+
+        // 닫기 버튼(X) 클릭 시 모달 닫기
+        registerCloseBtn.onclick = function() {
+            registerModal.style.display = "none";
+        };
+
+
+        // 취소 버튼 클릭 시 모달 닫기
+        cancelButton.onclick = function() {
+            registerModal.style.display = "none";
+        };
+
+        // 모달 외부 클릭 시 모달 닫기
+        window.onclick = function(event) {
+            if (event.target == registerModal) {
+                registerModal.style.display = "none";
+            }
+        };
+        
+        //사용기간 체크
+        const startDate = document.getElementById("startDate");
+        const endDate = document.getElementById("endDate");
+        const dDate = document.getElementById("dDate");
+        startDate.addEventListener("focusout", e => {
+            dDate.value = "";
+            dDate.disabled = (startDate.value !== "" || endDate.value !== "");
+            console.log(startDate.value);
+        });
+
+        endDate.addEventListener("focusout", e => {
+            dDate.value = "";
+            dDate.disabled = (startDate.value !== "" || endDate.value !== "");
+
+        });
+
+        startDate.addEventListener("focusout", e => {
+            dDate.value = "";
+            dDate.disabled = (startDate.value !== "" || endDate.value !== "");
+            console.log(startDate.value);
+        });
+
+        dDate.addEventListener("focusout", e => {
+
+            if(dDate.value !== ""){
+                startDate.disabled = true;
+                endDate.disabled = true;
+                startDate.value = "";
+                endDate.value = "";
+            }
+            else{
+                startDate.disabled = false;
+                endDate.disabled = false;
+            }
+
+        });
+
+
+
+        // 등록 확인 버튼 클릭 시
+        confirmButton.onclick = function() {
+            const type = document.getElementById("type-select").value;
+            const prodId = document.getElementById("product-select").value;
+            const couponName = document.getElementById("couponName").value;
+            const benefit = document.querySelector('input[name="benefit"]:checked').value;
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+            const dDate = document.getElementById("dDate").value;
+            const descInput = document.getElementById("descInput").value;
+            const uid = document.getElementById("uid").value;
+
+            if (type !== "종류 선택" && couponName && benefit && ((startDate && endDate) || dDate ) ) {
+                // 등록 로직 추가 (서버 전송 또는 콘솔 출력)
+
+                console.log("type:", type);
+                console.log("prodId:", Number(prodId));
+                console.log("benefit:", benefit);
+                console.log("startDate:", startDate);
+                console.log("endDate:", endDate);
+                console.log("dDate:", Number(dDate));
+                console.log("descInput:", descInput);
+                console.log("uid:", uid);
+
+
+                const jsonData = {
+                    "uid":uid,
+                    "type" : type,
+                    "prodId" : Number(prodId),
+                    "benefit" : benefit,
+                    "sdate" : startDate,
+                    "edate" : endDate,
+                    "ddate" : Number(dDate),
+                    "name" : couponName,
+                    "status" : 1,
+                    "ect" : descInput
+                }
+                console.log(jsonData);
+
+
+                fetch('/lotteon/admin/coupon/list', {
+                    method:'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(resp => resp.text())
+                    .then(data => {
+                        console.log(data);
+                        if(data === 'success'){
+                            alert("등록 성공했습니다.🥳");
+                            location.reload();
+                        }
+                        else{
+                            alert("등록 실패 했습니다.😭");
+                        }
+                    })
+                    .catch(err=>{
+                        console.log(err);
+
+                    });
+
+
+                // 등록 완료 후 모달 닫기
+                registerModal.style.display = "none";
+            } else {
+                alert("모든 필드를 입력해주세요.");
+            }
+        };
+    });
+</script>

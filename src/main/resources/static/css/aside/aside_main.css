@@ -1,0 +1,229 @@
+
+/* aside 개별 초기화 */
+.aside * {
+  margin: 0;
+  padding: 0;
+  font: normal 12px "Noto Sans CJK KR";
+}
+
+.aside ul, ol {
+  list-style: none;
+}
+.aside a {
+  text-decoration: none;
+  color: #111;
+}
+.aside input, textarea {
+  outline: none;
+}
+
+/* 왼쪽 카테고리 메뉴 */
+.aside {
+  margin-top:15px;
+  float: left;
+  width: 200px;
+  height: auto;
+  margin-right : 15px;
+}
+
+
+/* 베스트 배너 */
+.aside > .best {
+  width: 200px;
+  height: auto;
+  margin-top: 6px;
+  border: 1px solid #dbdbdb;
+  border-radius: 2%;
+  box-sizing: border-box;
+  box-shadow: 0 0 5px rgba(55, 55, 5, 0.2);
+  position:sticky;
+  top:0;
+}
+
+.aside > .best > h1 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #111;
+  margin: 6px;
+}
+
+.aside > .best > h1 > i {
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+.aside > .best > ol {
+  width: 100%;
+}
+.aside > .best > ol > li {
+  width: 100%;
+  height: 100%;
+  padding: 0 6px;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+
+.aside > .best > ol > li > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 마우스 호버시 밑줄 */
+.aside > .best > ol > li > a:hover h2 {
+  text-decoration: underline;
+}
+
+/* 베스트 상품 이미지 */
+.aside > .best > ol > li > a > .thumb {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  box-sizing: border-box;
+  vertical-align: top;
+  display: inline-block;
+}
+
+/* 첫번째 베스트 상품 */
+.aside > .best > ol > li:first-child > a > .thumb {
+  margin-top: 5px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  float: left;
+}
+
+/* 첫번째 상품 이미지 */
+.aside > .best > ol > li:first-child > a > .thumb  > img{
+  width: 100%;
+  height: 135px;
+}
+
+
+
+
+.aside > .best > ol > li > a .best_num {
+  background-color: #ef3e42;
+  text-align: center;
+  border-radius: 20%;
+  display: inline-block;
+  width: 15px;
+}
+
+/* 첫번째 상품 순위(번호) */
+.aside > .best > ol > li:first-child > a .best_num {
+  width: 35px;
+  display: inline-block;
+}
+
+/* 상품 순위(번호) */
+.aside > .best > ol > li > a i {
+  color: #ef3e42;
+  font-weight: bold;
+  font-style: italic;
+  text-align: center;
+  color: white;
+  margin-left: -2px;
+  display: inline-block;
+
+}
+
+/* 첫번째 상품 순위(번호) */
+.aside > .best > ol > li:first-child > a i {
+  font-size: 25px;
+  margin-left: -5px;
+}
+
+.thumb > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.aside > .best > ol > li:first-child > a h2{
+  font-size: 18px;
+  height:50px;
+  width: 185px;
+}
+
+/* 상품 이름 */
+.aside > .best > ol > li > a h2 {
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: wrap;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: keep-all;
+  height: 32px;
+  margin-bottom: 5px;
+  width: 82px;
+}
+
+
+
+.aside > .best > ol > li > a .aside_desc {
+  width: auto;
+  height: auto;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.aside > .best > ol > li:first-child > a .aside_desc{
+  float: left;
+}
+
+.aside > .best > ol > li > a .org_price > del::after {
+  content: "원";
+}
+.aside > .best > ol > li > a .org_price > ins::after {
+  content: "원";
+}
+.aside > .best > ol > li > a .org_price > del {
+  font-size: 10px;
+  color: #aaa;
+}
+.aside > .best > ol > li > a .org_price > span {
+  color: #eb000a;
+  font-size: 10px;
+}
+.aside > .best > ol > li > a .org_price > span::after {
+  content: "%↓";
+}
+
+.aside > .best > ol > li > a .dis_price > ins {
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: bold;
+}
+.aside > .best > ol > li > a .dis_price > ins::after {
+  content: "원";
+}
+
+.best-item-container {
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 10px; /* 이미지와 텍스트 사이의 간격 조절 */
+}
+
+.best-item-container h1 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #111;
+  margin: 6px;
+  margin-left: -6px;
+  margin-bottom: 3px;
+}
+
+.best-item {
+  font-size: 0;
+  width: 30px;
+  height: 30px;
+  padding: 11px;
+  margin-top: 8px;
+  margin-left: 6px;
+  margin-right: -10px;
+}

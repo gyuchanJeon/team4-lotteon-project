@@ -1,0 +1,87 @@
+/* 테이블 스타일 */
+.inquiry-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    margin-top: 43px;
+    border-top: 2px solid #e9e9e9;
+}
+
+.inquiry-table tr {
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.inquiry-table td {
+    padding: 15px;
+    vertical-align: top;
+    font-family: Inter;
+    font-size: 15.99px;
+    font-weight: 400;
+    text-align: left;
+
+}
+
+/* 답변이 들어있는 행의 높이 조정 */
+.answer {
+    height: 216px; /* 원하는 높이 설정 */
+    vertical-align: top; /* 상단 정렬 유지 */
+}
+
+.answer td {
+    padding: 15px; /* 셀 안쪽 여백 추가 */
+}
+
+.content {
+    height: 87px;
+    vertical-align: top;
+}
+
+.content td {
+    padding: 15px;
+}
+
+
+
+.inquiry-table .label {
+    width: 100px;
+    font-weight: bold;
+    background-color: #f5f7fa;
+    font-size: 15.99px;
+    font-weight: 700;
+    line-height: 19.35px;
+    text-align: left;
+
+}
+
+
+/* 버튼 스타일 */
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.delete-btn,
+.back-btn, .reply-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #d82a2a;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    text-decoration: none; /* 밑줄 제거 */
+}
+
+.delete-btn[disabled] {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.back-btn {
+    background-color: #ccc;
+}
+
+.reply-btn {
+    background-color: #d82a2a;
+}

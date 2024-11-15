@@ -1,0 +1,150 @@
+.register {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+}
+ul, ol {list-style: none;}
+a {text-decoration: none; color: #111;}
+input, textarea {outline: none;}
+
+.header-wrapper {
+  height: fit-content;
+}
+
+/* 입력할 때 테두리 색 변경 */
+input:focus {
+  border-color: #d82a2a !important;
+  outline: none !important; /* 기본 포커스 아웃라인 제거 */
+}
+
+h2 {
+  width: 596px;
+  margin: 18px auto;
+  padding-bottom: 7px;
+  border-bottom: 2px solid #d82a2a; /* 밑줄 추가 */
+  text-align: left;
+}
+.tit {
+  font-size: 27px;
+}
+
+.register-btns {
+  color: #fbf2ff;
+  background-color: #d82a2a;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  height: 26px;
+  box-sizing: border-box;
+  line-height: 25px;
+}
+
+.option {
+  font-size: 12px;
+}
+
+.main-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 109px;
+}
+.main-box {
+  width: 980px;
+  height: calc(100vh - 277px);
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 83px;
+}
+
+/* 회원가입 */
+.register {
+  margin-top: 129px;
+  margin-left: 8px;
+  box-sizing: border-box;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.register table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 10px;
+  border-top: 2px solid #e9e9e9;
+}
+.register table caption {
+  text-align: left;
+  padding: 10px 0;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.register table tr {
+  border: none;
+}
+
+.register table tr > td {
+  padding: 11px;
+  box-sizing: border-box;
+}
+.register table tr > td:nth-child(1) {
+  width: 124px;
+  background: #f5f7fa;
+}
+.registerButton {
+  align-content:center;}
+.regBtn {
+  border: none;
+  padding : 10px 40px;
+  line-height: 21px;
+  margin: 15px auto 0;
+  color: #fbf2ff;
+  background-color: #d82a2a;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+  float: right;
+}
+.register table tr .nickInfo {margin-bottom: 6px;}
+.register table input {
+  height: 29px;
+  padding: 10px;
+  font-size: 13px;
+  border: 1px solid #e9e9e9;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+.register table input[name=addr1] {
+  display: block;
+  width: 360px;
+  margin: 4px 0;
+}
+.register table input[name=addr2] {
+  display: block;
+  width: 360px;
+}
+.register table button {
+  border: none;
+  vertical-align: bottom;
+}
+.register > form > div {
+  margin: 0 auto;
+  width: 544px;
+  background-size: cover
+}
+
+.addr {
+  margin-bottom: 5px;
+}
+
+.desc {
+  margin-bottom: -6px;
+}
+

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>채용하기 목록</title>
+
+  <!--공통 css 부분-->
+  <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+  <!--각 페이지(section) 개별 css-->
+  <link rel="stylesheet" th:href="@{/css/cs/style_cs_recruit_list.css}"/>
+
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+  <div id="wrapper">
+    <aside th:replace="~{/admin/include/aside.html}"></aside>
+    <!--section-->
+    <section>
+      <div class="breadcrumb">
+        <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">채용하기</a>
+      </div>
+      <h3>채용하기 목록</h3>
+      <div class="form">
+        <form th:action="@{/admin/cs/recruit/list}" method="get" class="form" id="formNoPadding">
+          <div class="search-bar">
+            <select id="search-category" name="searchCategory" class="dropdown">
+              <option value="번호" th:selected="${searchCategory == '번호'}">번호</option>
+              <option value="채용부서" th:selected="${searchCategory == '채용부서'}">채용부서</option>
+              <option value="채용형태" th:selected="${searchCategory == '채용형태'}">채용형태</option>
+              <option value="제목" th:selected="${searchCategory == '제목'}">제목</option>
+            </select>
+            <input
+                    type="text"
+                    name="searchText"
+                    placeholder="검색어 입력"
+                    class="search-input"
+                    th:value="${searchText}" />
+            <button type="submit" class="search-btn">검색</button>
+          </div>
+        </form>
+
+
+        <table class="inquiry-table">
+          <thead>
+          <tr>
+            <th><input type="checkbox" class="chkbox-select-all"></th>
+            <th>번호</th>
+            <th>채용부서</th>
+            <th>경력사항</th>
+            <th>채용형태</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>상태</th>
+            <th>모집기간</th>
+            <th>작성일</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="recruit : ${recruitPage.content}"  th:attr="data-board-id=${recruit.recruitId}">
+            <td><input type="checkbox" class="chkbox"></td>
+            <td th:text="${recruit.recruitId}">번호</td>
+            <td th:text="${recruit.division}">채용부서</td>
+            <td th:text="${recruit.career}">경력사항</td>
+            <td th:text="${recruit.employment}">채용형태</td>
+            <td th:text="${recruit.title}">제목</td>
+            <td th:text="${recruit.author}">작성자</td>
+            <td th:text="${recruit.status}">상태</td>
+            <td>
+              <span th:text="${recruit.sDateFormatted}">시작일</span> ~
+              <span th:text="${recruit.eDateFormatted}">종료일</span>
+            </td>
+            <td th:text="${recruit.regdateFormatted}">작성일</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="buttons">
+          <button class="delete-btn">선택 삭제</button>
+          <button id="register-btn" class="register-btn">채용등록</button>
+        </div>
+      </div>
+      <!-- 페이지네이션 -->
+      <div class="pagination" th:if="${recruitPage.totalElements > 0}">
+        <!-- 이전 버튼 -->
+        <a th:href="@{/templates/admin/cs/recruit/list(page=${recruitPage.number - 1}, searchCategory=${searchCategory}, searchText=${searchText})}"
+           th:if="${recruitPage.hasPrevious()}"
+           class="page-btn btn btn-secondary">이전</a>
+
+        <!-- 페이지 번호 -->
+        <span th:each="pageNum : ${#numbers.sequence(0, recruitPage.totalPages - 1)}">
+        <a th:href="@{/templates/admin/cs/recruit/list(page=${pageNum}, searchCategory=${searchCategory}, searchText=${searchText})}"
+           th:text="${pageNum + 1}"
+           th:classappend="${pageNum == recruitPage.number} ? 'page-num active' : 'page-num'"
+           class="btn btn-outline-secondary"></a>
+    </span>
+
+        <!-- 다음 버튼 -->
+        <a th:href="@{/templates/admin/cs/recruit/list(page=${recruitPage.number + 1}, searchCategory=${searchCategory}, searchText=${searchText})}"
+           th:if="${recruitPage.hasNext()}"
+           class="page-btn btn btn-secondary">다음</a>
+      </div>
+    </section>
+    <!-- /Section -->
+  </div>
+  <!-- 채용 모달 섹션 -->
+  <div id="recruitRegisterModal" class="modal" style="display: none">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>채용등록</h4>
+        <span id="registerModalClose" class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <form id="recruitRegisterForm">
+          <table class="modal-table">
+            <tr>
+              <th>제목</th>
+              <td><input type="text" id="title" required></td>
+            </tr>
+            <tr>
+              <th>채용부서</th>
+              <td>
+                <select id="division-select" class="dropdown">
+                  <option>채용부서 선택</option>
+                  <option>IT</option>
+                  <option>UX</option>
+                  <option>마케팅</option>
+                  <option>영업</option>
+                  <option>광고산업</option>
+                  <option>경영</option>
+                  <option>운영</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>경력사항</th>
+              <td>
+                <select id="career-select" class="dropdown">
+                  <option>경력사항 선택</option>
+                  <option>무관</option>
+                  <option>신입</option>
+                  <option>경력 2 ~ 15년</option>
+                  <option>경력 4 ~ 15년</option>
+                  <option>경력 6 ~ 15년</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>채용형태</th>
+              <td>
+                <select id="employment-select" class="dropdown">
+                  <option>채용형태 선택</option>
+                  <option>정규직</option>
+                  <option>계약직</option>
+                  <option>파트타임</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>모집기간</th>
+              <td>
+                <input type="date" id="startDate" class="date" required>
+                ~
+                <input type="date" id="endDate" class="date"  required>
+              </td>
+            </tr>
+            <tr>
+              <th>비고</th>
+              <td><textarea id="content" rows="10"></textarea></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button id="registerConfirmBtn" class="confirm-btn">등록</button>
+      </div>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>
+<script>
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const selectAllCheckbox = document.querySelector('.chkbox-select-all');
+    const individualCheckboxes = document.querySelectorAll('.chkbox');
+    const deleteSelectedButton = document.querySelector('.delete-btn');
+
+    // 전체 선택 체크박스 클릭 이벤트
+    selectAllCheckbox.addEventListener('click', function() {
+      individualCheckboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+      });
+      toggleDeleteButtonState();
+    });
+
+    // 개별 체크박스 클릭 이벤트
+    individualCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('click', function() {
+        const allChecked = Array.from(individualCheckboxes).every(chk => chk.checked);
+        selectAllCheckbox.checked = allChecked;
+        toggleDeleteButtonState();
+      });
+    });
+
+    // 선택 삭제 버튼 상태 업데이트
+    function toggleDeleteButtonState() {
+      const anyChecked = Array.from(individualCheckboxes).some(chk => chk.checked);
+      deleteSelectedButton.disabled = !anyChecked;
+    }
+
+    // 선택 삭제 버튼 클릭 이벤트
+    deleteSelectedButton.addEventListener('click', function() {
+      // 선택된 체크박스 확인
+      const selectedIds = Array.from(individualCheckboxes)
+              .filter(checkbox => checkbox.checked)
+              .map(checkbox => {
+                const boardId = parseInt(checkbox.closest('tr').getAttribute('data-board-id'), 10);
+                console.log("data-board-id:", boardId); // 각 checkbox의 data-board-id 값을 출력
+                return boardId;
+              });
+      console.log("선택된 ID 목록:", selectedIds); // 디버깅용 로그
+
+      if (selectedIds.length === 0) {
+        alert('선택된 항목이 없습니다.');
+        return; // 아무 항목도 선택되지 않은 경우 함수 종료
+      }
+
+      if (confirm('선택한 항목을 삭제하시겠습니까?')) {
+        // 선택된 ID 리스트를 서버에 전송
+        fetch('/lotteon/cs/recruit/list', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(selectedIds)
+        })
+                .then(response => {
+                  if (response.ok) {
+                    alert('선택한 항목이 삭제되었습니다.');
+                    location.reload(); // 삭제 후 페이지 새로고침
+                  } else {
+                    return response.text().then(text => {
+                      throw new Error(text);
+                    });
+                  }
+                })
+                .catch(error => {
+                  console.error('선택 삭제 중 오류 발생:', error);
+                  alert('삭제 중 오류가 발생했습니다.');
+                });
+      }
+    });
+  });
+
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var registerModal = document.getElementById("recruitRegisterModal");
+    var registerBtn = document.getElementById("register-btn");
+    var registerCloseBtn = document.getElementById("registerModalClose");
+    var registerConfirmBtn = document.getElementById("registerConfirmBtn");
+
+    // 모달 열기
+    registerBtn.onclick = function () {
+      registerModal.style.display = "block";
+    };
+
+    // 모달 닫기
+    registerCloseBtn.onclick = function () {
+      registerModal.style.display = "none";
+    };
+
+    // 모달 외부 클릭 시 닫기
+    window.onclick = function (event) {
+      if (event.target === registerModal) {
+        registerModal.style.display = "none";
+      }
+    };
+
+    // 등록 버튼 클릭 시 폼 제출
+    registerConfirmBtn.addEventListener('click', function () {
+      // 폼 데이터를 가져와 객체로 변환
+      var data = {
+        title: document.getElementById("title").value,
+        division: document.getElementById("division-select").value,
+        career: document.getElementById("career-select").value,
+        employment: document.getElementById("employment-select").value,
+        sDate: document.getElementById("startDate").value,
+        eDate: document.getElementById("endDate").value,
+        content: document.getElementById("content").value,
+        author: "관리자", // 작성자 기본값 설정
+      };
+
+      data.regdate = new Date().toISOString();
+
+
+      // 데이터 전송
+      fetch('/lotteon/cs/recruit/list', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+              .then(response => {
+                console.log('Response Status:', response.status);
+                if (response.ok) {
+                  alert('채용 정보가 성공적으로 등록되었습니다.');
+                  registerModal.style.display = "none";
+                  location.reload(); // 필요 시 등록 후 페이지를 새로 고침
+                } else {
+                  return response.text().then(text => { // 응답 본문을 텍스트로 가져오기
+                    throw new Error(text);
+                  });
+                }
+              })
+              .catch(error => {
+                console.error('오류 발생:', error);
+                alert('서버 오류가 발생했습니다.');
+              });
+    });
+  });
+
+
+</script>

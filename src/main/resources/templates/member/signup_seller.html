@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" th:href="@{css/user/common.css}" />
+    <link rel="stylesheet" th:href="@{/css/member/signup.css}" />
+</head>
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+    <main>
+        <div class="login-container">
+            <h2 class="titterm">
+                <span class="tit">약관동의</span>
+            </h2>
+            <div class="main-wrapper">
+                <div class="main-box">
+                    <section class="terms">
+                        <table>
+                            <caption>(필수) 이용약관</caption>
+                            <tr>
+                                <td>
+                                    <textarea readonly>사이트 이용약관</textarea>
+                                    <p>
+                                        <label><input type="checkbox" name="chk1" />동의합니다.</label>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table>
+                            <caption>(필수) 전자금융 이용약관</caption>
+                            <tr>
+                                <td>
+                                    <textarea readonly>개인정보 취급방침</textarea>
+                                    <p>
+                                        <label><input type="checkbox" name="chk2" />동의합니다.</label>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table>
+                            <caption>(필수) 개인정보 수집동의</caption>
+                            <tr>
+                                <td>
+                                    <textarea readonly>사이트 이용약관</textarea>
+                                    <p>
+                                        <label><input type="checkbox" name="chk3" />동의합니다.</label>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                            <button type="button" onclick="location.href='/lotteon/member/join'" class="btnCancel">취소</button>
+                            <button type="button" onclick="location.href='/lotteon/member/register_seller'" class="btnNext">다음</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,1198 @@
+* {
+    margin: 0;
+    padding: 0;
+    font: normal 16px "Noto Sans CJK KR";
+}
+
+ul, ol {list-style: none;}
+a {text-decoration: none; color: #111;}
+
+/* header */
+header {
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    z-index: 100;
+    color: #000;
+    border-bottom: 1px solid #e1e1e1;
+    transition-duration: 0.5s;
+    background-color: white;
+}
+header > div {
+    width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: 16px;
+    box-sizing: border-box;
+}
+
+header ul {
+    float: right;
+    margin-top: 14px;
+    overflow: hidden;
+}
+header ul > li {
+    float: left;
+    width: 120px;
+    text-align: center;
+}
+
+header ul > li > a {
+    font-size: 18px;
+}
+
+/* footer */
+footer {
+    width: 100%;
+    height: 100px;
+    background-color: #f9f9f9;
+    z-index: 100;
+}
+footer > div {
+    width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+footer img {
+    float:left;
+    width: 100px;
+    height: 30px;
+    margin-top: 27px;
+}
+footer p {
+    float:left;
+    margin-left: 26px;
+    margin-top: 22px;
+    font-size: 13px;
+    color: #666;
+    line-height: 20px;
+}
+
+
+/* index */
+
+#index > .cover {
+    background-image: url('../../images/company/bg_company_index.jpg');
+}
+
+#index > .cover > div > p {
+    position: absolute;
+    left: 30px;
+    top: 550px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+}
+#index > section {
+    text-align: center;
+}
+
+#index > .top-content {
+    padding: 10px;
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+#index > .top-content > div > p {
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1.5em;
+}
+
+#index > .cs-content > div > p {
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 35px;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin-bottom: 50px;
+}
+
+#index > .cs-section .carousel {
+    width: 800px;
+    margin: 0 auto;
+    margin-bottom: 100px;
+}
+
+#index > .cs-section .carousel .carousel-inner{
+    border-radius: 10px;
+}
+
+#index> .cs-section .carousel-caption p {
+    color: #ffffff;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#index> .cs-section .carousel-caption .black-font {
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#index > .middel-section > div > p {
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin-bottom: 50px;
+}
+
+#index > .table-section div table {
+    margin: 0 auto;
+}
+#index > .table-section table tr td {
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 18px;
+    line-height: 1.5em;
+    text-align: left;
+}
+
+#index > .table-section table tr td p {
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin-top: 10px;
+    border-bottom: 1px solid #959595;
+}
+
+#index > .table-section table tr td a {
+    margin-left: 50px;
+}
+
+#index .bottom-section p {
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin-top: 100px;
+    margin-bottom: 75px;
+}
+
+#index .bottom-section img {
+    margin-bottom: 150px;
+}
+
+#index .banner-section img{
+    width: 1100px;
+    border-radius: 30px;
+    margin-bottom: 50px;
+}
+
+/* culture */
+
+/* #culture > .cover {
+    background-image: url('../../images/company/bg_culture_index.jpg');
+}
+
+#culture > .cover > div > p {
+    position: absolute;
+    left: 50px;
+    top: 550px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+} */
+
+/* cover에서 시작 */
+#culture > .cover {
+    background-image: url('../../images/company/bg_culture_index.jpg');
+    position: relative; /* cover가 다른 요소 위에 겹치지 않도록 relative 설정 */
+
+}
+
+#culture > .cover > div > p {
+    position: absolute;
+    left: 0; /* 텍스트를 왼쪽 정렬 */
+    top: 550px;
+    margin-left: 50px; /* 여백 조정 */
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* 전체적인 텍스트를 왼쪽에 맞추기 위한 설정 */
+#culture > section, #culture > .top-content, #culture > .cs-content, #culture > .middel-section {
+    text-align: left;
+    padding-left: 0; /* 좌측 여백 제거 */
+    margin-left: 0;
+}
+
+/* top-content 영역 고정 너비와 텍스트 왼쪽 정렬 */
+#culture > .top-content {
+    width: 1300px; /* 너비를 1300px로 고정 */
+    margin: 0 auto; /* 섹션을 중앙에 배치 */
+    padding: 10px;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left; /* 텍스트를 왼쪽 정렬 */
+    color: #000; /* 텍스트 색상 설정 */
+}
+
+#culture > .top-content > div > p {
+    margin-left: 50px;
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1.5em;
+}
+
+#culture > .cs-content > div > p {
+
+    margin-left: 60px;
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin-bottom: 50px;
+}
+
+
+
+#culture > .cs-content {
+    width: 1300px; /* 그리드의 너비를 1300px로 고정 */
+    margin: 0 auto; /* 그리드를 중앙에 배치 */
+}
+
+/* article의 그리드를 수정하여 글자 부분을 하나의 공간에 배치 */
+#culture > .cs-content > article {
+    border: 1px #959595 solid;
+    border-radius: 10px;
+    box-shadow: 3px 3px 10px #959595;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 두 열을 동일한 비율로 설정 */
+    grid-template-rows: auto; /* 행의 높이는 자동으로 설정 */
+    margin: 20px 0;
+    align-items: start; /* 그리드 항목을 위쪽에 정렬 */
+}
+
+#culture > .cs-content > article > img {
+    width: 100%; /* 이미지가 열 전체를 채우도록 설정 */
+    border-radius: 10px;
+    height: auto;
+    object-fit: cover; /* 이미지 비율을 유지하면서 영역을 채우도록 설정 */
+    margin-right: 0; /* 텍스트와의 간격을 없앰 */
+    margin-left: 0; /* 좌측 여백 제거 */
+}
+
+/* 텍스트 부분을 한 셀에 모두 배치 */
+#culture > .cs-content > article > div.text-content {
+    grid-column: 2 / 3; /* 텍스트가 두 번째 열 전체를 차지하도록 설정 */
+    grid-row: 1 / 2; /* 첫 번째 행에 텍스트 배치 */
+    display: flex;
+    flex-direction: column; /* 제목과 본문을 세로로 나열 */
+    margin-top: 25%;
+    margin-left: 15%;
+}
+#culture > .cs-content > article > div.text-content2 {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25%;
+    margin-left: 15%;
+}
+
+#culture > .cs-content > article > h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px; /* 본문과의 간격을 설정 */
+}
+
+#culture > .cs-content > article > p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* 첫 번째 article */
+#culture > .cs-content > article:nth-child(2n+1) > img {
+    grid-column: 2 / 3; /* 이미지가 두 번째 열에 위치 */
+    margin-left: 0; /* 왼쪽 여백 제거 */
+    margin-right: 20px; /* 오른쪽에 여백 추가 */
+}
+
+#culture > .cs-content > article:nth-child(2n+1) > h3,
+#culture > .cs-content > article:nth-child(2n+1) > p {
+    grid-column: 1 / 2; /* 텍스트가 첫 번째 열에 위치 */
+}
+
+
+
+
+#culture > .cs-section .carousel {
+    width: 800px;
+    margin: 0 auto;
+    margin-bottom: 100px;
+}
+
+#culture > .cs-section .carousel .carousel-inner{
+    border-radius: 10px;
+}
+
+#culture > .cs-section .carousel-caption p {
+    color: #ffffff;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+#culture > .cs-section .carousel-caption .black-font {
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+
+
+
+/* 중간 라인 */
+/* middle-section 중앙 정렬 */
+/* middle-section 중앙 정렬 */
+#culture > .middle-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* 각 article 사이의 간격 및 기본 레이아웃 */
+#culture > .middle-section > div > article {
+    display: flex;
+    align-items: flex-start; /* 이미지와 h3를 위쪽에서 맞춤 */
+    margin: 20px 0;
+}
+
+/* 이미지 크기 및 오른쪽 여백 */
+#culture > .middle-section > div > article > div > img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px; /* 이미지와 텍스트 사이의 간격 */
+}
+
+/* 텍스트 박스 스타일 */
+#culture > .middle-section > div > article > div {
+    display: flex;
+    flex-direction: column; /* 텍스트를 세로로 쌓음 */
+    justify-content: flex-start;
+    width: 600px;
+    margin-left: 10%; /* article 내부 여백 */
+}
+
+/* h3만 이미지 옆에 수평으로 배치 */
+#culture > .middle-section > div > article > div > h3 {
+    margin: 0 20px 10px 0; /* 이미지와 h3 사이 간격 설정 */
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    display: inline-block; /* h3만 수평으로 나타나도록 설정 */
+}
+
+/* p 요소는 이미지 아래로 배치 */
+#culture > .middle-section > div > article > div > p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* p 요소의 스타일을 동일하게 유지 */
+#culture > .middle-section > div > p {
+    margin-left: 10%;
+    color: #000000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 1.5em;
+    margin-bottom: 50px;
+}
+
+/* 배너부분 */
+#culture .banner-section{
+    text-align: center;
+}
+
+
+#culture .banner-section img{
+    width: 1000px;
+    border-radius: 30px;
+    margin-bottom: 50px;
+}
+
+
+
+
+/* �쒕툕怨듯넻 */
+#wrapper {}
+#wrapper > header {
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+#wrapper > header a {
+    color: black;
+}
+
+main > .cover {
+    width: 100%;
+    height: 670px;
+    box-sizing: border-box;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+main > .cover > div {
+    position: relative;
+    width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+main > .cover > div > h1 {
+    position: absolute;
+    left: 10px;
+    top: 280px;
+    font-size: 50px;
+    font-weight: bold;
+    color: #fff;
+}
+main > .cover > div > p {
+    position: absolute;
+    left: 10px;
+    top: 380px;
+    font-size: 22px;
+    font-weight: 500;
+    color: #fff;
+}
+
+main > .content {
+    width: 1280px;
+    height: auto;
+    margin: 0 auto;
+    padding: 40px 0;
+    box-sizing: border-box;
+}
+
+main > .content > h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 16px;
+}
+
+main > .content > p {
+    font-size: 19px;
+    line-height: 28px;
+    margin-bottom: 80px;
+}
+
+
+/* notice List */
+#notice > .cover {
+    background-image: url('../../images/company/bg_company_notice.jpg');
+}
+
+#notice .list {
+    width: 800px;
+    margin: 28px auto;
+    padding: 20px;
+}
+
+#notice .list table {
+    width: 100%;
+}
+
+#notice .list table tr > th {
+    padding: 10px 0;
+    font-size: 13px;
+    font-weight: bold;
+    border-top: 1px solid black;
+}
+
+#notice .list table tr > th:nth-child(2) {
+    text-align: center;
+}
+
+#notice .list table tr > td {
+    border-top: 1px solid #e6e6e6;
+    padding: 10px;
+    font-size: 13px;
+    background: rgb(255, 255, 255);
+    box-sizing: border-box;
+}
+
+#notice .list table tr > td > a {
+    font-size: 13px;
+}
+
+#notice .list table tr > td:nth-child(1) {
+    width: 300px;
+    background: #ffffff;
+    padding: 10px;
+    text-align: left;
+}
+#notice .list table tr > td:nth-child(2) {
+    width: 100px;
+    text-align: center;
+}
+
+#notice .list .paging {
+    width: 100%;
+    padding: 30px 0;
+    text-align: center;
+    border-top: 1px solid #e6e6e6;
+}
+
+#notice .list .paging > .num > a {
+    display: inline-block;
+    min-width: 14px;
+    margin: 0 2px;
+    padding: 8px 9px;
+    color: #000;
+    font-family: Tahoma;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+}
+
+#notice .list .paging > .num > a:hover {
+    border: 1px solid #454c5f;
+    text-decoration: none;
+}
+#notice .list .paging > .num > a.on {
+    font-weight: bold;
+}
+
+#notice .list .paging > span > a {
+    color: rgb(119, 119, 119);
+    font-family: 돋움, Dotum, Tahoma, sans-serif;
+    font-size: 11px;
+    letter-spacing: -1px;
+}
+
+/* notice view */
+
+#notice .view{
+    width: 800px;
+    margin: 28px auto;
+    padding: 60px;
+    padding-bottom: 100px;
+}
+
+#notice .view .content {
+    width: 100%;
+    height: 100%;
+    border-top: 2px solid black;
+    border-bottom: 1px solid #959595;
+}
+
+#notice .view .content tr:nth-child(2){
+    height: 200px;
+}
+
+#notice .view .content tr td:nth-child(1){
+    width: 100px;
+    padding: 20px;
+    background-color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#notice .view .content tr td:nth-child(2){
+    width: 700px;
+    padding: 20px;
+    font-size: 15px;
+}
+
+#notice .view .content tr:nth-child(1) td {
+    border-bottom: 1px solid #959595;
+}
+
+#notice .view .content tr:nth-child(1) td > span {
+    font-size: 15px;
+}
+
+#notice .view > article > a {
+    float: right;
+    width: 110px;
+    height: 46px;
+    margin: 40px auto 0;
+    line-height: 32px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* media */
+#media {}
+#media > .cover {
+    background-image: url('../../images/company/bg_company_promote.jpg');
+}
+#media > .content {}
+#media > .content > article {
+    position: relative;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    margin-bottom: 26px;
+}
+#media > .content > article > h3 {
+    position: absolute;
+    left: 740px;
+    top: 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+#media > .content > article > p {
+    position: absolute;
+    left: 740px;
+    top: 40px;
+    font-size: 18px;
+}
+
+
+
+/* 소식과 이야기 */
+#story > nav{
+    width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: 16px;
+    box-sizing: border-box;
+}
+
+#story > nav ul{
+    float: left;
+    margin-top: 14px;
+    overflow: hidden;
+}
+
+#story > nav ul > li{
+    float: left;
+    width: 100px;
+    text-align: center;
+}
+
+#story > nav ul > li a{
+    color: rgb(105, 105, 105);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 800;
+}
+
+#story > nav ul > li a:hover{
+    color: red;
+}
+
+
+#story > .cover {
+    width: auto;
+    height: 500px;
+}
+
+#story > .cover  h1{
+    color: black;
+    font-size: 40px;
+}
+
+#story > .cover  p{
+    color: black;
+}
+
+#story > section {
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 35px;
+    grid-row-gap: 35px;
+    display: grid;
+    margin: auto;
+    justify-items: center;
+}
+
+#story .card-item img{
+    width: 400px;
+    height: 300px;
+}
+
+#story .inner {
+    border: 1px rgb(228, 225, 225) solid;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #959595;
+
+}
+
+
+#story .content__button{
+    grid-column: 2; /* 그리드 두 번째 열에 위치 */
+    width: 170px;
+    height: 40px;
+    background-color: #E30613;
+    border: #ffffff;
+    border-radius: 30px;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex; /* 자식 요소의 가운데 정렬을 위한 Flexbox */
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+#story .content__button span{
+    color: white;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 800;
+}
+
+
+#story .card-text{
+    padding: 0 42px;
+}
+
+#story .card-text h3 {
+    margin-bottom: 25px;
+}
+
+#story .card-text p{
+    margin-bottom: 25px;
+}
+
+
+
+
+/* 채용 */
+
+#recruit > nav {
+    width: 1280px;
+    height: auto;
+    margin: 0 auto;
+    padding-top: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* 각 form 간 간격 */
+}
+
+#recruit > nav form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#recruit > nav form select,
+#recruit > nav form .search-text {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 180px; /* 리스트 박스 및 검색창의 너비 */
+}
+
+#recruit > nav form .search-text {
+    width: 250px; /* 검색창의 너비를 좀 더 넓게 */
+}
+
+#recruit > .cover {
+    width: auto;
+    height: 500px;
+}
+
+
+#recruit > .cover  span{
+    position: relative;
+    font-size: 25px;
+    top: 200px;
+    margin-left: 15px;
+    color: red;
+    font-weight: 800;
+
+}
+
+#recruit > .cover  h1{
+    color: black;
+    font-size: 35px;
+}
+
+#recruit > .cover  p{
+    margin-top: 30px;
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+
+table.job-board {
+    width: 100%;
+    max-width: 1280px;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+table.job-board th,
+table.job-board td {
+    padding: 15px;
+    text-align: left;
+}
+
+table.job-board th {
+    background-color: #f5f5f5;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+table.job-board td {
+    font-size: 14px;
+    color: #666;
+}
+
+table.job-board .job-info {
+    font-size: 13px;
+    color: #999;
+    padding-left: 15px;
+}
+
+table.job-board tr:hover {
+    background-color: #f9f9f9;
+}
+
+.job-board > tbody .job-status {
+    color: #007bff;
+    font-weight: bold;
+    text-align: right;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    font: normal 16px "Noto Sans CJK KR";
+}
+
+ul, ol {list-style: none;}
+a {text-decoration: none; color: #111;}
+
+/* header */
+header {
+    position: fixed;
+    width: 100%;
+    height: 80px;
+    z-index: 100;
+    color: #000;
+    border-bottom: 1px solid #e1e1e1;
+    transition-duration: 0.5s;
+    background-color: white;
+}
+header > div {
+    width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: 16px;
+    box-sizing: border-box;
+}
+
+header ul {
+    float: right;
+    margin-top: 14px;
+    overflow: hidden;
+}
+header ul > li {
+    float: left;
+    width: 120px;
+    text-align: center;
+}
+
+header ul > li > a {
+    font-size: 18px;
+}
+
+/* footer */
+footer {
+    width: 100%;
+    height: 100px;
+    background-color: #f9f9f9;
+    z-index: 100;
+}
+footer > div {
+    width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+footer img {
+    float:left;
+    width: 100px;
+    height: 30px;
+    margin-top: 27px;
+}
+footer p {
+    float:left;
+    margin-left: 26px;
+    margin-top: 22px;
+    font-size: 13px;
+    color: #666;
+    line-height: 20px;
+}
+
+
+
+/* �쒕툕怨듯넻 */
+#wrapper {}
+#wrapper > header {
+    border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+#wrapper > header a {
+    color: black;
+}
+
+main > .cover {
+    width: 100%;
+    height: 670px;
+    box-sizing: border-box;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+main > .cover > div {
+    position: relative;
+    width: 1280px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+main > .cover > div > h1 {
+    position: absolute;
+    left: 10px;
+    top: 280px;
+    font-size: 50px;
+    font-weight: bold;
+    color: #fff;
+}
+main > .cover > div > p {
+    position: absolute;
+    left: 10px;
+    top: 380px;
+    font-size: 22px;
+    font-weight: 500;
+    color: #fff;
+}
+
+main > .content {
+    width: 1280px;
+    height: auto;
+    margin: 0 auto;
+    padding: 40px 0;
+    box-sizing: border-box;
+}
+
+main > .content > h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 16px;
+}
+
+main > .content > p {
+    font-size: 19px;
+    line-height: 28px;
+    margin-bottom: 80px;
+}
+
+/* 채용 */
+
+#recruit > nav {
+    width: 1280px;
+    height: auto;
+    margin: 0 auto;
+    padding-top: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* 각 form 간 간격 */
+}
+
+#recruit > nav form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#recruit > nav form select,
+#recruit > nav form .searchText {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 180px; /* 리스트 박스 및 검색창의 너비 */
+    margin-right: 6px;
+}
+
+#recruit > nav form .searchText {
+    width: 250px; /* 검색창의 너비를 좀 더 넓게 */
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #d82a2a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 37px;
+}
+
+#recruit > .cover {
+    width: auto;
+    height: 500px;
+}
+
+
+#recruit > .cover  span{
+    position: relative;
+    font-size: 25px;
+    top: 200px;
+    margin-left: 15px;
+    color: red;
+    font-weight: 800;
+
+}
+
+#recruit > .cover  h1{
+    color: black;
+    font-size: 35px;
+}
+
+#recruit > .cover  p{
+    margin-top: 30px;
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+
+table.job-board {
+    width: 100%;
+    max-width: 1280px;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+table.job-board th,
+table.job-board td {
+    padding: 15px;
+    text-align: left;
+}
+
+table.job-board th {
+    background-color: #f5f5f5;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+table.job-board td {
+    font-size: 14px;
+    color: #666;
+}
+
+table.job-board .recruit-info {
+    font-size: 13px;
+    color: #999;
+    padding-left: 15px;
+}
+
+table.job-board tr:hover {
+    background-color: #f9f9f9;
+}
+
+.job-board > tbody .status {
+    color: #007bff;
+    font-weight: bold;
+    text-align: right;
+}
+
+.title-row {
+    display: flex;
+    justify-content: space-between; /* 제목과 상태를 양 끝에 배치 */
+    align-items: center; /* 수직 가운데 정렬 */
+    margin-bottom: 5px; /* 제목과 추가 정보 사이 간격 조정 */
+}
+
+.title {
+    font-weight: bold; /* 제목 스타일 조정 */
+}
+
+.status {
+    font-size: 14px;
+}
+
+.no-results {
+    text-align: center;      /* 텍스트를 중앙 정렬 */
+    font-size: 18px;         /* 폰트 크기 조절 */
+    color: #d82a2a;          /* 색상: 눈에 띄는 색 */
+    margin-top: 20px;        /* 상단 여백 */
+    padding: 10px;
+    border: 1px solid #d82a2a; /* 테두리 추가 */
+    border-radius: 5px;      /* 둥근 테두리 */
+    background-color: #f9f9f9; /* 배경색 */
+    margin-bottom: 26px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 수직 가운데 정렬 */
+    gap: 3px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.pagination span {
+    display: flex;
+    gap: 3px;
+}
+
+.page-btn, .page-num {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: middle; /* 요소 중앙 정렬 */
+    display: inline-flex; /* 수직 정렬을 위한 flex */
+    align-items: center; /* 수직 가운데 정렬 */
+}
+
+.page-btn:hover, .page-num:hover {
+    background-color: #f5f5f5;
+}
+
+.page-btn {
+    font-weight: bold;
+}
+
+.page-num.active {
+    background-color: #d82a2a;
+    color: white;
+}
+
+

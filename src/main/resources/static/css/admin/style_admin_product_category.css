@@ -1,0 +1,257 @@
+/* 설명 부분 스타일 */
+.version-header h4 {
+    font-size: 20px;
+    margin-top: 16px;
+    font-weight: bold;
+}
+
+.sub-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #333;
+    margin-top: -24px;
+    margin-bottom: 9px;
+    background-color: #f2f2f2;
+    height: 36px;
+    line-height: 36px;  /* 세로 가운데 정렬 */
+    text-align: left;  /* 텍스트 왼쪽 정렬 */
+    padding-left: 10px;  /* 왼쪽 여백 추가 */
+}
+
+/* 드롭다운 스타일 */
+.dropdown {
+    padding: 10px;
+    font-size: 14px;
+    margin-right: 2px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 124px;
+    height: 37px;
+}
+
+
+/* 추가/삭제 버튼 스타일 */
+.add-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.sub-title-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #333;
+    margin-top: -24px;
+    margin-bottom: 9px;
+    background-color: #FFFFE6;
+    height: 36px;
+    line-height: 36px;  /* 세로 가운데 정렬 */
+    text-align: left;  /* 텍스트 왼쪽 정렬 */
+    padding-left: 10px;  /* 왼쪽 여백 추가 */
+    margin-top: 60px;
+}
+
+/* 버튼 스타일 */
+
+.edit-btn {
+    color: #d82a2a; /* 수정 버튼 글자색 */
+    background-color: white;
+    border: 1px solid #d82a2a; /* 지정된 빨간색 테두리 */
+    border-radius: 5px; /* 테두리 모서리 둥글게 */
+}
+
+
+.write-btn {
+    padding: 10px 20px;
+    background-color: #d82a2a;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+    text-decoration: none; /* 밑줄 제거 */
+    margin-top: 7px;
+}
+
+/* 설명 부분 스타일 */
+.version-header h4 {
+    font-size: 20px;
+    margin-top: 16px;
+    font-weight: bold;
+}
+
+.sub-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #333;
+    margin-top: -24px;
+    margin-bottom: 9px;
+    background-color: #f2f2f2;
+    height: 36px;
+    line-height: 36px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.category-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.category {
+    margin-bottom: 10px;
+}
+.sub-category {
+    margin-left: 20px;
+    margin-top: 5px;
+}
+.delete-btn, .add-btn {
+    color: red;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.add-btn {
+    color: green;
+}
+.submit-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+.info {
+    font-size: 0.9em;
+    color: #666;
+}
+
+
+body {
+    font-family: 'Inter', sans-serif;
+    padding: 20px;
+}
+
+.category-section {
+    margin-top: 20px;
+}
+
+.form ul {
+    list-style-type: none;
+}
+
+.form li {
+    padding: 10px;
+    border-radius: 10px;
+    margin-right : 30px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 토글 버튼 */
+.toggle-btn {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* depth 메뉴 기본적으로 숨김 */
+.sub-category,
+.sub-sub-category {
+    display: none;
+    padding-left: 20px;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+    margin-left: 10px;
+    background-color: white;
+    border: none;
+    color: red;
+    padding: 2px 5px;
+    cursor: pointer;
+}
+
+
+.newCategoryInput {
+    padding: 10px !important;
+    width: 200px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    height: 37px !important;
+}
+
+/* 카테고리 추가 버튼 */
+.add-btn {
+    padding: 10px 20px;
+    background-color: #d82a2a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 37px;
+}
+
+/* 입력 필드 및 Depth 선택 영역 */
+.category-input-container {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 20px;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 8px;
+}
+
+.category-input-container input[type="text"] {
+    padding: 5px;
+    font-size: 14px;
+    width: 250px;
+}
+
+.category-input-container select {
+    padding: 5px;
+    font-size: 14px;
+}
+
+.category-input-container button {
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #d82a2a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 3px;
+}
+
+.deps1 {
+    margin-top: -8px;
+}
+
+.deps2 {
+    margin-left: -23px;
+}
+
+.deps3 {
+    margin-left: 24px;
+    margin-bottom: -11px;
+}
+
+/* 드래그 중인 요소에 대한 스타일 */
+.dragging {
+    opacity: 0.5;
+    background-color: #f0f0f0;
+    border: 2px dashed #d82a2a;
+    cursor: move;
+}
+
+/* 드래그 가능한 요소 위에 있을 때 */
+.category-item,
+.subcategory-item {
+    transition: background-color 0.3s ease;
+}
+
+.category-item.drag-over,
+.subcategory-item.drag-over {
+    background-color: #d82a2a;
+    border: 2px solid #6c6cff;
+}

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품수정</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" required/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_modify.css}" required/>
+    <script th:src="@{/js/my/admin_product/product_modify.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a
+                    th:href="@{/admin/product/register}" class="location">상품목록</a>
+            </div>
+            <h3>상품수정</h3>
+
+            <form>
+                <div class="form">
+                    <div class="version-header">
+                        <h4>상품분류</h4>
+                        <p class="sub-title">카테고리는 수정이 불가능합니다.</p>
+                    </div>
+
+                    <div class="inquiry-section">
+                        <table class="inquiry-table">
+                            <tr>
+                                <td class="label">1차 분류</td>
+                                <td>
+                                    <span th:if="${productCate.depth == 2}"
+                                          th:value="${productCate.parent.productCateId}"
+                                          th:text="${productCate.parent.name}"></span>
+                                    <span th:unless="${productCate.depth == 2}"
+                                          th:value="${parentProductCate.parent.productCateId}"
+                                          th:text="${parentProductCate.parent.name}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">2차 분류</td>
+                                <td>
+                                    <span th:if="${productCate.depth==2}" th:value="${productCate.productCateId}"
+                                          th:text="${productCate.name}"></span>
+                                    <span th:unless="${productCate.depth==2}"
+                                          th:value="${parentProductCate.productCateId}"
+                                          th:text="${parentProductCate.name}">
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">3차 분류</td>
+                                <td>
+                                    <span th:if="${productCate.depth==3}" th:value="${productCate.productCateId}"
+                                          th:text="${productCate.name}">
+                                    </span>
+                                    <span th:unless="${productCate.depth==3}" value=""></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+
+                    <div class="version-header">
+                        <h4>기본정보</h4>
+                        <p class="sub-title">기본정보는 반드시 선택하셔야 합니다. ※ 수정되지 않은 항목은 그대로 유지됩니다 ※</p>
+                    </div>
+
+                    <div class="inquiry-section">
+                        <table class="inquiry-table">
+                            <tr>
+                                <td class="label">상품명</td>
+                                <td>
+                                    <input type="text" name="name" id="name" th:value="${productDTO.name}" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">기본설명</td>
+                                <td>
+                                    <input type="text" name="description" id="description"
+                                           th:value="${productDTO.description}" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조사</td>
+                                <td>
+                                    <input type="text" name="company" id="company" th:value="${productDTO.company}"
+                                           required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">상품금액</td>
+                                <td>
+                                    <input type="text" name="price" class="inputmini" id="price"
+                                           th:value="${productDTO.price}" required/> 원
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">할인율</td>
+                                <td>
+                                    <input type="text" name="discount" class="inputmini" id="discount"
+                                           th:value="${productDTO.discount}" required/> %
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">포인트</td>
+                                <td>
+                                    <input type="text" name="point" class="inputmini" id="point"
+                                           th:value="${productDTO.point}" required/> 원
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">배송비</td>
+                                <td>
+                                    <input type="text" name="deliveryFee" class="inputmini" id="deliveryFee"
+                                           th:value="${productDTO.deliveryFee}" required/>
+                                    원
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">상품 이미지</td>
+                                <td class="image_td">
+                                    <div class="file-upload file">
+                                        <input type="file" id="prod_img1" name="img1" accept="image/*"/>
+                                        <label for="prod_img1" class="labelForInput">파일 수정하기</label>
+                                        <span class="upload-name">선택된 파일 없음</span>
+                                        <span>크기 190 x 190, 상품 목록에 출력될 이미지입니다. <br>⚠️ 파일을 수정하려면 '수정' 버튼을 클릭하여 새 파일을 업로드하세요. 파일을 업로드하지 않으면 기존 파일이 유지됩니다.
+</span>
+                                        <details>
+                                            <summary>
+                                                <span class="preview_img">기존 상품 목록 이미지 미리보기</span>
+                                            </summary>
+                                            <img th:src="@{'/uploads/product/' + ${productDTO.img1}}">
+                                            <input id="img1" type="hidden" th:value="${productDTO.img1}">
+                                        </details>
+                                    </div>
+                                    <div class="file-upload file">
+                                        <input type="file" id="prod_img2" name="img2" accept="image/*"/>
+                                        <label for="prod_img2" class="labelForInput">파일 수정하기</label>
+                                        <span class="upload-name">선택된 파일 없음</span>
+                                        <span>크기 190 x 190, 상품 메인에 출력될 이미지입니다.<br>⚠️ 파일을 수정하려면 '수정' 버튼을 클릭하여 새 파일을 업로드하세요. 파일을 업로드하지 않으면 기존 파일이 유지됩니다.</span>
+                                        <details>
+                                            <summary>
+                                                <span class="preview_img">기존 상품 메인 이미지 미리보기</span>
+                                            </summary>
+                                            <img th:src="@{'/uploads/product/' + ${productDTO.img2}}">
+                                            <input id="img2" type="hidden" th:value="${productDTO.img2}">
+                                        </details>
+
+                                    </div>
+                                    <div class="file-upload file">
+                                        <input type="file" id="prod_img3" name="img3" accept="image/*"/>
+                                        <label for="prod_img3" class="labelForInput">파일 수정하기</label>
+                                        <span class="upload-name">선택된 파일 없음</span>
+                                        <span>크기 190 x 190, 상품 상세에 출력될 이미지입니다.<br>⚠️ 파일을 수정하려면 '수정' 버튼을 클릭하여 새 파일을 업로드하세요. 파일을 업로드하지 않으면 기존 파일이 유지됩니다.</span>
+                                        <details>
+                                            <summary>
+                                                <span class="preview_img">기존 상품 상세 이미지 미리보기</span>
+                                            </summary>
+                                            <img th:src="@{'/uploads/product/' + ${productDTO.img3}}">
+                                            <input id="img3" type="hidden" th:value="${productDTO.img3}">
+                                        </details>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">상품 상세정보</td>
+                                <td class="image_td">
+                                    <div class="file-upload">
+                                        <input type="file" id="prod_detail" name="detail"
+                                               accept="image/*"/>
+                                        <label for="prod_detail" class="labelForInput">파일 수정하기</label>
+                                        <span class="upload-name">선택된 파일 없음</span>
+                                        <span>크기 가로 940px, 높이 제약없음, 크기 최대 1MB<br>⚠️ 파일을 수정하려면 '수정' 버튼을 클릭하여 새 파일을 업로드하세요. 파일을 업로드하지 않으면 기존 파일이 유지됩니다.</span>
+                                        <details>
+                                            <summary>
+                                                <span class="preview_img">기존 상품 상세정보 이미지 미리보기</span>
+                                            </summary>
+                                            <img th:src="@{'/uploads/product/' + ${productDTO.detail}}">
+                                            <input id="detail" type="hidden" th:value="${productDTO.detail}">
+                                        </details>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr id="option_tr">
+                                <td class="label">
+                                    상품 옵션 설정
+                                </td>
+                                <td>
+                                    <div id="option">
+                                        <th:block th:each="optionSet : ${options.entrySet()}">
+                                            <div>
+                                                <span>옵션명 :</span>
+                                                <input type="text" class="option-name op" placeholder="옵션명을 입력하세요"
+                                                       th:value="${optionSet.getKey()}" required>
+                                            </div>
+                                            <div class="option-values">
+                                                <span>옵션값 :</span>
+                                                <div class="fake_input op">
+                                                    <input type="text" class="option-value-input op"
+                                                           placeholder="옵션값 입력 후 엔터">
+                                                    <div class="pre-option-value-box option-value-box"
+                                                         th:each="value : ${optionSet.getValue()}">
+                                                        <span class="box-value" th:text="${value}"></span>
+                                                        <span class="pre-delete-value delete-value"> X</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                    <button th:if="${options.entrySet().size() < 3}" type="button" id="addOption">옵션
+                                        추가
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="version-header">
+                        <h4>상품정보 제공고시</h4>
+                        <p class="sub-title">[전자상거래에 관한 상품정보 제공에 관한 고시] 항목에 의거 등록해야 되는 정보입니다.</p>
+                    </div>
+                    <div class="inquiry-section">
+                        <table class="inquiry-table">
+                            <tr>
+                                <input id="productDetailId" type="hidden"
+                                       th:value="${productDetailDTO.productDetailId}">
+                                <td class="label">상품상태</td>
+                                <td>
+                                    <input type="text" name="condition" th:value="${productDetailDTO.condition_field}"
+                                           id="condition" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">부가세 면세여부</td>
+                                <td>
+                                    <input type="text" name="duty" th:value="${productDetailDTO.duty}"
+                                           id="duty" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">영수증 발행</td>
+                                <td>
+                                    <input type="text" name="receipt" th:value="${productDetailDTO.receipt}"
+                                           id="receipt" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">사업자구분</td>
+                                <td>
+                                    <input type="text" name="sellerType" th:value="${productDetailDTO.sellerType}"
+                                           id="sellerType" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">브랜드</td>
+                                <td>
+                                    <input type="text" name="brand" th:value="${productDetailDTO.brand}" id="brand"
+                                           required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">원산지</td>
+                                <td>
+                                    <input type="text" name="coa" th:value="${productDetailDTO.coa}"
+                                           id="coa" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조자 / 수입국</td>
+                                <td>
+                                    <input type="text" name="creator" th:value="${productDetailDTO.creator}"
+                                           id="creator" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조국</td>
+                                <td>
+                                    <input type="text" name="country" th:value="${productDetailDTO.country}"
+                                           id="country" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">취급시주의사항</td>
+                                <td>
+                                    <input type="text" name="warning" th:value="${productDetailDTO.warning}"
+                                           id="warning" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">제조연월</td>
+                                <td>
+                                    <input type="text" name="createDate" th:value="${productDetailDTO.createDate}"
+                                           id="createDate" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">품질보증기준</td>
+                                <td>
+                                    <input type="text" name="quality" th:value="${productDetailDTO.quality}"
+                                           id="quality" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">A/S 책임자</td>
+                                <td>
+                                    <input type="text" name="as" th:value="${productDetailDTO.as_field}"
+                                           id="as" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label">전화번호</td>
+                                <td>
+                                    <input type="text" name="asPhone" th:value="${productDetailDTO.asPhone}"
+                                           id="asPhone" required/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="desc">
+                        <p class="sub-title-desc">전자상거래등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성들을 양식에 따라 입력할 수
+                            있습니다.</p>
+                    </div>
+                    <div class="buttons">
+                        <button type="submit" class="write-btn" id="product_submit">등록</button>
+                    </div>
+                </div>
+                <input id="productId" type="hidden" th:value="${productDTO.productId}">
+                <input id="sellerInfoId" type="hidden"
+                       th:value="${#authentication.principal.user.sellerInfo.sellerInfoId}">
+            </form>
+        </section>
+        <!-- /Section -->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

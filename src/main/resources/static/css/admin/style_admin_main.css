@@ -1,0 +1,145 @@
+
+/* 대시보드 스타일 */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2개의 열 */
+    grid-template-rows: auto auto; /* 2개의 행 */
+    gap: 20px; /* 항목 간의 간격 */
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.dashboard-item {
+    background-color: #f5f7fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 첫 번째와 두 번째 항목(운영현황, 주문현황)은 전체 너비를 차지 */
+.dashboard-item:nth-child(1),
+.dashboard-item:nth-child(2) {
+    grid-column: span 2; /* 그리드에서 두 칸을 차지 */
+}
+
+/* 세 번째와 네 번째 항목(공지사항, 고객문의)은 반반씩 배치 */
+.dashboard-item:nth-child(3),
+.dashboard-item:nth-child(4) {
+    grid-column: span 1; /* 그리드에서 한 칸씩 차지 */
+}
+
+.dashboard-item h4 {
+    font-size: 18px;
+    color: #2b2e4a;
+    margin-bottom: 4px;
+    margin-top: 4px;
+}
+
+.dash_table {
+    width: 100%;
+    background: #ffffff;
+    border-collapse: collapse;
+}
+
+.dash_table th, .dash_table td {
+    padding: 8px;
+    text-align: left;
+}
+
+.dash_table th {
+    background-color: #fff;
+    font-weight: 550;
+    text-align: center;
+    border-top: 2px solid #e1e7ef;
+    padding-bottom: 3px;
+    padding-top: 8px;
+}
+
+.dash_table td {
+    color: #495057;
+}
+
+.dashboard-item tr {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dash tr td {
+    padding: 10px 0;
+    border-bottom: 1px solid #e1e7ef;
+    font-size: 14px;
+}
+
+.dashboard-item tr td a {
+    text-decoration: none;
+    color: #2b2e4a;
+    transition: color 0.3s ease;
+}
+
+.dashboard-item tr td a:hover {
+    font-weight: bold;
+}
+
+.operation_total {
+    text-align: center;
+}
+
+.operation_total{
+    text-align: center;
+}
+.content__bar{
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.operation_text tr td {
+    text-align: center;
+    font-size: 14px;
+}
+
+
+.operation_text th {
+    text-align: center;
+}
+
+.operation_table {
+    margin-top: 15px;
+}
+
+.tb-border {
+    border-right: 1px solid #e1e7ef;
+}
+
+.tb-bottom {
+    border-bottom: 1px solid #e1e7ef;
+}
+
+.count {
+    color: #d82a2a !important;
+    font-weight: bold;
+    font-size: 17px !important;
+}
+
+.dash-bottom {
+    border-bottom: 2px solid #e1e7ef;
+}
+
+.dash-padding {
+    padding-left:6px !important;
+    width: 389px;
+}
+
+.article tr {
+    padding: 10px 0;
+    border-bottom: 1px solid #e1e7ef !important;
+    font-size: 14px;
+    height: 34px;
+}
+
+.article td {
+    border-bottom: 1px solid #e1e7ef !important;
+    font-size: 14px;
+    height: 34px;
+}

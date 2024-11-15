@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품현황</title>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_shop_list.css}"/>
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+    <main>
+        <div id="wrapper">
+            <aside th:replace="~{/admin/include/aside.html}"></aside>
+            <!--section-->
+            <section>
+                <div class="breadcrumb">
+                    <a href="#">Home</a> > <a href="#">상점관리</a> > <a href="#" class="location">상점목록</a>
+                </div>
+                <h3>상점목록</h3>
+                <div class="form">
+                    <div class="search-bar">
+                        <form action="#" th:action="@{/admin/shop/list}" method="get">
+                            <select id="search-category" name="searchCategory" class="dropdown">
+                                <option value="all" th:selected="${searchCategory == ''}">전체</option>
+                                <option value="comName" th:selected="${searchCategory == 'comName'}">상호명</option>
+                                <option value="ceo" th:selected="${searchCategory == 'ceo'}">대표자</option>
+                                <option value="bizNumber" th:selected="${searchCategory == 'bizNumber'}">사업자등록번호</option>
+                                <option value="hp" th:selected="${searchCategory == 'hp'}">연락처</option>
+                            </select>
+                                <input
+                                        type="text"
+                                        name="keyword"
+                                        placeholder="키워드 입력"
+                                        class="search-input"
+                                        th:value="${keyword}"
+                                />
+                            <button type="submit" class="search-btn">검색</button>
+                        </form>
+                    </div>
+                    <div class="operation_bar">
+                        <span style="color: green;">● 운영 중</span>
+                        <span style="color: red;">● 운영 중지</span>
+                        <span style="color: blue;">● 운영 준비</span>
+                    </div>
+                    <table class="inquiry-table">
+                        <colgroup>
+                            <col style="width: 2%"> 
+                            <col style="width: 5%">
+                            <col style="width: 11%">
+                            <col style="width: 8%">
+                            <col style="width: 10%"> 
+                            <col style="width: 13%">
+                            <col style="width: 10%">
+                            <col style="width: 4%">
+                            <col style="width: 7%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="selectAll" name="userList" onclick="toggleSelectAll(this)" class="chkbox" /></th>
+                                <th>번호</th>
+                                <th>상호명</th>
+                                <th>대표</th>
+                                <th>사업자등록번호</th>
+                                <th>통신판매번호</th>
+                                <th>연락처</th>
+                                <th>운영</th>
+                                <th>관리</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user, i : ${userList}">
+                            <td><input type="checkbox" class="checkboxes" th:value="${user.sellerInfo.sellerInfoId}" onclick="toggleCheckbox(this)"></td>
+                            <td th:text="${startNo - i.index}"></td>
+                            <td>[[${user.sellerInfo.comName}]]</td>
+                            <td>[[${user.sellerInfo.ceo}]]</td>
+                            <td>[[${user.sellerInfo.bizNumber}]]</td>
+                            <td>[[${user.sellerInfo.comNumber}]]</td>
+                            <td>[[${user.sellerInfo.hp}]]</td>
+                            <td class="operation_color_img" style="color: green;">●</td>
+                            <td>
+                                [운영중]
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="buttons">
+                        <button class="delete-btn" disabled>선택 삭제</button>
+                        <a href="#" id="openRegisterModalBtn" class="write-btn">상점등록</a>
+                    </div>
+
+                    <div class="pagination" th:if="${totalElements > 0}">
+                        <button class="page-btn"
+                                th:disabled="${currentPage == 0}"
+                                th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=5\''">
+                            이전
+                        </button>
+                        <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <button class="page-num"
+                        th:classappend="${i == currentPage} ? 'active'"
+                        th:onclick="'window.location.href=\'?page=' + ${i} + '&size=5\''"
+                        th:text="${i + 1}">1</button>
+                    </span>
+                        <button class="page-btn"
+                                th:disabled="${currentPage + 1 == totalPages}"
+                                th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=5\''">
+                            다음
+                        </button>
+                    </div>
+                </div>
+            </section> 
+            <!-- /Section -->
+        </div>
+        <!-- 상점 등록 모달 -->
+    <div id="versionRegisterModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>상점등록</h4>
+                <span id="registerModalClose" class="close">&times;</span> 
+            </div>
+            <div class="modal-body">
+                <form id="versionRegisterForm">
+                    <table class="modal-table">
+                        <tr>
+                            <th>아이디</th>
+                            <td><input type="text" id="versionInput" placeholder="아이디를 입력하시오" required></td>
+                        </tr>
+                        <tr>
+                            <th>비밀번호</th>
+                            <td><input type="password" id="versionInput" placeholder="패스워드를 입력하시오" required></td>
+                        </tr>
+                        <tr>
+                            <th>비밀번호확인</th>
+                            <td><input type="password" id="versionInput" placeholder="다시한번 패스워드를 입력하시오" required></td>
+                        </tr>
+                    </table>
+                    <table class="modal-table">
+                        <tr>
+                            <th>상호명</th>
+                            <td><input type="text" id="versionInput" placeholder="상호명입력 예: (주)" required></td>
+                        </tr>
+                        <tr>
+                            <th>대표</th>
+                            <td><input type="text" id="versionInput" placeholder="이름입력" required></td>
+                        </tr>
+                        <tr>
+                            <th>사업자등록번호</th>
+                            <td><input type="text" id="versionInput" placeholder="사업자등록번호입력" required><span>- 포함 12 자리 입력</span></td> 
+                        </tr>
+                        <tr>
+                            <th>통신판매번호</th>
+                            <td><input type="text" id="versionInput" placeholder="통신판매번호입력" required><span>- 포함 12 자리 입력</span></td> 
+                        </tr>
+                        <tr>
+                            <th>이메일</th>
+                            <td>
+                                <input type="text" name="sellerInfo.email" class="inputEmail" placeholder="이메일 입력"/>
+                                <button type="button" id="btnCheckEmail" data-type="uid" class="register-btns">이메일 인증</button>
+                                <div class="auth" style="display:none">
+                                    <input type="text" name="auth" class="inputEmailCode" placeholder="인증번호 입력"/>
+                                    <button type="button" id="btnCheckEmailCode" class="register-btns">확인</button>
+                                </div>
+                                <span id="resultEmail" class="resultEmail desc"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td><input type="text" id="versionInput" placeholder="전화번호 입력" required></td>
+                        </tr>
+                        <tr>
+                            <th>팩스번호</th>
+                            <td><input type="text" id="versionInput" placeholder="팩스번호 입력" required></td>
+                        </tr>
+                        <tr>
+                            <th>우편번호</th>
+                            <td>
+                                <input type="text" id="postcode" placeholder="우편번호검색클릭" required readonly>
+                                <button type="button" id="findPostcodeBtn">우편번호검색</button>
+                                <script>
+                                    var findPostcodeBtn = document.getElementById("findPostcodeBtn");
+                                    findPostcodeBtn.onclick = function() {
+                                        new daum.Postcode({
+                                            oncomplete: function(data) {
+                                                document.getElementById('postcode').value = data.zonecode;
+                                                document.getElementById('address').value = data.roadAddress || data.jibunAddress;
+                                                document.getElementById('detailAddress').focus();
+                                            }
+                                        }).open();
+                                    };
+                                    </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>기본주소검색</th>
+                            <td><input type="text" id="address" placeholder="기본주소검색" required readonly></td>
+                        </tr>
+                        <tr>
+                            <th>상세주소입력</th>
+                            <td><input type="text" id="detailAddress" placeholder="상세주소입력" required></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="registerConfirmBtn" class="confirm-btn">등록하기</button>
+            </div>
+        </div>
+    </div>
+    </main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>
+
+<script>
+
+    // 전체 선택 체크박스 클릭 시 전체 선택
+    function toggleSelectAll(selectAllCheckbox) {
+        // 체크박스를 모두 불러옴
+        const checkboxes = document.querySelectorAll(".checkboxes")
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    // 개별 체크박스 클릭 시
+    function toggleCheckbox(checkbox) {
+        const checkboxes = document.querySelectorAll(".checkboxes");
+        const selectAllCheckbox = document.getElementById("selectAll");
+        const allChecked = Array.from(checkboxes).every(function(cb) {
+            return cb.checked;
+        });
+        selectAllCheckbox.checked = allChecked;
+    }
+
+ document.addEventListener('DOMContentLoaded', function() {
+    var registerModal = document.getElementById("versionRegisterModal");
+    var registerBtn = document.getElementById("openRegisterModalBtn");
+    var registerCloseBtn = document.getElementById("registerModalClose");
+    var closeButton = document.getElementById("registerCloseBtn");
+    var confirmButton = document.getElementById("registerConfirmBtn");
+    
+
+    registerBtn.onclick = function() {
+        registerModal.style.display = "flex";
+    };
+
+    registerCloseBtn.onclick = function() {
+        registerModal.style.display = "none";
+    };
+
+    window.onclick = function(event) {
+        if (event.target == registerModal) {
+            registerModal.style.display = "none";
+        }
+    };
+
+
+    confirmButton.onclick = function() {
+        var version = document.getElementById("versionInput").value;
+
+        if (version) {
+            console.log("버전:", version);
+
+            registerModal.style.display = "none";
+        } else {
+            alert("모든 필드를 입력해주세요.");
+        }
+    };
+
+    function dragElement(element) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        let offsetX = 0, offsetY = 0; 
+        const header = element.querySelector(".modal-header");
+
+        if (header) {
+            header.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+
+            offsetX = e.clientX - element.offsetLeft;
+            offsetY = e.clientY - element.offsetTop;
+
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = e.clientX - offsetX;
+            pos2 = e.clientY - offsetY;
+            element.style.left = pos1 + "px";
+            element.style.top = pos2 + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
+    // 모달을 드래그 가능하게 설정
+    dragElement(registerModal.querySelector(".modal-content"));
+});
+</script>
+

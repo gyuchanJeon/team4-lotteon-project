@@ -1,0 +1,303 @@
+/* 공통 스타일 */
+.cart-section {
+    padding: 20px;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+.section {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.order {
+    border: 1px solid #ddd;
+    width: 100%;
+    /* border-collapse: collapse; */
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.order-text {
+    padding: 60px;
+    text-align: center;
+    padding-bottom: 70px;
+    margin-bottom: 30px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+
+}
+/* 장바구니 테이블 스타일 */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cart-table th, .cart-table td {
+    padding: 15px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.cart-table th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+    color: #333;
+}
+
+.cart-table .product-info {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 15px;
+}
+
+.cart-table .product-info img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.cart-table .product-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+.quantity p {
+    font-size:14px;
+}
+/* 가격 정보 */
+.price-info {
+    font-size: 14px;
+    color: #888;
+}
+
+.price-info del {
+    margin-right: 10px;
+    color: #999;
+}
+
+.discount-price {
+    color: #ef2a23;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+
+/* 배송 정보 */
+.order-left{
+    width: 63%;
+}
+.order-right{
+    width: 35%;
+    float:right;
+}
+.shipping-info {
+    font-size: 14px;
+    color: #4caf50;
+    font-weight: bold;
+}
+
+/* 배송 정보 섹션 */
+.shipping-section {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border:1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.shipping h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.shipping-table {
+    width: 100%;
+}
+textarea{
+    width: 380px;
+    height: 125px;
+
+
+}
+.tableTitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-left:-10px;
+    color: #333;
+}
+
+.shipping-table th, .shipping-table td {
+    padding: 10px;
+    text-align: left;
+}
+.shipping-table th {
+    width:20%;
+    text-indent: 10px;
+}
+
+.shipping-table input{
+
+    padding: 10px;
+    width: 50%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.shipping-table button {
+    background-color: rgb(177, 31, 31);
+    width: 75px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid white;
+    box-sizing: border-box;
+}
+
+.shipping-table button:hover {
+
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+.radio input{
+    width:60px;
+}
+
+/* 할인 정보 */
+
+.coupon-section {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 18px;
+    border:1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.discount-section h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top : 5px;
+}
+
+.form-group {
+    display: flex;
+    text-align:left;
+    margin-bottom: 15px;
+
+}
+
+.form-group th {
+    width: 40%;
+    font-size: 12px;
+    color: #333;
+    padding:10px;
+    text-indent : 10px;
+
+}
+.form-group td {
+    width:50%;
+    font-size: 12px;
+    color: #333;
+    padding:6px;
+    text-indent : 10px;
+
+}
+
+
+
+
+.form-group td input{
+    padding: 7px;
+    width: 144px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.form-group td select {
+    padding: 7px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+/* 결제 요약 */
+.checkout-summary {
+    margin-left:auto;
+    height: 393px;
+    border:1px solid #ddd;
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.checkout-summary th{
+    width: 50%;
+}
+
+.checkout-summary p {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top : 5px;
+}
+.checkout-price {
+    margin-top:40px;
+}
+.checkout-price th {
+    font-size:15px;
+    font-weight: 600;
+}
+.checkout-price td{
+    font-size:16px;
+    font-weight: 600;
+    color: #c9302c;
+}
+
+
+.checkout-row {
+    display: inline-block;
+    margin-bottom: 10px;
+    text-align: left;
+    margin-left: 15px;
+}
+
+.checkout-row td {
+    width:30%;
+    padding:10px
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.checkout-btn:hover {
+    background-color: #c9302c;
+}

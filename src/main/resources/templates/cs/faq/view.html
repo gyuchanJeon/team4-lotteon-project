@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>자주묻는질문 보기</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/cs/cs_view.css}"/>
+</head>
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+
+<main>
+    <th:block th:replace="~{/cs/aside/aside.html}"></th:block>
+    <section id="section_wrapper">
+        <div id="category">
+            <p>자주묻는질문<br><span class="subtitle">[[${board.cate.name}]] 관련 자주 묻는 질문입니다.</span></p>
+            <div class="breadcrumb">
+                <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/faq/list}">자주묻는질문</a> > <a th:href="@{/cs/notice/list}" class="location">[[${board.cate.name}]]</a>
+            </div>
+        </div>
+        <table>
+            <tr>
+                <td>유형</td>
+                <td>[[${board.cate.parent.name}]]  |  [[${board.cate.name}]]</td>
+
+            </tr>
+            <tr>
+                <td>제목</td>
+                <td>[[${board.title}]]</td>
+            </tr>
+            <tr>
+                <td>내용</td>
+                <td class="board_content"><span>[[${board.content}]]</span></td>
+            </tr>
+        </table>
+        <a th:href="@{/cs/notice/list}">
+            <button id="toList">목록</button>
+        </a>
+    </section>
+</main>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
+</html>

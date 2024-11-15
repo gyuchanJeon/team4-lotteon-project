@@ -1,0 +1,150 @@
+<!-- <th:block th:insert="~{/company/layout/_header.html}"/> -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, user-scalable=no">
+    <title>recruit</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../images/company/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="../css/company/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="/js/company/index.js"></script>
+    <script src="/js/company/header.js"></script>
+
+</head>
+<main id="recruit">
+    <header>
+        <div>
+            <a th:href="@{/index}"><img src="../images/company/header_logo.png" width="180" alt="로고"></a>
+            <ul>
+                <li><a th:href="@{/company/index}">home</a></li>
+                <li><a th:href="@{/company/culture}">기업문화</a></li>
+                <li><a th:href="@{/company/story}">소식과 이야기</a></li>
+                <li><a th:href="@{/company/recruit}">채용</a></li>
+                <li><a th:href="@{/company/media}">미디어</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="cover">
+        <div>
+            <span>Join to LOTTE ON</span>
+            <h1>
+                쇼핑을 새롭게, 세상을 이롭게 이끌<br>
+                쇼핑 좀 해 본 인재를 모십니다!
+            </h1>
+            <p>
+                롯데ON은 안정성 있고 혁신성 있게 우리의 문화를 만들어가고 있어요.<br>
+                구성원들은 수평적이고 자율적인 문화 속에서 개선을 넘어서 혁신적인 롯데ON만의 서비스를 만들어요.<br>
+                롯데ON과 함께 굵은 점을 찍어가며 성장하실 분들을 기다립니다.<br>
+            </p>
+        </div>
+    </div>
+    <nav>
+        <form id="searchForm" action="/lotteon/company/recruit" method="get" class="search-form">
+            <select name="division">
+                <option value="">채용부서 선택</option>
+                <option value="IT">IT</option>
+                <option value="UX">UX</option>
+                <option value="마케팅">마케팅</option>
+                <option value="영업">영업</option>
+                <option value="광고산업">광고산업</option>
+                <option value="경영">경영</option>
+                <option value="운영">운영</option>
+            </select>
+
+            <select name="career">
+                <option value="">경력사항 선택</option>
+                <option value="무관">무관</option>
+                <option value="신입">신입</option>
+                <option value="경력 2 ~ 15년">경력 2 ~ 15년</option>
+                <option value="경력 4 ~ 15년">경력 4 ~ 15년</option>
+                <option value="경력 6 ~ 15년">경력 6 ~ 15년</option>
+            </select>
+
+            <select name="employment">
+                <option value="">전체 고용 형태</option>
+                <option value="Regular">정규직</option>
+                <option value="Contract">계약직</option>
+                <option value="Internship">인턴</option>
+                <option value="Part_time">아르바이트</option>
+                <option value="Free">프리랜서</option>
+                <option value="Detachment">파견직</option>
+                <option value="Daily">일용직</option>
+                <option value="Edu">교육생</option>
+            </select>
+
+            <input type="text" name="searchText" class="searchText" placeholder="검색어를 입력하세요">
+            <button type="submit" class="search-btn">검색</button>
+        </form>
+    </nav>
+    <section class="job-board">
+        <table class="job-board">
+            <tbody>
+            <tr th:each="recruit : ${recruitPage.content}">
+                <td colspan="2">
+                    <div class="title-row">
+                        <a href="#" class="title" th:text="${recruit.title}">채용 제목</a>
+                        <span class="status"
+                              th:text="${recruit.status}"
+                              th:classappend="${recruit.status == '모집중'} ? 'status-open' : 'status-closed'">
+                                상태
+                            </span>
+                    </div>
+                    <div class="recruit-info"
+                         th:text="${recruit.division} + ' | ' + ${recruit.career} + ' | ' + ${recruit.employment} + ' | ' + ${recruit.sDateFormatted} + ' ~ ' + ${recruit.eDateFormatted}">
+                        추가 정보
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${recruitPage.totalElements == 0}">
+            <p class="no-results">검색 결과가 없습니다.</p>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination" th:if="${recruitPage.totalElements > 0}">
+            <a th:href="@{/company/recruit(page=${recruitPage.number - 1})}"
+               th:if="${recruitPage.hasPrevious()}"
+               class="page-btn btn btn-secondary">이전</a>
+
+            <span th:each="pageNum : ${#numbers.sequence(0, recruitPage.totalPages - 1)}">
+                    <a th:href="@{/company/recruit(page=${pageNum})}"
+                       th:text="${pageNum + 1}"
+                       th:classappend="${pageNum == recruitPage.number} ? 'page-num active' : 'page-num'"
+                       class="btn btn-outline-secondary"></a>
+                </span>
+
+            <a th:href="@{/company/recruit(page=${recruitPage.number + 1})}"
+               th:if="${recruitPage.hasNext()}"
+               class="page-btn btn btn-secondary">다음</a>
+        </div>
+    </section>
+</main>
+<!-- <th:block th:insert="~{/company/layout/_footer.html}"/>
+  푸터영역-->
+<footer>
+    <div>
+        <img src="../images/company/footer_logo.png" alt="로고">
+        <p>
+            대표자 : 홍길동 사업자등록번호 : 123-45-67890 부산광역시 강남구 테헤란로 123 통신판매업 신고번호 : 제2021-부산강남-12345호<br>
+            개인정보보호책임자 : 김춘추 FAX : 02-1234-5678 help@LotteON.com
+        </p>
+    </div>
+</footer>
+</div>
+</body>
+</html>
+
+<script>
+    window.addEventListener('load', function() {
+        // 현재 URL에 쿼리 파라미터가 있다면 제거하고 리다이렉트
+        if (window.location.search) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
+</script>

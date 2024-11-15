@@ -1,0 +1,301 @@
+
+a {
+  text-decoration: none; /* 링크의 밑줄 제거 */
+  color: inherit; /* 링크의 색상 제거 */
+}
+
+body {
+  font-family: "Malgun Gothic", sans-serif;
+  font-size: 12px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.breadcrumb {
+  float:right
+}
+
+.breadcrumb > a {
+  font-size:15px;
+}
+
+#section_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 982px;
+  margin-top:-10px;
+  box-shadow: none !important;
+  background-color: white !important;
+}
+aside {
+  position: sticky;
+  top: 20px; /* 원하는 고정 위치 */ /* 스크롤 시 고정될 상단 위치 */
+margin-top:20px;
+  box-shadow: 0 0 5px rgba(55, 55, 5, 0.2);
+
+}
+.main-title-section {
+  margin-top: 61px;
+  margin-bottom: 61px;
+
+  text-align: center;
+  width: 982px;
+  box-sizing: border-box;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background-color: white !important;
+}
+.main-title-section p {
+  font-size: 2rem;
+  font-weight: bolder;
+  color: #d82a2a;
+  display: inline;
+}
+.main-title-section span {
+  font-size: 2rem;
+
+  font-weight: bolder;
+}
+
+section {
+  background-color: #fff;
+  padding: 10px;
+  width: 90%;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 10px #acabab4d;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+#notice-section, #consultation-section{
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid #ddd;
+
+}
+#qna-section{
+  box-sizing: border-box;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+}
+#faq-section{
+  margin-top: 20px;
+  box-sizing: border-box;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+}
+#faq-section > table {
+  min-height: 300px;
+}
+#faq-tr {
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+table {
+  width: 100%;
+  min-height: 280px;
+  border-collapse: collapse;
+}
+thead th {
+  padding: 10px;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+tbody{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+tr{
+  min-height: 50px;
+}
+tbody td {
+  padding: 7px 10px 7px 15px;
+}
+td a{
+  font-size: 15px;
+}
+.all {
+  text-align: right;
+}
+th {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+th a {
+  font-size: 15px;
+}
+th > span:first-child {
+  font-size: 20px;
+  font-weight: 900;
+}
+th > span:nth-child(2) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-self: flex-start;
+  font-size: 15px;
+}
+#faq-td {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+#faq-td > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.r-date {
+  color: gray;
+}
+.qna-td {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#consultation-td {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.consultation-div {
+  width: 260px;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: space-evenly;
+}
+.big {
+  font-size: 20px;
+  font-weight: 900;
+}
+#qna-write {
+  margin-top: 10px;
+  margin-left: 13px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #007BFF;
+}
+.toSeller {
+  color: #007BFF;
+}
+
+.image {
+  display: inline;
+  width: 150px;
+  height: 150px;
+  background-image: url(/lotteon/images/cs/cs_sprites.png);
+  background-size: 1230px 1645px;
+  margin-bottom: 5px;
+}
+
+.member {
+  background-position: 0px -151px;
+}
+.member:hover{
+  background-position: 0px -302px;
+}
+.member:active{
+  background-position: 0px -151px;
+}
+
+.coupon {
+  background-position: -302px -151px;
+}
+.coupon:hover {
+  background-position: -302px -302px;
+}
+.coupon:active {
+  background-position: -302px -151px;
+}
+
+.order {
+  background-position: -150px -151px;
+}
+.order:hover {
+  background-position: -150px -302px;
+}
+.order:active {
+  background-position: -150px -151px;
+}
+
+.delivery {
+  background-position: -452px -151px;
+}
+.delivery:hover {
+  background-position: -452px -302px;
+}
+.delivery:active {
+  background-position: -452px -151px;
+}
+
+.refund {
+  background-position: -603px -151px;
+}
+.refund:hover {
+  background-position: -603px -302px;
+}
+.refund:active {
+  background-position: -603px -151px;
+}
+
+.safe {
+  background-position: -754px -151px;
+}
+.safe:hover {
+  background-position: -754px -302px;
+}
+.safe:active {
+  background-position: -754px -151px;
+}
+
+.viewAll {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url(/lotteon/images/cs/cs_sprites.png);
+  background-size: 560px 680px;
+  background-position: -172px -186px;
+  margin-left: 2px;
+}
+a:hover{
+  text-decoration: underline;
+}
+details >* {
+  font-size: 15px;
+}
+summary{
+  margin-bottom: 7px;
+  &:hover{
+    cursor: pointer;
+    color: #007BFF;
+  }
+}
+details > span {
+  padding: 10px 0 0 11px;
+  color: grey;
+}
+details[open] {
+  &>summary{
+    font-weight: bold;
+  }
+}

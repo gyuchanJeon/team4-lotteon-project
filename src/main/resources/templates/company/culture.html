@@ -1,0 +1,177 @@
+<!-- <block insert="~{/company/layout/_header.html}" xmlns="http://www.w3.org/1999/html"/>
+해더영역 
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, user-scalable=no">
+    <title>LotteON Inc. 상상하는 모든것</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../images/company/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/company/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="/js/company/index.js"></script>
+    <script src="/js/company/header.js"></script>
+
+</head>
+<body>
+<div id="wrapper">
+    <header>
+        <div>
+            <a th:href="@{/index}"><img src="../images/company/header_logo.png" width="180" alt="로고"></a>
+            <ul>
+                <li><a th:href="@{/company/index}">home</a></li>
+                <li><a th:href="@{/company/culture}">기업문화</a></li>
+                <li><a th:href="@{/company/story}">소식과 이야기</a></li>
+                <li><a th:href="@{/company/recruit}">채용</a></li>
+                <li><a th:href="@{/company/media}">미디어</a></li>
+            </ul>
+        </div>
+    </header>
+<main id="culture">
+    <div class="cover">
+        <div>
+            <p>
+                대기업의 안정성과 스타트업의 혁신성을 함께,<br>
+                롯데ON에서 우리는 성장하고 있어요.
+            </p>
+        </div>
+    </div>
+    <section class="top-content">
+        <div>
+            <p>
+                롯데ON은 안정성 있게, 혁신성 있게 우리의 문화를 만들어가고 있어요.<br>
+                구성원들은 수평적이고 자율적인 문화 속에서<br>
+                개선을 넘어서 혁신적인 롯데ON만의 서비스를 만들어요.<br>
+                그렇게 굵은 점을 찍어가며, 우리는 롯데ON과 함께 성장하고 있어요.
+            </p>
+        </div>
+    </section>
+    <section class="cs-content">
+        <div>
+            <p>
+                대기업 속의 스타트업, 롯데ON은 이렇게 일해요!
+            </p>
+        </div>
+        <article>
+            <img src="../images/company/05_함께성장.png" alt="이미지 설명">
+            <div class="text-content">
+                <h3>스스로 책임지고 자율적으로 일해요</h3>
+                <p>
+                    “어른답게” 서로를 어른으로 대하고 배려하는 것이 중요해요.<br>
+                    스스로 판단하고 자율적으로 행동할 수 있기 때문에<br>
+                    더 높은 효율을 만들어나가며 일을 할 수 있어요.
+                </p>
+            </div>
+        </article>
+        <article>
+            <div class="text-content2">
+            <h3>목표와 방향을 생각하며 나아가요.</h3>
+            <p>
+                &#8220;혁신적으로 &#8221;일의 목적을 충분히 생각하는 것으로부터 <br/>
+                우리의 아이디어는 시작되고,높은 목표는 혁신적인 방향을 <br/>
+                만들어 낼 수 있다고 믿어요. 그 과정에서 우리가 더 잘할 수 <br/>있는 것이 무엇인지 항상 고민해요.
+            </p>
+            </div>
+            <img loading="lazy" decoding="async"  src="../images/company/06_clipdrop-enhance.png" />
+        </article>
+        <article>
+            <img src="../images/company/teamwork-3213924_960_720.webp" alt="이미지 설명">
+            <div class="text-content">
+            <h3>함께하면 할 수 있다고 믿어요.</h3>
+            <p>
+                &#8220;원팀으로 &#8221;롯데ON의 뛰어난 동료들과 서로 의지하며 <br/>
+                여러 팀이 함께 집중해서 시너지를 만들어내요.<br/>
+                서비스를 더 좋은 방향으로 만들어가기 위해 <br/>소통과 협업을 중요하게 생각해요.
+            </p>
+            </div>
+        </article>
+    </section>
+    <section class="middle-section">
+        <div>
+            <p>
+                우리의 문화와 제도는 구성원들의<br>
+                성장과 몰입을 위해 존재해요.
+            </p>
+            <article class="middle__article1" >
+                <div>
+                    <h3><img src="../images/company/기업문화_icon01-150x150.png"/>수평적인 문화</h3>
+                    <div class="middle__article-content">
+                        <p>
+                            수평적인 의사소통을 위해 님 호칭을 사용하며,<br>
+                            서로의 의견도, 인격도 존중되는 소통 문화를 만들어가요.<br>
+                            역할 중심의 Career Level,<br>
+                            모든 정보의 공유와 소통으로<br>
+                            수평적인 문화를 지속해나가요.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3><img src="../images/company/기업문화_icon02-150x150.png"/>자율적인 근무환경</h3>
+                    <div class="middle__article-content">
+                        <p>
+                            원하는 자리에 앉는 스마트 오피스,<br>
+                            정해진 출퇴근 시간 없이<br>
+                            자율적으로 근무하는<br>
+                            유연근로제로 효율적인 업무를 위한<br>
+                            구성원의 자율을 존중해요
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article class="middle__article2" style="display: flex;">
+                <div>
+                    <h3><img src="../images/company/기업문화_icon03-150x150.png"/>함께 누리는 복지제도</h3>
+                    <div class="middle__article-content">
+                        <p>
+                            선택적 복리후생 제도를 통해<br>
+                            개인이 원하는 복리후생 항목을 선택하여 사용해요.<br>
+                            리프레시 안식휴가, 사랑스러운 아이를 위한<br>
+                            육아휴직 등 다양한 복지 제도로<br>
+                            구성원들의 행복한 일터와 가정을 책임져요.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3><img src="../images/company/기업문화_icon04-150x150.png"/>이기고 성장하는 문화</h3>
+                    <div class="middle__article-content">
+                        <p>
+                            ‘이달의 롯데ON 구성원’을 선정하는<br>
+                            ‘M.O.M(Member of the Month) 포상제도’ 운영과<br>
+                            아이디어 제안 채널 ‘아이디어ON’을 통해<br>
+                            구성원의 이야기를 듣고 성과를 인정하여<br>
+                            Winning Culture를 만들어가요.
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+    </section>
+
+
+    <section class="banner-section">
+        <div>
+            <a href="#"><img src="../images/company/기업문화_banner.png"></a>
+        </div>
+    </section>
+</main>
+    <!-- <block insert="~{/company/layout/_footer.html}"/>
+     푸터영역-->
+     <footer>
+        <div>
+            <img src="../images/company/footer_logo.png" alt="로고">
+            <p>
+                대표자 : 홍길동 사업자등록번호 : 123-45-67890 부산광역시 강남구 테헤란로 123 통신판매업 신고번호 : 제2021-부산강남-12345호<br>
+                개인정보보호책임자 : 김춘추 FAX : 02-1234-5678 help@LotteON.com
+            </p>
+        </div>
+    </footer>
+    </div>
+    </body>
+    </html>

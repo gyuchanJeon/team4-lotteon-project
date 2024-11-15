@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>롯데ON::롯데 온라인 쇼핑몰</title>
+    <link rel="stylesheet" th:href="@{/css/my/myInfo.css}"/>
+    <link rel="stylesheet" th:href="@{/css/my/myInfo_modal.css}"/>
+    <link rel="stylesheet" th:href="@{/css/my/myInfo_order.css}"/>
+    <link rel="stylesheet" th:href="@{/css/my/myInfo_qna.css}"/>
+    <script th:src="@{/js/my/home.js}" defer></script>
+</head>
+
+<body>
+<div id="wrapper">
+    <main>
+        <header th:replace="~{/include/my_header.html}"></header>
+        <div th:replace="~{/my/my_aside.html}"></div>
+        <section class="myInfo_sec">
+            <div th:replace="~{/my/banner.html}"></div>
+
+            <!-- 최근 주문내역 -->
+            <article class="myInfo_recentOrder myInfo_Article">
+                <div class="myInfo_ArticleTitle"><span>최근주문내역</span><a th:href="@{/my/order}">더보기 ></a></div>
+                <ul class="myInfo_product">
+                    <li>
+                        <span>[[${orderDTO.buyDate.toLocalDate()}]] / </span><a href="#" class="orderDetailBtn"> 주문번호 :
+                        [[${orderDTO.orderId}]]</a>
+                        <div>
+                            <div th:if="${orderItems.size() > 0}" th:each="item : ${orderItems}">
+                                <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">
+                                <div>
+                                    <a href="#" class="orderSellerBtn"
+                                       th:text="${item.productVariants.product.company}"></a>
+                                    <!-- 해당 제품에 대한 판매자 정보를 modal 에 출력하기 위한 데이터 보관 -->
+                                    <input class="seller_grade" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.grade}">
+                                    <input class="seller_comName" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.comName}">
+                                    <input class="seller_ceo" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.ceo}">
+                                    <input class="seller_hp" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.hp}">
+                                    <input class="seller_fax" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.fax}">
+                                    <input class="seller_email" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.email}">
+                                    <input class="seller_comNumber" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.comNumber}">
+                                    <input class="seller_zipCode" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.address.zipCode}">
+                                    <input class="seller_addr1" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.address.addr1}">
+                                    <input class="seller_addr2" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.address.addr2}">
+                                    <a th:href="@{/product/list}" th:text="${item.productVariants.sku}"></a>
+                                    <p>수량: [[${item.count}]]개</p>
+                                    <p><strong
+                                            th:text="${#numbers.formatInteger(item.originPrice, 1, 'COMMA')} + '원'"></strong>
+                                    </p>
+                                </div>
+                                <div>
+                                    <span th:text="${statusText}"></span>
+                                </div>
+                                <div>
+                                    <button class="orderAcceptBtn" th:attr="data-order-item-id=${item.orderItemId}">구매확정</button>
+                                    <button class="orderReviewBtn">상품평쓰기</button>
+                                    <!-- 상품평에 필요한 데이터 숨겨놓기 -->
+                                    <input class="variantId" type="hidden"
+                                           th:value="${item.productVariants.variant_id}">
+                                    <input class="sku" type="hidden" th:value="${item.productVariants.sku}">
+                                    <button class="orderReturnBtn" th:attr="data-order-item-id=${item.orderItemId}">반품신청</button>
+                                    <button class="orderChangeBtn" th:attr="data-order-item-id=${item.orderItemId}">교환신청</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </article>
+            <!-- 최근 주문내역 끝 -->
+
+            <div th:replace="~{/my/modal :: modalFragment(orderDTO=${orderDTO}, orderItems=${orderItems})}"></div>
+
+            <!-- 포인트 적립내역 -->
+            <article class="myInfo_PointRecode myInfo_Article">
+                <div class="myInfo_ArticleTitle"><span>포인트 적립내역</span><a href="#">더보기 ></a></div>
+                <table class="myInfo_PointTable myInfo_Table">
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>구분</th>
+                        <th>주문번호</th>
+                        <th>적립금액</th>
+                        <th>비고</th>
+                        <th>유효기간</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 반복 block -->
+                    <tr>
+                        <td>
+                            2022-12-13
+                        </td>
+                        <td>
+                            적립
+                        </td>
+                        <td>
+                            2022131001
+                        </td>
+                        <td>
+                            340
+                        </td>
+                        <td>
+                            상품 구매확정
+                        </td>
+                        <td>
+                            2024-12-10
+                        </td>
+                    </tr>
+                    <!-- 반복 블럭 끝 -->
+
+                    <!-- 반복 block -->
+                    <tr>
+                        <td>
+                            2022-12-13
+                        </td>
+                        <td>
+                            적립
+                        </td>
+                        <td>
+                            2022131001
+                        </td>
+                        <td>
+                            340
+                        </td>
+                        <td>
+                            상품 구매확정
+                        </td>
+                        <td>
+                            2024-12-10
+                        </td>
+                    </tr>
+                    <!-- 반복 블럭 끝 -->
+                    </tbody>
+                </table>
+            </article>
+
+            <!-- 상품평 -->
+            <article class="myInfo_Review myInfo_Article">
+                <div class="myInfo_ArticleTitle"><span>상품평</span><a th:href="@{/my/review}">더보기 ></a></div>
+                <table class="myInfo_ReviewTable myInfo_Table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>상품평</th>
+                        <th>내용</th>
+                        <th>평점</th>
+                        <th>작성일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 반복 block -->
+                    <tr th:each="review , i : ${reviewDTOList}" th:if="${i.index < 3}">
+                        <td>
+                            [[${i.index+1}]]
+                        </td>
+                        <td>
+                            [[${review.product.productId}]] / [[${review.product.name}]]
+                        </td>
+                        <td>
+                            [[${review.content}]]
+                        </td>
+                        <td>
+                            <th:block th:with="
+                  fullStars=${T(java.lang.Math).floor(review.getReviewStar() / 2)},
+                  halfStar=${review.getReviewStar() % 2 == 1},
+                  emptyStars=${5 - fullStars - (halfStar ? 1 : 0)}">
+
+                                <!-- 전체 별 -->
+                                <th:block th:if="${fullStars > 0}">
+                                    <th:block th:each="num : ${#numbers.sequence(1, fullStars)}">
+                                        <img th:src="@{/images/review/star.png}" alt="Full Star">
+                                    </th:block>
+                                </th:block>
+
+                                <!-- 반 별 -->
+                                <th:block th:if="${halfStar}">
+                                    <img th:src="@{/images/review/star_half.png}" alt="Half Star">
+                                </th:block>
+
+                                <!-- 회색 별 -->
+                                <th:block th:if="${emptyStars > 0}">
+                                    <th:block th:each="num : ${#numbers.sequence(1, emptyStars)}">
+                                        <img th:src="@{/images/review/star_gray.png}" alt="Gray Star">
+                                    </th:block>
+                                </th:block>
+
+                            </th:block>
+                        </td>
+                        <td>
+                            [[${review.regDateSub}]]
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </article>
+
+            <!-- 문의 내역 -->
+            <article class="myInfo_Qna myInfo_Article">
+                <div class="myInfo_ArticleTitle"><span>문의 내역</span><a href="#">더보기 ></a></div>
+                <table class="myInfo_QnaTable myInfo_Table">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>문의채널</th>
+                        <th>문의유형</th>
+                        <th>제목</th>
+                        <th>작성일</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 반복 block -->
+                    <tr>
+                        <td>
+                            1
+                        </td>
+                        <td>
+                            고객센터
+                        </td>
+                        <td>
+                            주문 / 결제
+                        </td>
+                        <td>
+                            신용카드 결제 중 오류가 난 경우 어떻게 하나요?
+                        </td>
+                        <td>
+                            2022-12-12
+                        </td>
+                        <td class="qna_answer">
+                            검토 중
+                        </td>
+                    </tr>
+                    <!-- 반복 블럭 끝 -->
+
+                    <!-- 반복 block -->
+                    <tr>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            고객센터
+                        </td>
+                        <td>
+                            주문 / 결제
+                        </td>
+                        <td>
+                            신용카드 결제 중 오류가 난 경우 어떻게 하나요?
+                        </td>
+                        <td>
+                            2022-12-12
+                        </td>
+                        <td class="qna_answer answerd">
+                            답변완료
+                        </td>
+                    </tr>
+                    <!-- 반복 블럭 끝 -->
+
+                    <!-- 반복 block -->
+                    <tr>
+                        <td>
+                            3
+                        </td>
+                        <td>
+                            판매자 게시판
+                        </td>
+                        <td>
+                            배송
+                        </td>
+                        <td>
+                            배송기간이 보통 얼마나 걸리나요?
+                        </td>
+                        <td>
+                            2022-12-12
+                        </td>
+                        <td class="qna_answer answerd">
+                            답변완료
+                        </td>
+                    </tr>
+                    <!-- 반복 블럭 끝 -->
+                    </tbody>
+                </table>
+            </article>
+
+            <!-- 나의 설정 -->
+            <article class="myInfo_myInfo myInfo_Article">
+                <div class="myInfo_ArticleTitle"><span>나의 설정</span><a href="#">더보기 ></a></div>
+                <ol class="myInfo_div">
+                    <li>
+                        <div>기본배송지설정</div>
+                        <a href="#">변경</a>
+                        <p>부산광역시 부산진구 대연동 120</p>
+                        <p>한빛빌딩 10층</p>
+                    </li>
+                    <li>
+                        <div>Email 설정</div>
+                        <a href="#">변경</a>
+                        <p>abd123@naver.com</p>
+                        <p>(최종수정일 2021-12-10)</p>
+                    </li>
+                    <li>
+                        <div>휴대폰 설정</div>
+                        <a href="#">변경</a>
+                        <p>010 - 1234 - 1001</p>
+                        <p>(최종수정일 2021-12-10)</p>
+                    </li>
+                </ol>
+            </article>
+
+        </section>
+    </main>
+</div>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>공지사항 목록</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cs/qna_write.css}"/>
+</head>
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+<main>
+  <th:block th:replace="~{/cs/aside/aside_qna.html}"></th:block>
+  <section id="section_wrapper">
+    <div id="category">
+      <p>문의작성<br><span class="subtitle">고객님이 작성하신 문의 내용입니다.</span></p>
+      <div class="breadcrumb">
+        <a th:href="@{/cs/index}">Home</a> > <a th:href="@{/cs/qna/list}">문의하기</a> > <a th:href="@{/cs/qna/view}" class="location">문의작성</a>
+      </div>
+    </div>
+    <form id="myForm" th:action="@{/cs/qna/write}" method="POST">
+      <table>
+        <tr>
+          <td>문의유형</td>
+          <td>
+            <select id="category1">
+              <option>1차 유형</option>
+              <option th:each="cate : ${cate1}"
+                      th:value="${cate.boardCateId}"
+                      th:text="${cate.name}">
+              </option>
+            </select>
+            <select name="cate" id="category2" required>
+              <option value="2차 유형" disabled hidden selected>2차 유형</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>작성자</td>
+          <td><input type="text" class="writeTitle" th:value="${#authentication.principal.name}"><input type="hidden" class="writeTitle" name="uid" th:value="${#authentication.principal.user.uid}" readonly><input type="hidden" name="type"  value="qna" readonly></td>
+        </tr>
+        <tr>
+          <td>제목</td>
+          <td><input name="title" class="writeTitle" placeholder="제목을 입력합니다." required></td>
+        </tr>
+        <tr>
+          <td>내용</td>
+          <td><textarea name="content" id="writeContent" placeholder="내용을 입력합니다." required></textarea></td>
+        </tr>
+      </table>
+
+      <div class="btnDiv">
+        <a th:href="@{/cs/qna/list}"><button type="button" id="btnCancel">취소하기</button></a>
+        <button type="submit" id="btnSubmit">등록하기</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<footer th:replace="~{/include/footer.html}"></footer>
+
+<script>
+  const category1Select = document.getElementById('category1');
+  const category2Select = document.getElementById('category2');
+
+  category1Select.addEventListener('change', function() {
+    const parentId = this.value;
+    category2Select.innerHTML = '<option disabled hidden selected>2차 유형</option>';
+
+    fetch(`/lotteon/cs/qna/subcategories/${parentId}`)
+            .then(response => response.json())
+            .then(data => {
+              data.forEach(subCategory => {
+                const option = document.createElement('option');
+                option.value = subCategory.boardCateId;
+                option.text = subCategory.name;
+                category2Select.appendChild(option);
+              });
+            })
+            .catch(error => console.error('Error fetching subcategories:', error));
+  });
+
+  document.getElementById("myForm").addEventListener("submit", function(event) {
+    const category2 = document.getElementById("category2");
+
+    if (category2.value === "2차 유형") {
+      alert("카테고리를 선택해주세요.");
+      event.preventDefault();
+    } else {
+      // 등록 확인 메시지
+      if (!confirm("정말로 작성하시겠습니까?")) {
+        event.preventDefault(); // 취소 시 폼 제출 중단
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

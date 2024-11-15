@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<!--
+    2024-10-27
+    전규찬
+    버튼 크기 조절 / 호버 설정
+    체크박스 기능 구현
+-->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상품현황</title>
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_list.css}"/>
+    <script th:src="@{/js/my/admin_product/product_list.js}" defer></script>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a th:href="@{/admin/index}">Home</a> > <a th:href="@{/admin/product/list}">상품관리</a> > <a th:href="@{/admin/product/list}" class="location">상품목록</a>
+            </div>
+            <h3>상품현황</h3>
+            <div class="form">
+                <div class="search-bar">
+                    <form th:action="@{/admin/product/list}" method="get"> <!-- GET 방식으로 폼 전송 -->
+                        <select id="search-category" name="searchCategory" class="dropdown"> <!-- name 속성 추가 -->
+                            <option value="name" th:selected="${searchCategory == 'name'}">상품명</option>
+                            <option value="productId" th:selected="${searchCategory == 'productId'}">상품번호</option>
+                            <option th:if="${#authentication.principal.user.role == 'ADMIN'}" value="sellerInfoId" th:selected="${searchCategory == 'sellerInfoId'}">판매자</option>
+                            <option value="company" th:selected="${searchCategory == 'company'}">제조사</option>
+                        </select>
+                        <input
+                                type="text"
+                                name="keyword"
+                                placeholder="키워드 입력"
+                                class="search-input"
+                                th:value="${keyword}"
+                        />
+                        <button type="submit" class="search-btn">검색</button> <!-- type을 submit으로 설정 -->
+                    </form>
+                </div>
+
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 1%">
+                        <col style="width: 10%">
+                        <col style="width: 10%">
+                        <col style="width: 15%">
+                        <col style="width: 11%">
+                        <col style="width: 9%">
+                        <col style="width: 9%">
+                        <col style="width: 9%">
+                        <col style="width: 7%">
+                        <col style="width: 10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="checkAll"></th>
+                        <th>사진</th>
+                        <th>상품코드</th>
+                        <th>상품명</th>
+                        <th>판매가격</th>
+                        <th>할인율</th>
+                        <th>포인트</th>
+                        <th>판매자</th>
+                        <th>조회</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${products}">
+                        <td><input type="checkbox" class="chk" th:value="${product.productId}"></td>
+                        <td><img th:src="@{'/uploads/product/' + ${product.getImg1()}}" alt="상품 사진" class="product-image"></td>
+                        <td th:text="${product.productId}"></td>
+                        <td th:text="${product.name}"></td>
+                        <td th:text="${product.price}"></td>
+                        <td th:text="${product.discount}"></td>
+                        <td th:text="${product.point}"></td>
+                        <td th:text="${product.sellerInfoId.sellerInfoId}"></td>
+                        <td th:text="${product.hit}"></td>
+                        <td>
+                            <a th:href="@{/admin/product/modify(productId=${product.productId})}" class="edit-btn">수정</a>
+                            <button class="deletebtn" th:value="${product.productId}">삭제</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="buttons">
+                    <button id="delete-btn" disabled>선택 삭제</button>
+                    <a th:href="@{/admin/product/register}" class="write-btn">상품등록</a>
+                </div>
+
+                <div class="pagination">
+                    <button class="page-btn"
+                            th:disabled="${currentPage == 0}"
+                            th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=5\''">
+                        이전
+                    </button>
+                    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=5\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+                    <button class="page-btn"
+                            th:disabled="${currentPage + 1 == totalPages}"
+                            th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=5\''">
+                        다음
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- /Section -->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

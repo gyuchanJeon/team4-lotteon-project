@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자주묻는질문 작성</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_write.css}"/>
+
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">자주묻는질문</a>
+            </div>
+            <h3>자주묻는질문 작성</h3>
+            <div class="form">
+                <form th:action="@{/cs/faq/write}" method="POST">
+                    <div id="dropdown" class="table-controls">
+                        <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
+                        <select id="category1">
+                            <option>1차 유형</option>
+                            <option th:each="cate : ${cate1}"
+                                    th:value="${cate.boardCateId}"
+                                    th:text="${cate.name}">
+                            </option>
+                        </select>
+
+                        <!-- 2차 유형 카테고리 (동적으로 추가됨) -->
+                        <select name="cate" id="category2" required>
+                            <option value="2차 유형" disabled hidden selected>2차 유형</option>
+                        </select>
+
+                    </div>
+                    <div class="inquiry-section">
+                        <table class="inquiry-table">
+                            <tr>
+                                <td class="label">제목</td>
+                                <td>
+                                    <input type="text" name="title"/><input type="hidden" class="writeTitle" name="uid" value="ekkang" readonly/><input type="hidden" name="type"  value="faq" readonly/>
+                                </td>
+                            </tr>
+                            <tr class="content">
+                                <td class="label">내용</td>
+                                <td>
+                                    <textarea name="content" rows="5" cols="50"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="buttons">
+                        <a th:href="@{/admin/cs/faq/list}" class="cancel-btn">취소하기</a>
+                        <button type="submit" class="save-btn">등록하기</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <!--/section-->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>
+<script>
+    // 1차 카테고리 선택 시 2차 카테고리 값을 동적으로 가져와서 설정
+    const category1Select = document.getElementById('category1');
+    const category2Select = document.getElementById('category2');
+
+    category1Select.addEventListener('change', function() {
+        const parentId = this.value;
+
+        // 2차 카테고리 초기화
+        category2Select.innerHTML = '<option disabled hidden selected>2차 유형</option>';
+
+        // 서버로부터 2차 카테고리 데이터를 가져옴
+        fetch(`/lotteon/cs/qna/subcategories/${parentId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                data.forEach(subCategory => {
+                    const option = document.createElement('option');
+                    option.value = subCategory.boardCateId;
+                    option.text = subCategory.name;
+                    category2Select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching subcategories:', error));
+
+
+    });
+    document.getElementById("myForm").addEventListener("submit", function(event) {
+        const category2 = document.getElementById("category2");
+
+        // category2의 값이 빈 문자열이라면 폼 제출을 막고 경고 메시지 표시
+        if (category2.value === "2차 유형") {
+            alert("카테고리를 선택해주세요.");
+            event.preventDefault(); // 폼 제출 중단
+        }
+    });
+</script>

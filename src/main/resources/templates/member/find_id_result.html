@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lotteOn::login</title>
+    <link rel="stylesheet" th:href="@{/css/member/findIdResult.css}"/>
+</head>
+
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+<main id="main">
+    <div class="mainIn">
+        <div class="findidresult">
+            <section>
+                <div class="headtxt">
+                    <span>아이디 찾기 결과</span>
+                </div>
+                <div>
+                    <!--<span class="sub-title">아이디 찾기 결과</span>-->
+                    <p class="desc">아래의 회원 정보를 확인해 주세요.</p>
+                </div>
+                <!-- 아이디 정보를 찾은 경우 -->
+                <div >
+                    <table>
+                        <tr>
+                            <td class="table-label">이름</td>
+                            <td>
+                                <span th:text="${user.memberInfo.name}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-label">아이디</td>
+                            <td>
+                                <span th:text="${user.uid}" ></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-label">이메일</td>
+                            <td>
+                                <span th:text="${user.memberInfo.email}" ></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-label">가입일</td>
+                            <td>
+                                <span th:text="${#strings.substring(user.memberInfo.updatedAt, 0, 10)}"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="btns">
+                    <a th:href="@{/member/pass_change(uid=${user.uid})}" class="btn_cancel">비밀번호 재설정</a>
+                    <a th:href="@{/member/login}" id="submitBtn2" class="btn_next">로그인하러 가기</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<!--<footer>
+    <ul>
+        <li><a href="/company/index">회사소개</a></li>
+        <li><a href="#">서비스이용약관</a></li>
+        <li><a href="#">개인정보처리방침</a></li>
+        <li><a href="#">전자금융거래약관</a></li>
+    </ul>
+    <div>
+        <p><img th:src="@{images/main/footer_logo.png}" alt="로고"/></p>
+        <p>
+            <strong>(주)롯데ON</strong><br/>- bxSlider
+            대표이사 : 김사무엘상현, 정준호, 강성현<br/>
+            사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
+            통신판매업 신고 : 서울송파 제0158호<br>
+            호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+        </p>
+        <p>
+            <strong>고객센터</strong><br/>
+            Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
+            Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
+            App Version:[[${appInfo}]]
+        </p>
+    </div>
+</footer>-->
+</body>
+
+<script>
+    window.onload = function() {
+    };
+</script>
+
+</html>

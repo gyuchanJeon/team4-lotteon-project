@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>롯데ON::롯데 온라인 쇼핑몰</title>
+    <link rel="stylesheet" th:href="@{/css/main/common.css}"/>
+    <th:block th:replace="~{/include/common_head}"></th:block>
+    <script src="https://kit.fontawesome.com/20962f3e4b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css}"/>
+
+    <style>
+
+    </style>
+    <!--슬라이드-->
+    <script type="module">
+        import Swiper from 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.mjs'
+
+        const swiper = new Swiper('.swiper', {
+            // Optional parameters
+            direction: 'horizontal',
+            loop: true,
+            autoplay: {
+                delay: 4000,
+            },
+
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            // And if we need scrollbar
+            scrollbar: {
+                el: '.swiper-scrollbar',
+            },
+        });
+    </script>
+<!--슬라이드 끝-->
+</head>
+<body>
+<div id="bannerTop" class="on">
+    <article th:each="banner : ${banners}" th:if="${banner.location == 'MAIN1'}" th:style="'background: ' + ${banner.background}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/config/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
+    </article>
+</div>
+<div id="wrapper">
+    <header th:replace="~{/include/header.html}"></header>
+    <main>
+        <div th:replace="~{/main_aside.html}"></div>
+        <section class="main_section body-section">
+            <!-- 슬라이더 영역 -->
+            <section class="slider">
+                <!--슬라이더용-->
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <!-- Slides -->
+                        <div class="swiper-slide" th:each="banner : ${banners}" th:if="${banner.location == 'MAIN2'}">
+                            <a th:href="${banner.link}"><img th:src="@{'/uploads/config/' + ${banner.img}}" alt="item1"/></a>
+                        </div>
+                    </div>
+                    <!-- If we need navigation buttons -->
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </section>
+            <!--슬라이더 끝-->
+
+            <div id="content"></div> <!-- 동적으로 추가할 섹션들을 포함할 컨테이너 -->
+
+        </section>
+
+    </main>
+    <footer th:replace="~{/include/footer.html}">
+    </footer>
+</div>
+</body>
+
+<!--비동기 처리 스크립트-->
+<script th:src="@{/js/index.js}"></script>
+</html>

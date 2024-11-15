@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lotteOn::login</title>
+    <link rel="stylesheet" th:href="@{/css/member/findId.css}"/>
+</head>
+
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+<main id="main">
+    <div class="mainIn">
+        <div class="findid">
+            <form th:action="@{/member/pass_change}" method="post" class="findIdForm">
+                <div id="error-message" th:if="${error}" th:text="${error}" style="display: none;"></div>
+                <section>
+                    <input type="hidden" name="uid" th:value="${user.uid}"/>
+                    <div class="headtxt">
+                        <span>비밀번호 재설정</span>
+                    </div>
+                    <p class="notice">새로운 비밀번호를 설정해 주세요.</p>
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="pass">새 비밀번호</label>
+                            <input type="password" id="pass" name="pass2" placeholder="영문, 숫자, 특수문자 8~12자 설정" class="inputPass">
+                        </div>
+                        <div class="form-group">
+                            <label for="pass">새 비밀번호 확인</label>
+                            <input type="password" id="pass2" name="pass" class="inputPass" placeholder="새 비밀번호 다시 입력"><br>
+                            <span class="resultPass desc" id="resultPass"></span>
+                        </div>
+                    </div>
+                </section>
+                <!--<div class="findnote">
+                    <p>
+                        회원가입시 이메일 주소와 입력한 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.<br>
+                        인증번호를 입력 후 확인 버튼을 누르세요.
+                    </p>
+                </div>-->
+                <div class="btnss">
+<!--                    <a th:href="@{/member/login}" class="btn_cancel">취소</a>-->
+                    <button id="submitBtn2" type="submit" class="btn_pass">확인</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!--<footer>
+    <ul>
+        <li><a href="/company/index">회사소개</a></li>
+        <li><a href="#">서비스이용약관</a></li>
+        <li><a href="#">개인정보처리방침</a></li>
+        <li><a href="#">전자금융거래약관</a></li>
+    </ul>
+    <div>
+        <p><img th:src="@{images/main/footer_logo.png}" alt="로고"/></p>
+        <p>
+            <strong>(주)롯데ON</strong><br/>- bxSlider
+            대표이사 : 김사무엘상현, 정준호, 강성현<br/>
+            사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
+            통신판매업 신고 : 서울송파 제0158호<br>
+            호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+        </p>
+        <p>
+            <strong>고객센터</strong><br/>
+            Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
+            Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
+            App Version:[[${appInfo}]]
+        </p>
+    </div>
+</footer>-->
+</body>
+
+<script>
+
+    let receivecode;
+    let isEmailOk = false;
+    window.onload = function() {
+
+        // error-message 요소가 존재하는지 확인
+        const errorMessageElement = document.getElementById("error-message");
+        if (errorMessageElement) { // 요소가 존재할 경우에만 메시지 가져오기
+            var errorMessage = errorMessageElement.textContent;
+            if (errorMessage) {
+                alert(errorMessage); // alert 창으로 에러 메시지 표시
+            }
+        }
+
+        function showResultInvalid(element, message) {
+            element.textContent = message;
+            element.style.color = 'red';
+            element.style.display = 'block';
+        }
+
+        function showResultValid(element, message) {
+            element.textContent = message;
+            element.style.color = 'green';
+            element.style.display = 'block';
+        }
+
+        // 비밀번호 확인 기능
+        const inputPasses = document.getElementsByClassName('inputPass');
+        const resultPass = document.getElementById('resultPass');
+        let isPasswordValid = false; // 비밀번호 유효성 체크 상태
+
+        if (inputPasses.length > 1) {
+            inputPasses[1].addEventListener('focusout', () => {
+                if (inputPasses[0].value === inputPasses[1].value) {
+                    if (!inputPasses[0].value.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,12}$/)) {
+                        showResultInvalid(resultPass, '비밀번호 형식에 맞지 않습니다.');
+                        isPasswordValid = false; // 유효성 실패
+                    } else {
+                        showResultValid(resultPass, '사용 가능한 비밀번호입니다.');
+                        isPasswordValid = true; // 유효성 성공
+                    }
+                } else {
+                    showResultInvalid(resultPass, '비밀번호가 일치하지 않습니다.');
+                    isPasswordValid = false; // 유효성 실패
+                }
+            });
+        }
+
+        // 비밀번호 유효성 검사 함수
+        window.validatePassword = function() {
+            if (!isPasswordValid) {
+                alert("비밀번호를 재확인 해주세요."); // 유효성 검사 실패 시 alert 표시
+                return false; // 폼 제출 방지
+            }
+            return true; // 모든 검사를 통과하면 true 반환
+        };
+
+    };
+</script>
+
+</html>

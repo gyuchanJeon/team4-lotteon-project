@@ -1,0 +1,118 @@
+
+/* 상품 목록 섹션 */
+.product-list-section {
+  padding: 20px;
+}
+
+/* 정렬 옵션 */
+
+.sort-btn {
+  border: none;
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.sort-btn:hover {
+  background-color: #e4e4e4;
+}
+.sort-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.sort-link {
+  padding: 10px 15px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+  transition: color 0.2s ease;
+}
+.f{
+margin-left : 10px;
+}
+
+.sort-link:hover {
+  color: #ff5656; /* 마우스 오버 시 색 변경 */
+}
+
+/* 왼쪽 정렬 */
+.sort-options .sort-link {
+  margin-right: 20px;
+}
+
+/* 오른쪽 정렬 */
+.sort-options .sort-linkRight {
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.sort-options .sort-view-options {
+  display: flex;
+  align-items: center;
+}
+
+/* 아이콘과 텍스트 오른쪽 정렬 */
+.sort-options .sort-view-options a {
+  margin-left: 10px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+}
+
+.sort-options .sort-view-options a:hover {
+  color: #ff5656;
+}
+
+/* VIEW 선택 */
+.view-count {
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.rating img{
+  width: 13px;
+  margin-right: -2px;
+}
+
+
+/* 페이지네이션 */
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.pagination ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.pagination ul li {
+  display: inline;
+  margin: 0 5px;
+}
+
+.pagination ul li a {
+  text-decoration: none;
+  color: #333;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.pagination ul li a:hover {
+  background-color: #f0f0f0;
+  border-color: #ccc;
+}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>관리자 회원 포인트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}" />
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_member_point.css}" />
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">회원관리</a> >
+                <a href="#" class="location">포인트관리</a>
+            </div>
+            <h3>포인트관리</h3>
+            <div class="form">
+                <div class="search-bar">
+                    <select id="search-type" class="dropdown" onchange="handleTypeChange()">
+                        <option value="">전체</option>
+                        <option value="차감">차감</option>
+                        <option value="적립">적립</option>
+                    </select>
+                    <select id="search-searchType" class="dropdown">
+                        <option value="all">전체검색</option>
+                        <option value="id">아이디</option>
+                        <option value="name">이름</option>
+                        <option value="email">이메일</option>
+                        <option value="hp">휴대폰</option>
+                    </select>
+                    <input type="text" id="search-keyword" placeholder="키워드 입력" class="search-keyword" onkeypress="if(event.key === 'Enter') searchPoints()" />
+                    <button class="search-btn" onclick="searchPoints()">검색</button>
+                </div>
+
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 5%" />
+                        <col style="width: 5%" />
+                        <col style="width: 7%" />
+                        <col style="width: 5%" />
+                        <col style="width: 7%" />
+                        <col style="width: 10%" />
+                        <col style="width: 6%" />
+                        <col style="width: 10%" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>유형</th>
+                        <th>아이디</th>
+                        <th>이름</th>
+                        <th>지급 포인트</th>
+                        <th>지급 내용</th>
+                        <th>누적 포인트</th>
+                        <th>지급 날짜</th>
+                    </tr>
+                    </thead>
+                    <tbody id="pointTableBody"></tbody>
+                </table>
+                <div class="pagination" id="paginationContainer"></div>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        loadPoints(); // 페이지 로드 시 데이터 불러오기
+    });
+
+    // `search-type` 값 변경 시 자동으로 데이터를 가져옴
+    function handleTypeChange() {
+        const keyword = document.getElementById("search-keyword").value;
+        const searchType = document.getElementById("search-searchType").value;
+
+        // 검색 유형과 키워드가 없으면 `type`만으로 데이터 검색
+        if (!keyword && !searchType) {
+            searchPoints();
+        } else {
+            searchPoints();
+        }
+    }
+
+    // `searchPoints` 함수: 조건에 따라 데이터 요청
+    function searchPoints(page = 0, size = 8) {
+        const type = document.getElementById("search-type").value;
+        const searchType = document.getElementById("search-searchType").value;
+        const keyword = document.getElementById("search-keyword").value;
+
+        // `null` 값일 경우에는 파라미터로 보내지 않도록 쿼리스트링을 조건부로 작성
+        let url = `/lotteon/member/point?page=${page}&size=${size}`;
+        if (type) url += `&type=${type}`;
+        if (searchType && keyword) { // 검색 유형과 키워드가 있는 경우만 추가
+            url += `&searchType=${searchType}&keyword=${keyword}`;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log("데이터:", data); // 데이터 확인용 로그
+                updatePointTable(data, page);
+                updatePagination(data.totalPages, page);
+            })
+            .catch(error => console.error("데이터를 불러오는 중 오류 발생:", error));
+    }
+
+    function updatePointTable(data, page) {
+        const pointTableBody = document.getElementById("pointTableBody");
+        pointTableBody.innerHTML = "";
+
+        if (data.content.length === 0) {
+            // 데이터가 없을 때 메시지 표시
+            const row = document.createElement("tr");
+            const cell = document.createElement("td");
+            cell.colSpan = 8; // 테이블 전체 폭에 걸치도록 설정
+            cell.textContent = "조회하실 포인트 내역이 없습니다.";
+            cell.classList.add("no-data-message"); // 스타일을 적용하려면 클래스 추가
+            row.appendChild(cell);
+            pointTableBody.appendChild(row);
+            return;
+        }
+
+        data.content.forEach((point, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <td>${data.totalElements - (page * data.size + index)}</td>
+            <td>${point.type}</td>
+            <td>${point.uid}</td>
+            <td>${point.memberInfo.name}</td>
+            <td>${point.point}</td>
+            <td>${point.pointName}</td>
+            <td>${point.presentPoint}</td>
+            <td>${point.pointDate}</td>
+        `;
+            pointTableBody.appendChild(row);
+        });
+    }
+
+    function updatePagination(totalPages, currentPage) {
+        const paginationContainer = document.getElementById("paginationContainer");
+        paginationContainer.innerHTML = "";
+
+        if (totalPages === 0) return;
+
+        const prevButton = document.createElement("button");
+        prevButton.classList.add("page-btn");
+        prevButton.textContent = "이전";
+        prevButton.disabled = currentPage === 0;
+        prevButton.onclick = () => searchPoints(currentPage - 1);
+        paginationContainer.appendChild(prevButton);
+
+        for (let i = 0; i < totalPages; i++) {
+            const pageButton = document.createElement("button");
+            pageButton.classList.add("page-num");
+            pageButton.textContent = i + 1;
+            if (i === currentPage) pageButton.classList.add("active");
+            pageButton.onclick = () => searchPoints(i);
+            paginationContainer.appendChild(pageButton);
+        }
+
+        const nextButton = document.createElement("button");
+        nextButton.classList.add("page-btn");
+        nextButton.textContent = "다음";
+        nextButton.disabled = currentPage + 1 === totalPages;
+        nextButton.onclick = () => searchPoints(currentPage + 1);
+        paginationContainer.appendChild(nextButton);
+    }
+
+    function loadPoints() {
+        document.getElementById("search-type").selectedIndex = 0;
+        document.getElementById("search-searchType").selectedIndex = 0;
+        document.getElementById("search-keyword").value = '';
+        searchPoints(); // 초기 데이터 로드
+    }
+</script>
+</body>
+</html>

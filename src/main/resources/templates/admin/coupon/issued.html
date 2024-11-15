@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠폰발급현황</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_coupon_issued.css}"/>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">쿠폰관리</a> >
+                <a href="#" class="location">쿠폰발급현황</a>
+            </div>
+            <h3>쿠폰발급현황</h3>
+            <div class="form">
+                <div class="search-bar">
+                    <select id="search-category" class="dropdown">
+                        <option>발급번호</option>
+                        <option>쿠폰번호</option>
+                        <option>쿠폰명</option>
+                        <option>사용자</option>
+                    </select>
+                    <input
+                            type="text"
+                            placeholder="검색어 입력"
+                            class="search-input"
+                    />
+                    <button class="search-btn">검색</button>
+                </div>
+
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 10%" />
+                        <col style="width: 11%" />
+                        <col style="width: 16%" />
+                        <col style="width: 13%" />
+                        <col style="width: 10%" />
+                        <col style="width: 8%" />
+                        <col style="width: 9%" />
+                        <col style="width: 7%" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>발급번호</th>
+                        <th>쿠폰번호</th>
+                        <th>쿠폰종류</th>
+                        <th>쿠폰명</th>
+                        <th>사용자</th>
+                        <th>상태</th>
+                        <th>사용일</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <a href="#" onclick="openCouponDetailModal()">10121211341</a>
+                        </td>
+                        <td>10121211341</td>
+                        <td>개별상품 할인</td>
+                        <td>10월 한달 감사 쿠폰</td>
+                        <td>akwe121</td>
+                        <td class="notissued">미사용</td>
+                        <td>0000-00-00 00:00:00</td>
+                        <td>
+                            <button class="end-btn">중단</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#" onclick="openCouponDetailModal()">10121211341</a>
+                        </td>
+                        <td>10121211341</td>
+                        <td>개별상품 할인</td>
+                        <td>10월 한달 감사 쿠폰</td>
+                        <td>akwe121</td>
+                        <td class="notissued">미사용</td>
+                        <td>0000-00-00 00:00:00</td>
+                        <td>
+                            <button class="end-btn">중단</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#" onclick="openCouponDetailModal()">10121211341</a>
+                        </td>
+                        <td>10121211341</td>
+                        <td>개별상품 할인</td>
+                        <td>10월 한달 감사 쿠폰</td>
+                        <td>akwe121</td>
+                        <td class="notissued">미사용</td>
+                        <td>0000-00-00 00:00:00</td>
+                        <td>
+                            <button class="end-btn">중단</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#" onclick="openCouponDetailModal()">10121211341</a>
+                        </td>
+                        <td>10121211341</td>
+                        <td>개별상품 할인</td>
+                        <td>10월 한달 감사 쿠폰</td>
+                        <td>akwe121</td>
+                        <td class="issued">사용</td>
+                        <td>0000-00-00 00:00:00</td>
+                        <td>
+                            <button class="end-status">중단</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#" onclick="openCouponDetailModal()">10121211341</a>
+                        </td>
+                        <td>10121211341</td>
+                        <td>개별상품 할인</td>
+                        <td>10월 한달 감사 쿠폰</td>
+                        <td>akwe121</td>
+                        <td class="issued">사용</td>
+                        <td>0000-00-00 00:00:00</td>
+                        <td>
+                            <button class="end-status">중단</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button class="page-btn">이전</button>
+                    <button class="page-num">1</button>
+                    <button class="page-num">2</button>
+                    <button class="page-num">3</button>
+                    <button class="page-num">4</button>
+                    <button class="page-num">5</button>
+                    <button class="page-btn">다음</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<!-- 쿠폰정보 모달 -->
+<div id="versionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>쿠폰정보</h4>
+            <span id="versionModalClose" class="close">&times;</span> <!-- id 추가 -->
+        </div>
+        <div class="modal-body">
+            <table class="modal-table">
+                <tr>
+                    <th>쿠폰번호</th>
+                    <td>10121211341</td>
+                    <th>발급처</th>
+                    <td>(주)다있어</td>
+                </tr>
+                <tr>
+                    <th>발급번호</th>
+                    <td>10121211341</td>
+                    <th>사용여부</th>
+                    <td class="notissued">미사용</td>
+                </tr>
+                <tr>
+                    <th>쿠폰종류</th>
+                    <td>개별상품 할인</td>
+                    <th>발급대상</th>
+                    <td>akwe121</td>
+                </tr>
+                <tr>
+                    <th>쿠폰명</th>
+                    <td colspan="3">10월 한달 감사 쿠폰 이벤트</td>
+                </tr>
+                <tr>
+                    <th>혜택</th>
+                    <td colspan="3">2,000원 할인</td>
+                </tr>
+                <tr>
+                    <th>사용기간</th>
+                    <td colspan="3">2024-10-17 ~ 2024-10-22</td>
+                </tr>
+                <tr>
+                    <th>유의사항</th>
+                    <td colspan="3" style="white-space: pre-line;">상품 중복 할인 쿠폰
+                        - 상품 1개에 대해 사용 가능
+                        - 판매자 즉시할인/상품할인 쿠폰과 중복 사용 가능
+
+                        사용처
+                        - (주)다있어
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button id="versionCloseBtn" class="close-btn">닫기</button> <!-- id 추가 -->
+        </div>
+    </div>
+</div>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>
+<script>
+
+    // 전역 변수로 모달 선언
+    var modal = document.getElementById("versionModal");
+
+    // 쿠폰정보 모달 열기 함수
+    function openCouponDetailModal() {
+        modal.style.display = "block";
+    }
+
+    // 버전확인 모달 동작
+    document.addEventListener('DOMContentLoaded', function() {
+        var modal = document.getElementById("versionModal");
+        var btns = document.querySelectorAll(".edit-btn"); // "확인" 버튼들
+        var versionCloseBtn = document.getElementById("versionModalClose"); // 버전 모달 닫기 버튼
+        var closeButton = document.getElementById("versionCloseBtn");
+
+
+        // 닫기 버튼(X) 클릭 시 모달 닫기
+        versionCloseBtn.onclick = function() {
+            modal.style.display = "none";
+        };
+
+        // 하단 닫기 버튼 클릭 시 모달 닫기
+        closeButton.onclick = function() {
+            modal.style.display = "none";
+        };
+
+        // 모달 외부 클릭 시 모달 닫기
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    });
+
+
+
+</script>

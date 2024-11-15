@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의하기 보기</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_view.css}"/>
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a th:href="@{/admin/index}">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">문의하기</a>
+            </div>
+            <h3>문의하기 보기</h3>
+            <div class="form">
+                <div class="inquiry-section">
+                    <table class="inquiry-table">
+                        <tr>
+                            <td class="label">유형</td>
+                            <td>[[${board.cate.parent.name}]]&nbsp;-&nbsp;[[${board.cate.name}]]</td>
+                        </tr>
+                        <tr>
+                            <td class="label">제목</td>
+                            <td th:text="${board.title}"></td>
+                        </tr>
+                        <tr class="content">
+                            <td class="label">내용</td>
+                            <td th:text="${board.content}"></td>
+                        </tr>
+                        <tr class="answer" th:if="${board.comment != null}">
+                            <td class="label">답변</td>
+                            <td th:text="${board.comment}">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="buttons">
+                    <!-- boardId 값을 data-board-id 속성에 저장 -->
+                    <button class="delete-btn" th:data-board-id="${board.boardId}" onclick="deleteBoard(this)">삭제</button>
+                    <a th:href="@{/admin/cs/qna/list}" class="back-btn">목록</a>
+                    <a th:if="${board.comment == null}"
+                       th:href="@{/admin/cs/qna/reply/{id}(id=${board.boardId})}"
+                       class="write_btn">답변하기</a>
+
+                </div>
+            </div>
+        </section><!--/section-->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+
+<script>
+    function deleteBoard(button) {
+        // data-board-id 속성에서 boardId 값을 가져오기
+        const boardId = button.getAttribute("data-board-id");
+
+        if (confirm("정말로 삭제하시겠습니까?")) {
+            fetch(`/lotteon/admin/cs/board/delete/${boardId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("삭제되었습니다.");
+                        window.location.href = "/lotteon/admin/cs/qna/list";
+                    } else {
+                        alert("삭제에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("삭제 중 오류 발생:", error);
+                    alert("삭제 중 오류가 발생했습니다.");
+                });
+        }
+    }
+</script>
+</body>
+</html>

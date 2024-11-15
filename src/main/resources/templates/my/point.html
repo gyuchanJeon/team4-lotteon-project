@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" th:href="@{/css/my/myInfo.css}" />
+  <link rel="stylesheet" th:href="@{/css/my/myInfo_search.css}" />
+</head>
+
+<body>
+  <div id="wrapper">
+    <main>
+      <header th:replace="~{/include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{/my/my_aside.html}"></div>
+
+
+      <section class="myInfo_sec">
+
+        <div th:replace="~{/my/banner.html}"></div>
+
+        
+        <!-- 포인트 적립내역 -->
+        <article class="myInfo_PointRecode myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>포인트내역</span></div>
+          <div class="myInfo_Search">
+            <p>기간별조회</p>
+            <ol class="myInfo_Search_Time">
+              <li><a href="">1 주일</a></li>
+              <li><a href="">15 일</a></li>
+              <li><a href="" class="Time_current">1 개월</a></li>
+            </ol>
+            <ol class="myInfo_Search_Time">
+              <li><a href="">8 월</a></li>
+              <li><a href="">9 월</a></li>
+              <li><a href="">10 월</a></li>
+              <li><a href="">11 월</a></li>
+              <li><a href="" class="Time_current">12월</a></li>
+            </ol>
+            <ol class="myInfo_Search_Time">
+              <li><input type="date"><span>~</span><input type="date"></li>
+            </ol>
+            <button>조회</button>
+          </div>
+          <table class="myInfo_PointTable myInfo_Table">
+            <thead>
+              <tr>
+                <th>날짜</th>
+                <th>구분</th>
+                <th>내용</th>
+                <th>금액</th>
+                <th>현재 포인트</th>
+
+              </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${#lists.isEmpty(points)}">
+              <td colspan="4" style="text-align: center;">포인트 내역이 없습니다.</td>
+            </tr>
+            <tr th:each="point : ${points}">
+              <td>
+                [[${point.pointDate}]]
+              </td>
+              <td>
+                [[${point.type}]]
+              </td>
+              <td>
+                [[${point.pointName}]]
+              </td>
+              <td>
+                [[${point.point}]]
+              </td>
+              <td>
+                [[${point.presentPoint}]]
+              </td>
+            </tr>
+            <!-- 반복 블럭 끝 -->
+            </tbody>
+          </table>
+          <!-- 페이지네이션: 게시물이 있을 때만 표시 -->
+          <div class="pagination" th:if="${totalPages > 1}">
+            <button class="page-btn"
+                    th:disabled="${currentPage == 0}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+              이전
+            </button>
+
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <button class="page-num"
+                    th:classappend="${i == currentPage} ? 'active'"
+                    th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                    th:text="${i + 1}">1</button>
+        </span>
+
+            <button class="page-btn"
+                    th:disabled="${currentPage + 1 == totalPages}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+              다음
+            </button>
+        </article>
+
+
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{/include/footer.html}"></footer>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<header>
+    <link rel="stylesheet" th:href="@{/css/include/header.css}"/>
+    <div class ="headerWrapper">
+
+        <!-- 로그인, 회원가입, 주문배송, 고객센터 -->
+        <div class="util innerContent">
+            <div class="accountArea">
+                <ul>
+                    <!-- Member Role -->
+                    <li sec:authorize="hasRole('member')" class="role"><span class="loginNick">[[${#authentication.principal.user.memberInfo.name}]]</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
+                    </li>
+
+                    <!-- Seller Role -->
+                    <li sec:authorize="hasRole('seller')" class="role"><span class="loginNick">[[${#authentication.principal.user.sellerInfo.comName}]]</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
+                    </li>
+
+                    <!-- Admin Role -->
+                    <li sec:authorize="hasRole('ADMIN')" class="role"><span class="loginNick">관리자</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/member/login}" class="area">로그인</a>
+                    </li>
+                    <li sec:authorize="hasRole('ADMIN') or hasRole('seller')">
+                        <a th:href="@{/admin/index}" class="area">관리자</a>
+                    </li>
+                    <li  sec:authorize="isAuthenticated()">
+                        <a th:href="@{/member/logout}" id="logout" class="area">로그아웃</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/member/join}" class="area">회원가입</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/my/order}" class="area">주문배송</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/cs/index}" class="area">고객센터</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 메인 헤더 -->
+        <div class="main">
+            <div class="main innerContent">
+                <h1 class="logoArea">
+                    <a th:href="@{/index}">
+                        <img src="https://static.lotteon.com/p/common/foCommon/assets/img/logo_lotte-on@2x.png" alt="LOTTE ON">
+                    </a>
+                </h1>
+            </div><!-- main -->
+        </div><!--headerWrapper-->
+</header>

@@ -1,0 +1,184 @@
+  <!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/cs/index.css}" />
+    <th:block th:replace="~{/include/common_head}"></th:block>
+
+  </head>
+  <body>
+  <header th:replace="~{/include/header.html}"></header>
+
+  <main>
+
+    <th:block th:replace="~{/cs/aside/aside.html}"></th:block>
+
+  <section id="section_wrapper">
+      <!-- 자주하는 질문 Section -->
+      <section id="faq-section">
+        <table>
+          <thead>
+            <th>
+              <span>자주하는질문</span>
+              <span>
+                <!-- 자주하는질문 링크 / 화살표 이미지 링크 필요 -->
+                <a th:href="@{/cs/faq/list}">전체보기</a>
+                <a th:href="@{/cs/faq/list}" class="viewAll"></a>
+              </span>
+            </th>
+          </thead>
+          <tbody>
+            <tr id="faq-tr">
+              <td id="faq-td">
+                <div>
+                  <a th:href="@{/cs/faq/list/1}" class="image member"></a>
+                  <a th:href="@{/cs/faq/list/1}">회원</a>
+                </div>
+                <div>
+                  <a th:href="@{/cs/faq/list/2}" class="image coupon"></a>
+                  <a th:href="@{/cs/faq/list/2}">쿠폰 / 이벤트</a>
+                </div>
+                <div>
+                  <a th:href="@{/cs/faq/list/3}" class="image order"></a>
+                  <a th:href="@{/cs/faq/list/3}">주문 / 결제</a>
+                </div>
+                <div>
+                  <a th:href="@{/cs/faq/list/4}" class="image delivery"></a>
+                  <a th:href="@{/cs/faq/list/4}">배송</a>
+                </div>
+                <div>
+                  <a th:href="@{/cs/faq/list/5}" class="image refund"></a>
+                  <a th:href="@{/cs/faq/list/5}">취소 / 반품 / 환불</a>
+                </div>
+                <div>
+                  <a th:href="@{/cs/faq/list/6}" class="image safe"></a>
+                  <a th:href="@{/cs/faq/list/6}">안전결제</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    <!-- 공지사항 Section -->
+    <section id="notice-section">
+      <table>
+        <thead>
+        <tr>
+          <th>
+            <span>공지사항</span>
+            <span>
+                  <!-- 공지사항 링크 / 화살표 이미지 링크 필요 -->
+                  <a th:href="@{/cs/notice/list}">전체보기</a>
+                  <a th:href="@{/cs/notice/list}" class="viewAll"></a>
+                </span>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board : ${noticeBoards}">
+          <td>
+            <!-- details / summary / span 세 가지 html 태그로 글 제목과 내용 미리보기를 구현함 -->
+            <details>
+              <summary>
+                <a th:href="@{'/cs/notice/view/' + ${board.boardId}}">
+                  [[${board.title}]]
+                </a>
+                <span class="r-date">[[${#temporals.format(board.regDate, 'yy.MM.dd')}]]</span>
+              </summary>
+              <span>
+                [[${board.content}]]
+                  </span>
+            </details>
+          </td>
+
+        </tbody>
+      </table>
+    </section>
+
+      <!-- 문의하기 Section -->
+      <section id="qna-section">
+        <table>
+          <thead>
+            <th>
+              <span>문의하기</span>
+              <span>
+                <!-- 문의하기 링크 / 화살표 이미지 링크 필요 -->
+                <a th:href="@{/cs/qna/list}">전체보기</a>
+                <a th:href="@{/cs/qna/list}" class="viewAll"></a>
+              </span>
+            </th>
+          </thead>
+          <tbody>
+            <tr th:each="board: ${qnaBoards}">
+              <!-- 5개씩 출력 -->
+              <td class="qna-td">
+                <details>
+                  <summary>
+                    <a th:href="@{'/cs/qna/view/' + ${board.boardId}}">
+                      [[${board.title}]]
+                    </a>
+                      <span class="r-date">[[${board.maskedUserId}]] [[${#temporals.format(board.regDate, 'yy.MM.dd')}]]</span>
+                  </summary>
+                  <span>
+                    [[${board.content}]]
+                  </span>
+                </details>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <a th:href="@{/cs/qna/write}" id="qna-write">문의글 작성 ></a>
+      </section>
+
+      <!-- 1:1 상담안내 Section -->
+      <section id="consultation-section">
+        <table>
+          <thead>
+            <th>
+              <span>1:1 상담안내</span>
+            </th>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="consultation-td">
+                <div class="consultation-div">
+                  <span class="big"> 이용안내 </span>
+                  <div>
+                    <div>일반회원 / 비회원</div>
+                    <div>
+                      <span class="big">1566-0001</span>
+                      <span>(평일 09:00 ~ 18:00)</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div>스마일클럽 전용</div>
+                    <div>
+                      <span class="big">1566-0002</span>
+                      <span>(365일 09:00 ~ 18:00)</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="consultation-div">
+                  <span class="big"> 판매상담이용안내 </span>
+                  <div>
+                    <div>판매고객</div>
+                    <div>
+                      <span class="big">1566-5700</span>
+                      <span>(평일 09:00 ~ 18:00)</span>
+                    </div>
+                  </div>
+                  <!-- 판매자가입및서류접수안내 페이지 링크 필요 -->
+                  <a th:href="@{/member/join}" class="big toSeller">판매자가입및서류접수안내></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </section>
+  </main>
+  <footer th:replace="~{/include/footer.html}"></footer>
+  </body>
+</html>

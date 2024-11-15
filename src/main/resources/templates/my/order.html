@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>롯데ON::롯데 온라인 쇼핑몰</title>
+    <link rel="stylesheet" th:href="@{/css/my/myInfo.css}"/>
+    <link rel="stylesheet" th:href="@{/css/my/myInfo_search.css}"/>
+    <link rel="stylesheet" th:href="@{/css/my/myInfo_order.css}"/>
+    <link rel="stylesheet" th:href="@{/css/my/myInfo_modal.css}"/>
+    <script th:src="@{/js/my/my_order.js}" defer></script>
+</head>
+
+<body>
+<div id="wrapper">
+    <main>
+        <header th:replace="~{/include/my_header.html}"></header>
+        <!--어사이드-->
+        <div th:replace="~{/my/my_aside.html}"></div>
+
+        <section class="myInfo_sec">
+            <div th:replace="~{/my/banner.html}"></div>
+            <!-- 최근 주문내역 -->
+            <article class="myInfo_recentOrder myInfo_Article">
+                <div class="myInfo_ArticleTitle"><span>전체주문내역</span></div>
+                <div class="myInfo_Search">
+                    <p>기간별조회</p>
+                    <ol class="myInfo_Search_Time">
+                        <input id="selected_period" type="hidden" th:value="${selected_period}">
+                        <li><a id="period_week" th:href="@{/my/order(period=${'week'})}">1주일</a></li>
+                        <li><a id="period_15days" th:href="@{/my/order(period=${'15days'})}">15일</a></li>
+                        <li><a id="period_month" th:href="@{/my/order(period=${'month'})}">1개월</a></li>
+                    </ol>
+                    <ol class="myInfo_Search_Time">
+                        <input id="selected_month" type="hidden" th:value="${selected_month}">
+                        <li class="months" th:each="month : ${months}">
+                            <a th:href="@{/my/order(month=${T(java.lang.Integer).parseInt(month.replace('월',''))})}" th:text="${month}"></a>
+                        </li>
+                    </ol>
+                    <ol class="myInfo_Search_Time">
+                        <li><input type="date"><span>~</span><input type="date"></li>
+                        <button id="customDate">조회</button>
+                    </ol>
+                </div>
+                <ul class="myInfo_product">
+                    <li th:each="order : ${orderDTOs}">
+                        <span th:text="${order.buyDate.toLocalDate()}"></span>
+                        <div>
+                            <div th:each="item : ${order.orderItems}">
+                                <img th:src="@{'/uploads/product/' + ${item.productVariants.product.img1}}" alt="">
+                                <div>
+                                    <p th:text="'주문번호' + ${order.orderId}"></p>
+                                    <a href="#" class="orderSellerBtn" th:text="${item.productVariants.product.company}"></a>
+                                    <p th:text="${item.productVariants.sku}"></p>
+                                    <p th:text="'수량 : ' + ${item.count}"></p>
+                                    <p><strong th:text="${#numbers.formatInteger(item.originPrice, 1, 'COMMA')} + '원'">34,000원</strong></p>
+                                    <!-- 해당 제품에 대한 판매자 정보를 modal 에 출력하기 위한 데이터 보관 -->
+                                    <input class="seller_grade" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.grade}">
+                                    <input class="seller_comName" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.comName}">
+                                    <input class="seller_ceo" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.ceo}">
+                                    <input class="seller_hp" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.hp}">
+                                    <input class="seller_fax" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.fax}">
+                                    <input class="seller_email" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.email}">
+                                    <input class="seller_comNumber" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.comNumber}">
+                                    <input class="seller_zipCode" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.address.zipCode}">
+                                    <input class="seller_addr1" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.address.addr1}">
+                                    <input class="seller_addr2" type="hidden"
+                                           th:value="${item.productVariants.product.sellerInfoId.address.addr2}">
+                                </div>
+                                <div>
+                                    <span th:text="${statusText}"></span>
+                                </div>
+                                <div>
+                                    <button class="orderAcceptBtn" data-order-item-id="[[${item.orderItemId}]]">구매확정</button>
+                                    <button class="orderReviewBtn">상품평쓰기</button>
+                                    <!-- 상품평에 필요한 데이터 숨겨놓기 -->
+                                    <input class="variantId" type="hidden"
+                                           th:value="${item.productVariants.variant_id}">
+                                    <input class="sku" type="hidden" th:value="${item.productVariants.sku}">
+                                    <button class="orderReturnBtn">반품신청</button>
+                                    <button class="orderChangeBtn">교환신청</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </article>
+            <div class="page">
+                <a href="#">이전</a>
+                <a href="#" class="page_current">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">다음</a>
+            </div>
+        </section>
+        <!-- 최근 주문내역 끝 -->
+        <div th:if="${orderDTOs}" th:replace="~{/my/modal_order :: modalFragment(orderDTOs=${orderDTOs})}"></div>
+    </main>
+</div>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
+
+</html>

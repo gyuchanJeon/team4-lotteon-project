@@ -1,0 +1,139 @@
+
+
+
+  /* 전체 섹션 스타일 */
+  .product-list-section {
+    padding: 20px;
+  }
+  
+  /* 상품 목록 제목 */
+  .section-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* 정렬 버튼 스타일 */
+  .sort-options {
+    margin-bottom: 20px;
+  }
+  
+  .sort-btn {
+    border: none;
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .sort-btn:hover {
+    background-color: #e4e4e4;
+  }
+  
+  /* 상품 리스트 스타일 */
+  .product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* 각 상품 아이템 스타일 */
+  .product-item {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .product-image img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+  }
+  
+  .product-details {
+    flex-grow: 1;
+    margin-left: 20px;
+  }
+  
+  .product-name {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .product-description {
+    color: #666;
+    margin: 10px 0;
+  }
+  
+  .price-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+  }
+  
+  .original-price {
+    text-decoration: line-through;
+    color: #999;
+  }
+  
+  .discount-rate {
+    color: red;
+  }
+  
+  .shipping-info {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .seller-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    font-size: 14px;
+  }
+  
+  .seller-badge {
+    background-color: #ffecb3;
+    padding: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .rating {
+    color: #ffcc00;
+  }
+  
+  /* 페이지네이션 */
+  .pagination {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .pagination ul {
+    list-style: none;
+    padding: 0;
+    display: inline-block;
+  }
+  
+  .pagination ul li {
+    display: inline;
+    margin: 0 5px;
+  }
+  
+  .pagination ul li a {
+    text-decoration: none;
+    color: #333;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+  
+  .pagination ul li a:hover {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+  }
+  

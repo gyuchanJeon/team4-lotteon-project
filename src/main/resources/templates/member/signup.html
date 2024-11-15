@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" th:href="@{css/member/common.css}" />
+    <link rel="stylesheet" th:href="@{/css/member/signup.css}" />
+</head>
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+    <main>
+        <div class="login-container">
+            <h2 class="titterm">
+                <span class="tit">약관동의</span>
+            </h2>
+            <div class="main-wrapper">
+                <div class="main-box">
+                    <section class="terms">
+                        <input type="hidden" id="hiddenType" th:value="${type}" />
+                        <table>
+                            <caption><span class="must">(필수)</span> 이용약관</caption>
+                            <tr>
+                                <td>
+                                    <textarea th:text="${type == 1 ? termsDTO.term : (type == 2 ? termsDTO.tax : '')}" readonly></textarea>
+                                    <p>
+                                        <label><input type="checkbox" id="chk1" name="chk1" />동의합니다.</label>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table>
+                            <caption><span class="must">(필수)</span> 전자금융 이용약관</caption>
+                            <tr>
+                                <td>
+                                    <textarea th:text="${termsDTO.finance}" readonly>개인정보 취급방침</textarea>
+                                    <p>
+                                        <label><input type="checkbox" id="chk2" name="chk2" />동의합니다.</label>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table>
+                            <caption><span class="must">(필수)</span> 개인정보 수집동의</caption>
+                            <tr>
+                                <td>
+                                    <textarea th:text="${termsDTO.privacy}" readonly>사이트 이용약관</textarea>
+                                    <p>
+                                        <label><input type="checkbox" id="chk3" name="chk3" />동의합니다.</label>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table th:if="${type == 1}">
+                            <caption><span class="option">(선택)</span> 위치정보 이용약관</caption>
+                            <tr>
+                                <td>
+                                    <textarea th:text="${termsDTO.location}" readonly>사이트 이용약관</textarea>
+                                    <p>
+                                        <label><input type="checkbox" id="chk4" name="chk4" />동의합니다.</label>
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                            <a th:href="@{/member/join}" class="btnCancel">취소</a>
+                            <a href="#" class="btnNext" onclick="checkTerms(event)">다음</a>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{/include/footer.html}">
+    </footer>
+
+</body>
+
+</html>
+
+<script>
+
+    function checkTerms(e) {
+        const chk1_1 = document.querySelector('input[name="chk1"]').checked;
+        const chk2_1 = document.querySelector('input[name="chk2"]').checked;
+        const chk3_1 = document.querySelector('input[name="chk3"]').checked;
+
+        if (chk1_1 && chk2_1 && chk3_1) {
+            // hidden input에서 type 값을 가져옴
+            const type = document.getElementById("hiddenType").value;
+            console.log('type : ' + type);
+
+            if (type == 1) {
+                window.location.href = "/lotteon/member/register";
+            } else {
+                window.location.href = "/lotteon/member/register_seller";
+            }
+        } else {
+            e.preventDefault();
+            alert('약관에 동의해주세요.');
+            return;
+        }
+    }
+
+</script>

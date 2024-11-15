@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <th:block th:replace="~{/include/common_head}"></th:block>
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
+    <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product/style_product_view.css}"/>
+    <script th:src="@{/js/my/product/product_view.js}" defer></script>
+
+</head>
+<body>
+<div id="bannerTop" class="on">
+    <article th:each="banner : ${banners}" th:if="${banner.location == 'MAIN1'}" th:style="'background: ' + ${banner.background}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/config/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
+    </article>
+</div>
+<div id="wrapper">
+    <header th:replace="~{/include/header.html}"></header>
+
+    <main class="mainIn cf">
+        <aside th:replace="~{/main_aside.html}"></aside>
+        <section class="product-view-section body-section">
+            <div class="breadcrumb">
+                <a href="#">Home</a> &gt;
+                <a href="#">패션·의류·뷰티</a> &gt;
+                <a href="#">남성의류</a>
+            </div>
+
+            <h2 class="section-title">상품보기</h2>
+            <section class="product-view">
+                <div class="product-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg1()}}" alt="상품 목록 사진" class="product-image">
+                </div>
+                <div class="product-info">
+                    <p class="product-number">상품번호: [[${productDTO.productId}]]</p>
+                    <h2 class="product-title" th:text="${productDTO.name}"></h2>
+                    <p class="product-number" th:text="${productDTO.description}"></p>
+                    <h2 id="product-dto" th:text="${productDTOJson}" style="display:none"></h2>
+                    <div class="rating">
+                        <span>★★★★★</span> <a href="#">상품리뷰</a> ([[${productDTO.review}]])
+                    </div>
+                    <div class="price-section">
+                        <span class="original-price" th:text="${productDTO.price}" th:attr="data-originalPrice=${productDTO.price}"></span>
+                        <span class="discount-rate" th:text="${productDTO.discount + '% ↓'}" th:attr="data-discountRate=${productDTO.discount}"></span>
+                        <span class="discount-price"></span>
+                    </div>
+
+                    <!-- 쿠폰 발급받기 버튼 추가 -->
+                    <div class="coupon-button-section">
+                        <button id="couponButton" class="coupon-button">쿠폰 발급받기</button>
+                    </div>
+
+                    <div class="shipping-info">
+                        <p th:if="${productDTO.deliveryFee == 0}" th:text="무료배송"></p>
+                        <p th:if="${productDTO.deliveryFee != 0}" th:text="${productDTO.deliveryFee + '원'}"></p>
+                        <p>모레(금) 7/8 도착 예정</p>
+                    </div>
+                    <div class="product-origin">
+                        <p>원산지 : 상세설명 참조</p>
+                    </div>
+                    <span id="variant-options" class="variant-options">
+                       <ul>
+                            <li th:each="entry, entryStat : ${options.entrySet()}">
+                                <span th:text="${entry.key}"></span>
+                                <select class="option-select">
+                                    <option value="" selected disabled>선택하세요</option>
+                                    <option th:each="value : ${entry.value}" th:value="${value}">[[${value}]]</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </span>
+                    <div class="total-price">
+                        총 상품금액: <strong>0원</strong>
+                    </div>
+                    <div class="purchase-actions">
+                        <form th:action="@{/product/cart}" method="post" id="cartForm">
+                            <input type="hidden" name="productVariants" class="selected-variant-id"/>
+                            <input type="hidden" name="count" id="count" />
+                            <button type="submit" class="cart-button">장바구니</button>
+                        </form>
+                        <a id="buyLink" th:href="@{/product/order}" class="buy-button">구매하기</a>
+                    </div>
+                    <div class="product-banner" th:each="banner : ${banners}" th:if="${banner.location == 'PRODUCT1'}">
+                        <a th:href="${banner.link}">
+                            <img th:src="@{'/uploads/config/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="product-details">
+                <h3>연관상품</h3>
+                <article class="recommend-article" th:each="product : ${recommendedProducts}">
+                    <a th:href="@{/product/view(productId = ${product.productId})}" >
+                        <div class="thumb">
+                            <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="상품이미지">
+                        </div>
+                        <h2>[[${product.name}]]</h2>
+                        <p>[[${product.description}]]</p>
+                        <div class="org_price">
+                            <del>[[${product.price}]]</del>
+                            <span>[[${product.discount}]]%</span>
+                        </div>
+                        <div class="dis_price">
+                            <ins>[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</ins>
+                            <th:block th:if="${product.deliveryFee} eq 0">
+                                <span class="free">무료배송</span>
+                            </th:block>
+                        </div>
+                    </a>
+                </article>
+            </section>
+
+            <!-- 쿠폰 모달 -->
+            <div id="couponModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4>쿠폰정보</h4>
+                        <span class="close-button" id="closeCouponModal">&times;</span>
+                    </div>
+                    <div class="modal-main">
+                        <ul id="couponList">
+                            <h4>현재 발급가능한 쿠폰은 <span class="strong-span">[[${coupons.size()}]]장</span>입니다.</h4>
+                            <li class="coupon-section" th:each="coupon : ${coupons}">
+                                <span th:text="${coupon.name}"></span>
+                                <button class="download-btn" th:data-coupon-id="${coupon.couponId}">
+                                </button>
+                            </li>
+                        </ul>
+
+                        <p>쿠폰 사용기간 내에 할인받고 구매하세요.<br>
+                            쿠폰 사용 시 최소구매금액과 최대할인금액을 확인하세요.<br>
+                            일부 쿠폰은 조기소진될 수 있습니다.<br>
+                        </p>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <section class="product-details">
+                <h3>상품정보</h3>
+                <div class="product-detail-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg2()}}" alt="상품 메인 사진" class="product-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getImg3()}}" alt="상품 상세 사진" class="product-image">
+                    <img th:src="@{'/uploads/product/' + ${productDTO.getDetail()}}" alt="상품 상세 정보 사진" class="product-image">
+                </div>
+                <div id="product-info-public-announcement" class="hidden">
+                    <h3>상품정보제공공시</h3>
+                    <table class="info-table">
+                        <tr>
+                            <th>상품상태</th>
+                            <td th:text="${productDTO.productDetailId.condition_field}"></td>
+                        </tr>
+                        <tr>
+                            <th>부가세 면세여부</th>
+                            <td th:text="${productDTO.productDetailId.duty}"></td>
+                        </tr>
+                        <tr>
+                            <th>영수증 발행</th>
+                            <td th:text="${productDTO.productDetailId.receipt}"></td>
+                        </tr>
+                        <tr>
+                            <th>사업자구분</th>
+                            <td th:text="${productDTO.productDetailId.sellerType}"></td>
+                        </tr>
+                        <tr>
+                            <th>브랜드</th>
+                            <td th:text="${productDTO.productDetailId.brand}"></td>
+                        </tr>
+                        <tr>
+                            <th>원산지</th>
+                            <td th:text="${productDTO.productDetailId.coa}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조자 / 수입국</th>
+                            <td th:text="${productDTO.productDetailId.creator}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조국</th>
+                            <td th:text="${productDTO.productDetailId.country}"></td>
+                        </tr>
+                        <tr>
+                            <th>취급시주의사항</th>
+                            <td th:text="${productDTO.productDetailId.warning}"></td>
+                        </tr>
+                        <tr>
+                            <th>제조연월</th>
+                            <td th:text="${productDTO.productDetailId.createDate}"></td>
+                        </tr>
+                        <tr>
+                            <th>품질보증기준</th>
+                            <td th:text="${productDTO.productDetailId.quality}"></td>
+                        </tr>
+                        <tr>
+                            <th>A/S 책임자</th>
+                            <td th:text="${productDTO.productDetailId.as_field}"></td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td th:text="${productDTO.productDetailId.asPhone}"></td>
+                        </tr>
+                        <!-- Additional product info -->
+                    </table>
+                </div>
+            </section>
+
+            <!-- 상품리뷰 -->
+            <section id="additional-product-info" th:data-product-id="${productDTO.productId}">
+                <h3>상품리뷰</h3>
+                <div class="review-list" id="review-list">
+
+                </div>
+                <div class="pagination"></div>
+            </section>
+
+        </section>
+    </main>
+    <footer th:replace="~{/include/footer.html}"></footer>
+</div>
+
+</body>
+</html>

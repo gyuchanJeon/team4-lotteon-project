@@ -1,0 +1,103 @@
+<link rel="stylesheet" th:href="@{/css/admin/include/style_admin_aside.css}">
+<link rel="stylesheet" th:href="@{/css/cs/style_cs_aside.css}">
+<aside>
+    <ul class="sidebar-menu">
+        <li class="asideTitle">
+            고객센터
+        </li>
+        <li>
+            <a th:href="@{/cs/notice/list}">공지사항</a>
+            <ul class="submenu"> <!-- 우선 파라미터 전달해서 데이터 불러오는 방식으로 적어놨습니다. 값은 예시입니다. fetch 쓰셔도 돼요 -->
+            <li>
+                <a th:href="@{/cs/notice/list(cate1=${member})}">고객서비스</a>
+            </li>
+            <li>
+                <a th:href="@{/cs/notice/list}">안전거래</a>
+            </li>
+            <li>
+                <a th:href="@{/cs/notice/list}">위해상품</a>
+            </li>
+            <li>
+                <a th:href="@{/cs/notice/list}">이벤트당첨</a>
+            </li>
+            </ul>
+        </li>
+        <li>
+            <a th:href="@{/cs/faq/list(cate1=${member})}">자주 묻는 질문</a>
+            <ul class="submenu"> <!-- 우선 파라미터 전달해서 데이터 불러오는 방식으로 적어놨습니다. 값은 예시입니다. fetch 쓰셔도 돼요 -->
+            <li>
+                <a th:href="@{/cs/faq/list(cate1=${member})}">회원</a>
+                <ul class="submenu">
+                    <li><a th:href="@{/cs/faq/list(cate1=${member}, cate2=${register})}">회원가입</a></li>
+                    <li><a th:href="@{/cs/faq/list(cate1=${member}, cate2=${grade})}">회원등급</a></li>
+                    <li><a th:href="@{/cs/faq/list(cate1=${member}, cate2=${info})}">회원정보</a></li>
+                    <li><a th:href="@{/cs/faq/list(cate1=${member}, cate2=${info})}">회원탈퇴</a></li>
+                </ul>
+            </li>
+            <li>
+                <a th:href="@{/cs/faq/list}">쿠폰/이벤트</a>
+                <ul class="submenu">
+                    <li><a th:href="@{/cs/faq/list(cate1=${coupon}, cate2=${coupon})}">쿠폰</a></li>
+                    <li><a th:href="@{/cs/faq/list(cate1=${coupon}, cate2=${event})}">이벤트</a></li>
+                </ul>
+            </li>
+            <li>
+                <a th:href="@{/cs/faq/list}">주문/결제</a>
+                <ul class="submenu">
+                    <li><a th:href="@{/cs/faq/list(cate1=${order}, cate2=${order})}">주문</a></li>
+                    <li><a th:href="@{/cs/faq/list(cate1=${order}, cate2=${payment})}">결제</a></li>
+                </ul>
+            </li>
+            <li>
+                <a th:href="@{/cs/faq/list}">배송</a>
+                <ul class="submenu">
+                    <li><a th:href="@{/cs/faq/list(cate1=${delivery}, cate2=${register})}">신청/이용방법</a></li>
+                    <li><a th:href="@{/cs/faq/list(cate1=${delivery}, cate2=${change})}">변경/해지</a></li>
+                </ul>
+            </li>
+            <li>
+                <a th:href="@{/cs/faq/list}">취소/반품/교환</a>
+                <ul class="submenu">
+                    <li><a th:href="@{/cs/faq/list}">취소</a></li>
+                    <li><a th:href="@{/cs/faq/list}">반품</a></li>
+                    <li><a th:href="@{/cs/faq/list}">교환</a></li>
+                </ul>
+            </li>
+            <li>
+                <a th:href="@{/cs/faq/list}">여행/숙박/항공</a>
+                <ul class="submenu">
+                    <li><a th:href="@{/cs/faq/list}">여행</a></li>
+                    <li><a th:href="@{/cs/faq/list}">숙박</a></li>
+                    <li><a th:href="@{/cs/faq/list}">항공</a></li>
+                </ul>
+            </li>
+            <li>
+                <a th:href="@{/cs/faq/list}">안전거래</a>
+                <ul class="submenu">
+                    <li><a th:href="@{/cs/faq/list}">안전거래</a></li>
+                </ul>
+            </li>
+        </ul> </li>
+        <li>
+            <a th:href="@{/cs/qna/list}">문의하기</a>
+        </li>
+    </ul>
+</aside>
+
+<script>
+    document.querySelectorAll('.sidebar-menu > li').forEach(function (menuItem) {
+        menuItem.addEventListener('mouseenter', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'block';
+            }
+        });
+
+        menuItem.addEventListener('mouseleave', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'none';
+            }
+        });
+    });
+</script>

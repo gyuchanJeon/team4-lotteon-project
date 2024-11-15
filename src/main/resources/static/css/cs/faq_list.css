@@ -1,0 +1,212 @@
+a {
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    color: inherit; /* 링크의 색상 제거 */
+}
+
+a:hover {
+    text-decoration: underline;
+}
+.main-title-section span {
+    font-size: 20px;
+     font-weight: bolder;
+}
+body {
+    font-family: "Malgun Gothic", sans-serif;
+    font-size: 12px;
+    margin: 0 auto;
+}
+main {
+    margin-top: 20px;
+}
+/* Wrapper 설정 */
+#wrapper {
+    display: flex;
+    width: 1200px;
+    margin: 40px auto;
+}
+
+/* 사이드바 스타일 */
+aside {
+    border: 1px solid #ede6db;
+    box-sizing: border-box;
+    width: 220px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 650px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    margin-bottom: 3px;
+    position: relative;
+}
+
+.sidebar-menu a {
+    text-decoration: none;
+    color: #2b2e4a;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 10px;
+    display: block;
+    background-color: #ffffff;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    margin-top: 12px;
+}
+
+.sidebar-menu a:hover {
+    background-color: #f5f5f5;
+    font-weight: 900;
+}
+
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    display: none; /* 처음에는 서브메뉴가 보이지 않음 */
+}
+
+.submenu li {
+    margin-bottom: -13px;
+}
+
+.submenu a {
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.submenu a:hover {
+    font-weight: 700;
+    background-color: #eaeaea;
+}
+
+
+.form {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#section_wrapper {
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 975px;
+    padding: 20px;
+    border: 1px solid #ede6db;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+.location {
+    font-weight: bold;
+}
+
+#category {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 10px;
+    margin-left : 10px;
+    width: 100%;
+}
+.qimage{
+    width:13px;
+    height: 13px;
+
+}
+#category > p {
+    font-size: 17px;
+    font-weight: 900;
+}
+
+#category span {
+    font-size: 12px;
+    margin-bottom: 15px;
+    color: gray;
+    margin-top: 50px;
+}
+
+table {
+    width: 100%;
+    border: 1px solid rgba(160, 159, 159, 0.961);
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.faq-Table {
+    width: 100%;
+    padding: 0 10px 10px 10px;
+}
+
+tr {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid gainsboro;
+}
+
+.last-Tr {
+    border: none;
+}
+
+td {
+    width: 100%;
+}
+
+td > a {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.thead {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+#showMore {
+    height: 100%;
+    width: 100%;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#showLess {
+    height: 100%;
+    width: 100%;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.showMoreOrLess {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+#showLess:hover, #showMore:hover {
+    color: rgba(0, 0, 255, 0.64);
+    font-weight: bolder;
+}
+
+.qimage {
+    width: 15px;
+    height: 12px;
+    margin-right: 3px;
+}

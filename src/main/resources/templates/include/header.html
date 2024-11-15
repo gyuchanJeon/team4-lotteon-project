@@ -1,0 +1,183 @@
+
+<body>
+<link rel="stylesheet" th:href="@{/css/include/header.css}"/>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<header>
+    <div class ="headerWrapper">
+
+        <!-- 로그인, 회원가입, 주문배송, 고객센터 -->
+        <div class="util innerContent">
+            <div class="accountArea">
+                <ul>
+                    <!-- Member Role -->
+                    <li sec:authorize="hasRole('member')" class="role"><span class="loginNick">[[${#authentication.principal.user.memberInfo.name}]]</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
+                    </li>
+
+                    <!-- Seller Role -->
+                    <li sec:authorize="hasRole('seller')" class="role"><span class="loginNick">[[${#authentication.principal.user.sellerInfo.comName}]]</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
+                    </li>
+
+                    <!-- Admin Role -->
+                    <li sec:authorize="hasRole('ADMIN')" class="role"><span class="loginNick">관리자</span>
+                        <i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/member/login}" class="area">로그인</a>
+                    </li>
+                    <li sec:authorize="hasRole('ADMIN') or hasRole('seller')">
+                        <a th:href="@{/admin/index}" class="area">관리자</a>
+                    </li>
+                    <li  sec:authorize="isAuthenticated()">
+                        <a th:href="@{/member/logout}" id="logout" class="area">로그아웃</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/member/join}" class="area">회원가입</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/my/order}" class="area">주문배송</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/cs/index}" class="area">고객센터</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 메인 헤더 -->
+        <div class="main">
+            <div class="main innerContent">
+                <h1 class="logoArea">
+                    <h1 class="logoArea">
+                        <a th:href="@{/index}">
+                            <img th:src="@{'/uploads/config/' + ${info.headerLogo}}" alt="LOTTE ON">
+                        </a>
+                    </h1>
+                </h1>
+                <div class="searchAreaWrap">
+                    <div class="searchArea">
+                        <input type="search" id="headerSearchId" th:placeholder="${SoldList.get(0).name}">
+                        <button type="button" class="btnSearchInner"><span class="blind">검색</span></button>
+                    </div>
+                </div>
+                <div class="buttonArea">
+                    <ul>
+                        <li class="buttonBox">
+                            <button type="button" class="chat">
+                                <a th:href="@{/cs/qna/write}"><img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_chat_black.svg" alt="문의하기"></a>
+                                <span>문의</span>
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="heart">
+                                <a href="#"><img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_heart_black.svg" alt="나의찜"></a>
+                                <span>나의찜</span>
+                            </button>
+                        </li>
+                        <li>
+
+                            <button type="button" class="mylotte">
+                                <a th:href="@{/my/home}"><img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_my_black.svg" alt="마이롯데"></a>
+                                <span>마이롯데</span>
+                            </button>
+
+                        </li>
+
+                        <li>
+
+                            <button type="button" class="cart">
+                                <a th:href="@{/product/cart}"><img src="https://static.lotteon.com/p/common/foCommon/assets/img/icon_cart_black.svg" alt="장바구니"></a>
+                                <span>장바구니</span>
+                            </button>
+
+                        </li>
+                    </ul>
+                </div>
+            </div><!-- main -->
+        </div><!--headerWrapper-->
+
+        <!-- 하위 카테고리 영역 (내비게이터) -->
+        <div class="subWrapper">
+            <div class="sub">
+                <div class="category">
+                    <div class="moreViewWrap">
+                        <button type="button" class="moreView"><img class ="cateBtn" th:src="@{/images/main/category_button.png}"/></button>
+                    </div>
+                    <div class="menu" style="align-content: center">
+                        <ul>
+                            <li class="active"><a href="#Hit" class="scroll_move">히트상품</a></li>
+                            <li><a href="#Score" class="scroll_move">추천상품</a></li>
+                            <li><a href="#Recent" class="scroll_move">최신상품</a></li>
+                            <li><a href="#ScoreMany" class="scroll_move">인기상품</a></li>
+                            <li><a href="#Discount" class="scroll_move">할인상품</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div><!-- sub -->
+        </div><!-- subWrapper -->
+
+        <!-- 카테고리 -->
+        <div class="here">
+            <div class="categoryMenu">
+                <ul>
+                    <li th:each="child : ${productCateDTOList}">
+                        <a th:href="@{'/product/list/' + ${child.getProductCateId}}">[[${child.getName()}]]</a>
+                        <!-- 2차 메뉴 -->
+                        <ul class="subMenu">
+                            <li th:each="sub : ${child.getChildren()}">
+                                <a th:href="@{'/product/list/' + ${sub.getProductCateId}}">[[${sub.getName()}]]</a>
+                                <!-- 3차 메뉴 -->
+                                <ul class="subSubMenu">
+                                    <li th:each="subChild : ${sub.getChildren()}">
+                                        <a th:href="@{'/product/list/' + ${subChild.getProductCateId}}">[[${subChild.getName()}]]</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<script>
+    const moreViewButton = document.querySelector('.moreView');
+    const categoryMenu = document.querySelector('.categoryMenu');
+
+    moreViewButton.addEventListener('click', function() {
+        categoryMenu.classList.toggle('open');
+    });
+
+
+    const btnSearchInner = document.querySelector('.btnSearchInner');
+    const headerSearchInput = document.querySelector('#headerSearchId');
+
+    // 검색 수행 함수 정의
+    function performSearchHeader() {
+        const keyword = headerSearchInput.value; // 검색어 가져오기
+        if (keyword) {
+            // 검색어를 포함한 URL로 이동
+            window.location.href = `/lotteon/product/search/${encodeURIComponent(keyword)}`;
+        } else {
+            alert("검색어를 입력해주세요."); // 검색어가 비어 있는 경우 경고 메시지
+        }
+    }
+
+    // 버튼 클릭 시 검색 수행
+    btnSearchInner.addEventListener('click', function(e) {
+        e.preventDefault();
+        performSearchHeader();
+    });
+
+    // Enter 키로 검색 수행
+    headerSearchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            performSearchHeader();
+        }
+    });
+</script>

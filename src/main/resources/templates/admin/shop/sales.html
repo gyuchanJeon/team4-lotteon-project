@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>매출현황</title>
+    <!-- <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> -->
+
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}">
+
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_shop_sales.css}">
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+    <main>
+        <div id="wrapper">
+            <aside th:replace="~{/admin/include/aside.html}"></aside>
+            <!--section-->
+            <section>
+                <div class="breadcrumb">
+                    <a href="#">Home</a> > <a href="#">상점관리</a> > <a href="#" class="location">매출현황</a>
+                </div>
+                <h3>매출현황</h3>
+                <div class="form">
+                    <div class="search-bar">
+                        <select id="search-category" class="dropdown">
+                            <option>일별</option>
+                            <option>주별</option>
+                            <option>월별</option>
+                        </select>
+                    </div>
+                    <table class="inquiry-table">
+                        <colgroup>
+                            <col style="width: 2%"> 
+                            <col style="width: 10%"> 
+                            <col style="width: 12%">
+                            <col style="width: 7%"> 
+                            <col style="width: 7%"> 
+                            <col style="width: 7%"> 
+                            <col style="width: 7%"> 
+                            <col style="width: 7%"> 
+                            <col style="width: 13%">  
+                            <col style="width: 13%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>상호명</th>
+                                <th>사업자등록번호</th>
+                                <th>주문건수</th>
+                                <th>결재완료</th>
+                                <th>배송중</th>
+                                <th>배송완료</th>
+                                <th>구매확정</th>
+                                <th>주문합계</th>
+                                <th>매출합계</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>5</td>
+                                <td>(주)다나와</td>
+                                <td>112-12-12345</td>
+                                <td>103</td>
+                                <td>90</td>
+                                <td>56</td>
+                                <td>52</td>
+                                <td>50</td>
+                                <td>12,870,600</td>
+                                <td>10,870,600</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <button class="page-btn">이전</button>
+                        <button class="page-num">1</button>
+                        <button class="page-num">2</button>
+                        <button class="page-num">3</button>
+                        <button class="page-num">4</button>
+                        <button class="page-num">5</button>
+                        <button class="page-btn">다음</button>
+                    </div>
+                </div>
+            </section> 
+            <!-- /Section -->
+        </div>
+    </main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

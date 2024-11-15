@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lotteOn::login</title>
+    <link rel="stylesheet" th:href="@{/css/member/findId.css}"/>
+</head>
+
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+<main id="main">
+    <div class="mainIn">
+        <div class="findid">
+            <form th:action="@{/member/find_id_result}" method="post" class="findIdForm">
+                <div id="error-message" th:if="${error}" th:text="${error}" style="display: none;"></div>
+                <section>
+                    <div class="headtxt">
+                        <span>비밀번호 찾기 - 개인구매회원</span>
+                    </div>
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="name">이름</label>
+                            <input type="text" id="name" name="memberInfo.name" placeholder="이름을 입력해 주세요">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">이메일</label>
+                            <input type="email" name="memberInfo.email" id="email" placeholder="이메일 입력" th:placeholder="'이메일을 입력해 주세요'" class="input-email"/>
+                            <button type="button" class="btnSendEmail" id="btnSendEmail">인증번호 받기</button>
+                            <span class="resultEmail"></span>
+                        </div>
+                        <div class="form-group email-code">
+                            <input type="text" id="code" placeholder="인증번호 입력" th:placeholder="'인증번호를 입력해 주세요'" class="input-email"/>
+                            <button type="button" class="btnAuthEmail" id="btnAuthEmail">인증확인</button>
+                        </div>
+                    </div>
+                </section>
+                <div class="findnote">
+                    <p>
+                        회원가입시 이메일 주소와 입력한 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.<br>
+                        인증번호를 입력 후 확인 버튼을 누르세요.
+                    </p>
+                </div>
+                <div class="btns">
+<!--                    <a th:href="@{/member/login}" class="btn_cancel">취소</a>-->
+                    <button id="submitBtn2" type="submit" class="btn_next">확인</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!--<footer>
+    <ul>
+        <li><a href="/company/index">회사소개</a></li>
+        <li><a href="#">서비스이용약관</a></li>
+        <li><a href="#">개인정보처리방침</a></li>
+        <li><a href="#">전자금융거래약관</a></li>
+    </ul>
+    <div>
+        <p><img th:src="@{images/main/footer_logo.png}" alt="로고"/></p>
+        <p>
+            <strong>(주)롯데ON</strong><br/>- bxSlider
+            대표이사 : 김사무엘상현, 정준호, 강성현<br/>
+            사업자등록번호 : 529-85-00774(롯데쇼핑(주) e커머스사업부)<br/>
+            통신판매업 신고 : 서울송파 제0158호<br>
+            호스팅 서비스사업자 : 롯데쇼핑(주) e커머스사업부
+        </p>
+        <p>
+            <strong>고객센터</strong><br/>
+            Tel : 1899-7000(유료) (평일 09:00~18:00)<br/>
+            Fax : 051-123-4567 | E-mail : lotteon@lotte.net<br/>
+            App Version:[[${appInfo}]]
+        </p>
+    </div>
+</footer>-->
+</body>
+
+<script>
+
+
+    let receivecode;
+    let isEmailOk = false;
+    window.onload = function() {
+
+        // error-message 요소가 존재하는지 확인
+        var errorMessageElement = document.getElementById("error-message");
+        if (errorMessageElement) { // 요소가 존재할 경우에만 메시지 가져오기
+            var errorMessage = errorMessageElement.textContent;
+            if (errorMessage) {
+                alert(errorMessage); // alert 창으로 에러 메시지 표시
+            }
+        }
+
+        const btnSendEmail = document.getElementById('btnSendEmail');   // 인증번호 받기 버튼
+        const btnAuthEmail = document.getElementById('btnAuthEmail');   // 인증확인 버튼
+        const resultEmail = document.querySelector('.resultEmail');     // 인증 결과
+        let preventDblClick = false; // 더블클릭 방지
+
+        // 인증번호 받기 버튼 클릭시
+        btnSendEmail.onclick = async function() {
+            if (preventDblClick) return;
+
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+
+            if(!email || !name) {
+                resultEmail.innerText = "이름과 이메일을 모두 입력하세요.";
+                resultEmail.style.color = "red";
+                return;
+            }
+
+            try {
+                preventDblClick = true;
+
+                const response = await fetch('/lotteon/member/email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ "email": email, "name": name })
+                });
+
+                const data = await response.json();
+                console.log(data.code)
+                receivecode=data.code
+                if (data.result) {
+                    resultEmail.innerText = "인증번호가 발송되었습니다.";
+                    resultEmail.style.color = "green";
+                } else {
+                    resultEmail.innerText = "다시 시도해주세요.";
+                    resultEmail.style.color = "red";
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultEmail.innerText = "오류가 발생했습니다.";
+                resultEmail.style.color = "red";
+            } finally {
+                preventDblClick = false;
+            }
+        };
+
+        // 이메일 인증확인 버튼
+        btnAuthEmail.onclick = function() {
+            const code = document.getElementById('code').value;
+            if(receivecode===code){
+                isEmailOk = true;
+            }
+
+            if(isEmailOk) {
+                document.getElementById('submitBtn2').disabled = false;
+                alert('인증되었습니다.');
+            }
+        }
+
+    };
+</script>
+
+</html>

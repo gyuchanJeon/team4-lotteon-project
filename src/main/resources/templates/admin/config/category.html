@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>카테고리 관리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_product_category.css}"/>
+
+
+    <style>
+    </style>
+    <script th:src="@{https://code.jquery.com/jquery-3.7.1.js}"></script>
+    <script th:src="@{https://code.jquery.com/ui/1.14.0/jquery-ui.js}"></script>
+    <script>
+        $( function() {
+            $( ".sortable" ).sortable();
+        } );
+    </script>
+
+
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!-- 카테고리 추가 영역 -->
+        <section>
+            <h3>카테고리</h3>
+
+            <div class="form">
+                <div class="version-header">
+                    <h4>카테고리 관리</h4>
+                    <p class="sub-title">쇼핑몰 메인, 상품 페이지 사이드 카테고리 메뉴입니다.</p>
+                </div>
+
+                <!-- 카테고리 추가 영역 -->
+                <div class="category-input-container">
+                    <select id="categoryDepth" class="dropdown">
+                        <option value="1">1차 카테고리</option>
+                        <option value="2">2차 카테고리</option>
+                        <option value="3">3차 카테고리</option>
+                    </select>
+                    <select id="parentCategorySelect" disabled class="dropdown">
+                        <option value="">상위 카테고리를 선택하세요</option>
+                    </select>
+                    <input type="text" id="newCategoryInput"  class="newCategoryInput" placeholder="카테고리 이름을 입력하세요">
+                    <button class="add-btn" id="addCategoryBtn">카테고리 추가</button>
+                </div>
+
+                <section class="category-section">
+
+                    <ul id="category-list" class="sortable deps1">
+                        <li data-depth="1" class="ui-state-default category-item" th:each="child : ${productCateDTOList}" th:data-name="${child.getName()}">
+                            <span class="toggle-btn">▶</span>
+                            [[${child.getName()}]]
+                            <button class="delete-btn">X</button>
+                            <ul class="sortable sub-category" style="display: none;">
+                                <li data-depth="2" class="ui-state-default deps2 subcategory-item" th:each="sub : ${child.getChildren()}"  th:data-name="${sub.getName()}">
+                                    <span class="toggle-btn">▶</span>
+                                    [[${sub.getName()}]]
+                                    <button class="delete-btn">X</button>
+                                    <ul class="sortable sub-sub-category" style="display: none;">
+                                        <li data-depth="3" class="ui-state-default deps3 category-item" th:each="subChild : ${sub.getChildren()}" th:data-name="${subChild.getName()}">
+                                            [[${subChild.getName()}]]
+                                            <button class="delete-btn">X</button>
+
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- 카테고리 구조 -->
+
+                </section><!-- category-section -->
+                <div class="desc">
+                    <p class="sub-title-desc">카테고리 메뉴 순서를 변경할 때 드래그 앤 드롭으로 1차, 2차 카테고리 메뉴 이동 후 수정하기를 클릭합니다.</p>
+                </div>
+                <div class="buttons">
+                    <button type="submit" class="write-btn">수정하기</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+
+<script>
+
+    const parentCategorySelect = document.getElementById('parentCategorySelect');
+    const categoryDepthSelect = document.getElementById('categoryDepth');
+
+    // 카테고리 Depth에 따라 상위 카테고리 선택할 수 있게 함
+    categoryDepthSelect.addEventListener('change', function() {
+        const depth = categoryDepthSelect.value;
+
+        // 1차 카테고리일 때는 상위 카테고리 선택을 비활성화
+        if (depth === '1') {
+            parentCategorySelect.disabled = true;
+            parentCategorySelect.innerHTML = `<option value="">상위 카테고리 없음</option>`;
+        } else {
+            parentCategorySelect.disabled = false;
+            updateParentCategoryOptions(depth);
+        }
+    });
+
+    // 상위 카테고리 선택창 업데이트
+    function updateParentCategoryOptions(depth) {
+        parentCategorySelect.innerHTML = '';
+
+        const categoryListItems = document.querySelectorAll(`#category-list li[data-depth="${depth - 1}"]`);
+        categoryListItems.forEach(item => {
+            const categoryName = item.getAttribute('data-name');
+            parentCategorySelect.innerHTML += `<option value="${categoryName}">${categoryName}</option>`;
+        });
+    }
+
+    // 카테고리 추가 기능
+    document.getElementById('addCategoryBtn').addEventListener('click', function() {
+        const categoryName = document.getElementById('newCategoryInput').value.trim();
+        const categoryDepth = document.getElementById('categoryDepth').value;
+        const selectedParent = parentCategorySelect.value;
+
+        const jsonData = {
+            "name" : categoryName,
+            "depth": categoryDepth
+        }
+
+        const queryParams = new URLSearchParams({
+            parent: selectedParent
+        });
+
+        fetch('/lotteon/admin/config/category?' + queryParams.toString(),{
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err=>{
+                console.log(err);
+            });
+
+
+
+        if (categoryName !== "") {
+            const newCategory = document.createElement('li');
+            newCategory.setAttribute('data-depth', categoryDepth);
+            newCategory.setAttribute('data-name', categoryName);
+
+            // 카테고리 깊이에 따라 적절한 클래스를 추가
+            if (categoryDepth == '1') {
+                newCategory.classList.add('deps1');
+                newCategory.innerHTML = `<span class="toggle-btn">▶</span>${categoryName} <button class="delete-btn">X</button>`;
+                document.getElementById('category-list').appendChild(newCategory);
+            } else if (categoryDepth == '2') {
+                newCategory.classList.add('deps2');
+                newCategory.innerHTML = `<span class="toggle-btn">▶</span>${categoryName} <button class="delete-btn">X</button>`;
+                const parentCategory = document.querySelector(`li[data-name="${selectedParent}"] > ul`);
+                if (!parentCategory) {
+                    const subCategoryList = document.createElement('ul');
+                    subCategoryList.classList.add('sub-category');
+                    document.querySelector(`li[data-name="${selectedParent}"]`).appendChild(subCategoryList);
+                    subCategoryList.appendChild(newCategory);
+                } else {
+                    parentCategory.appendChild(newCategory);
+                }
+            } else if (categoryDepth == '3') {
+                newCategory.classList.add('deps3');
+                newCategory.innerHTML = `${categoryName} <button class="delete-btn">X</button>`;
+                const parentCategory = document.querySelector(`li[data-name="${selectedParent}"] > ul`);
+                if (parentCategory) {
+                    parentCategory.appendChild(newCategory);
+                }
+            }
+
+            // 카테고리 추가 후 입력 필드 초기화
+            document.getElementById('newCategoryInput').value = '';
+
+            // 추가한 카테고리를 보이게 하기
+            const toggleBtn = newCategory.querySelector('.toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.click(); // 서브 카테고리를 펼치기
+            }
+        }
+    });
+
+    // 토글 기능
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('toggle-btn')) {
+            const subMenu = e.target.nextElementSibling.nextElementSibling;
+            if (subMenu) {
+                subMenu.style.display = subMenu.style.display === 'none' ? 'block' : 'none';
+                e.target.textContent = e.target.textContent === '▶' ? '▼' : '▶';
+            }
+        }
+
+        if(e.target.classList.contains('delete-btn')){
+            const liElement = e.target.closest('li');
+            const name = liElement.getAttribute('data-name');
+
+            console.log(name);
+
+            fetch('/lotteon/admin/config/category', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name })
+            })
+                .then(resp => resp.text())
+                .then(data => {
+                    console.log(data);
+                    if(data === 'success'){
+                        liElement.remove();
+                        alert("삭제 성공했습니다.");
+                    }
+                    else{
+                        alert("삭제 실패 했습니다.");
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    });
+
+
+
+    // 초기 상태 저장
+    let initialOrder = getOrderData();
+
+    // '수정하기' 버튼 클릭 시
+    $(".write-btn").on("click", function() {
+        let currentOrder = getOrderData();
+        let changes = getOrderChanges(initialOrder, currentOrder);
+
+        // 변경 사항이 있을 경우에만 서버로 전송
+        if (changes.length > 0) {
+            fetch("/lotteon/admin/config/category", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(changes)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("변경되었습니다!");
+                    } else {
+                        alert("업데이트 중 오류가 발생했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("서버와의 연결 중 오류가 발생했습니다.");
+                });
+        } else {
+            alert("변경된 순서가 없습니다.");
+        }
+    });
+
+    // 리스트의 계층별 순서 데이터를 추출하는 함수
+    function getOrderData() {
+        let data = [];
+        $('#category-list > .category-item').each(function(index, item) {
+            let category = {
+                name: $(item).data('name'),
+                order: index, // 현재 순서
+                depth: 1,
+                children: []
+            };
+
+            // 2단계 하위 요소 추출
+            $(item).find('.deps2').each(function(subIndex, subItem) {
+                let subCategory = {
+                    name: $(subItem).data('name'),
+                    order: subIndex,
+                    depth: 2,
+                    children: []
+                };
+
+                // 3단계 하위 요소 추출
+                $(subItem).find('.deps3').each(function(subSubIndex, subSubItem) {
+                    let subSubCategory = {
+                        name: $(subSubItem).data('name'),
+                        order: subSubIndex,
+                        depth: 3
+                    };
+                    subCategory.children.push(subSubCategory);
+                });
+
+                category.children.push(subCategory);
+            });
+
+            data.push(category);
+        });
+        return data;
+    }
+
+    // 변경된 순서만 비교하여 추출하는 함수
+    function getOrderChanges(initialOrder, currentOrder) {
+        let changes = [];
+
+        function compareOrders(initItems, currItems) {
+            for (let i = 0; i < currItems.length; i++) {
+                // 초기와 현재 항목이 모두 존재할 때만 비교 수행
+                if (initItems[i] && currItems[i]) {
+                    // order 또는 name이 다른 경우 변경 사항으로 추가
+                    if (initItems[i].order !== currItems[i].order || initItems[i].name !== currItems[i].name) {
+                        changes.push(currItems[i]);
+                    }
+
+                    // 하위 요소가 있는 경우에만 재귀적으로 비교
+                    if (initItems[i].children && currItems[i].children) {
+                        compareOrders(initItems[i].children, currItems[i].children);
+                    }
+                }
+            }
+        }
+
+        compareOrders(initialOrder, currentOrder);
+        console.log(changes);
+        return changes;
+    }
+
+
+
+</script>
+</body>
+</html>

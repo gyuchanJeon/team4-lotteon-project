@@ -1,0 +1,381 @@
+<link rel="stylesheet" th:href="@{/css/my/myInfo_modal.css}"/>
+<script th:src="@{/js/my/modal.js}"></script>
+<div th:fragment="modalFragment(orderDTOs)">
+
+    <!-- 판매자 정보 모달 시작 -->
+    <article class="myInfo_modal Modalhidden" id="sellerModal">
+        <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+                <span>판매자정보</span>
+                <img th:src="@{/images/my/x-mark-xxl.png}" class="closeBtn">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail modalDealer">
+
+                <table class="myInfo_ModalTable">
+                    <tr>
+                        <td>판매자 등급</td>
+                        <td>
+                            <span id="sellerGrade"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>상호</td>
+                        <td>
+                            <span id="sellerComName"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>대표자</td>
+                        <td>
+                            <span id="sellerCeo"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>전화번호</td>
+                        <td>
+                            <span id="sellerHp"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>FAX</td>
+                        <td>
+                            <span id="sellerFax"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>
+                            <span id="sellerEmail"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>사업자번호</td>
+                        <td>
+                            <span id="sellerComNumber"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>영업소재지</td>
+                        <td>
+                            <span id="sellerAddress"></span>
+                        </td>
+                    </tr>
+                </table>
+                <p>* 위 정보는 전자상거래 법 제 20조 제 2항 및 동 법 시행령 제 25조 제 2항에 의거하여 소비자 보호에 의거하여 공개합니다.</p>
+                <div class="modalButtons orderInquireBtn">
+                    <button type="button">문의하기</button>
+                </div>
+            </article>
+        </div>
+    </article>
+    <!-- 판매자 정보 모달 끝 -->
+
+    <!-- 문의하기 모달 시작 -->
+    <article class="myInfo_modal Modalhidden" id="inquireModal">
+        <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+                <span>문의하기</span>
+                <img th:src="@{/images/my/x-mark-xxl.png}" class="closeBtn">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+
+                <table class="myInfo_ModalTable">
+                    <tr>
+                        <td>문의종류</td>
+                        <td>
+            <span class="Modalradio">
+              <input type="radio" name="contact" value="product"><label>상품</label>
+              <input type="radio" name="contact" value="product"><label>배송</label>
+              <input type="radio" name="contact" value="product"><label>반품 / 취소</label>
+              <input type="radio" name="contact" value="product"><label>교환</label>
+              <input type="radio" name="contact" value="product"><label>기타</label>
+            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>
+                            <span class="ModalInput"><input type="text" placeholder="abc123@gmail.com"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>제목</td>
+                        <td>
+                            <span class="ModalInput"><input type="text"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>
+                            <span class="ModalInput"><textarea name=""></textarea></span>
+                        </td>
+                    </tr>
+                </table>
+                <div class="modalButtons">
+                    <button type="button">등록하기</button>
+                    <button type="button" class="cancelBtn">취소</button>
+                </div>
+            </article>
+        </div>
+    </article>
+    <!-- 문의하기 모달 끝 -->
+
+    <!-- 구매확인 모달 시작 -->
+    <article class="myInfo_modal Modalhidden" id="acceptModal">
+        <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+                <span>구매확인</span>
+                <img th:src="@{/images/my/x-mark-xxl.png}" class="closeBtn">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+                <p class="ModalCheck">
+                    상품을 받으셨나요?<br>
+                    상품 받으신 분 만 수취 확인을 해주세요.
+                </p>
+
+                <div class="modalButtons">
+                    <button type="button" class="confirmAcceptBtn">등록하기</button>
+                    <button type="button" class="cancelBtn">취소</button>
+                </div>
+            </article>
+        </div>
+    </article>
+    <!-- 구매확인 모달 끝 -->
+
+    <!-- 상품평작성하기 모달 시작 -->
+    <article class="myInfo_modal Modalhidden" id="ReviewModal">
+        <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+                <span>상품평작성하기</span>
+                <img th:src="@{/images/my/x-mark-xxl.png}" class="closeBtn">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+                <form>
+                    <table class="myInfo_ModalTable">
+                        <tr>
+                            <input id="variant_id" type="hidden">
+                            <td>상품명</td>
+                            <td>
+                                <input id="showVariantId" type="hidden">
+                                <span id="showSku">상품명 출력</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>만족도</td>
+                            <td id="rating_td">
+                                <label for="rating">별점 선택 :</label>
+                                <div class="star-rating" id="starRating">
+                                    <!-- 초기 별점 이미지 (별점 1으로 설정) -->
+                                    <img th:src="@{/images/review/rating_2.png}" alt="별점" id="starImage">
+                                </div>
+                                <!-- 선택된 별점을 저장할 숨겨진 입력 필드 -->
+                                <input type="hidden" name="rating" id="rating" value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>리뷰사진</td>
+                            <td>
+                                <input id="reviewImage1" type="file" name="files">
+                                <input id="reviewImage2" type="file" name="files">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>내용</td>
+                            <td>
+                            <span class="ModalInput"><textarea id="reviewContent" name=""
+                                                               placeholder="최소 10자 이상 200자 내외로 작성하세요."></textarea></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="modalButtons">
+                        <button id="reviewBtn" type="submit">작성완료</button>
+                        <button type="button" class="cancelBtn">취소</button>
+                    </div>
+                </form>
+            </article>
+        </div>
+    </article>
+    <!-- 상품평작성하기 모달 끝 -->
+
+    <!-- 반품신청 모달 시작 -->
+    <article class="myInfo_modal Modalhidden" id="ReturnModal">
+        <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+                <span>반품신청</span>
+                <img th:src="@{/images/my/x-mark-xxl.png}" class="closeBtn">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+                <div class="myInfo_ArticleTitle"><span>상품정보</span></div>
+                <table class="myInfo_returnTable myInfo_Table">
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>상품정보</th>
+                        <th>결제금액</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>2022-12-13</td>
+                        <td>
+                            <div class="myInfo_productInfo">
+                                <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                                <div>
+                                    <p>주문번호: 1012211341</p>
+                                    <p>{주}상호명</p>
+                                    <p>상품명</p>
+                                    <p>수량: 1개</p>
+                                    <p><strong>34,000원</strong></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="myInfo_chargeMoney">
+                            <div>
+                                <p>판매가</p>
+                                <p>할인</p><br>
+                                <p>결제금액</p>
+                            </div>
+                            <div>
+                                <p>30000</p>
+                                <p>3000</p><br>
+                                <p>27000</p>
+                            </div>
+                        </td>
+                        <td>배송완료</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="myInfo_ModalTable ">
+                    <p class="myInfo_ModalTable_title">반품정보 입력</p>
+                    <tr>
+                        <td>반품유형</td>
+                        <td>
+            <span class="Modalradio">
+              <input type="radio" name="return" value="returnType"><label>단순 변심</label>
+              <input type="radio" name="return" value="returnType"><label>파손 및 불량</label>
+              <input type="radio" name="return" value="returnType"><label>주문실수</label>
+              <input type="radio" name="return" value="returnType"><label>기타</label>
+            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>사유입력</td>
+                        <td>
+                            <textarea name=""></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>사진첨부(선택)</td>
+                        <td>
+                            <input type="file">
+                        </td>
+                    </tr>
+                </table>
+                <div class="modalButtons">
+                    <button type="button">반품신청</button>
+                    <button type="button" class="cancelBtn">취소</button>
+                </div>
+            </article>
+        </div>
+    </article>
+    <!-- 반품신청 모달 끝 -->
+
+    <!-- 교환신청 모달 시작 -->
+    <article class="myInfo_modal Modalhidden" id="ChangeModal">
+        <div class="myInfo_ModalWindow">
+            <!-- 상단 표시줄 -->
+            <div class="myInfo_ModalControl">
+                <span>교환신청</span>
+                <img th:src="@{/images/my/x-mark-xxl.png}" class="closeBtn">
+            </div>
+            <!-- 모달 내용 -->
+            <article class="myInfo_ModalDetail">
+                <div class="myInfo_ArticleTitle"><span>상품정보</span></div>
+                <table class="myInfo_returnTable myInfo_Table">
+                    <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>상품정보</th>
+                        <th>결제금액</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>2022-12-13</td>
+                        <td>
+                            <div class="myInfo_productInfo">
+                                <img th:src="@{/images/my/임시 이미지.png}" alt="">
+                                <div>
+                                    <p>주문번호: 1012211341</p>
+                                    <p>{주}상호명</p>
+                                    <p>상품명</p>
+                                    <p>수량: 1개</p>
+                                    <p><strong>34,000원</strong></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="myInfo_chargeMoney">
+                            <div>
+                                <p>판매가</p>
+                                <p>할인</p><br>
+                                <p>결제금액</p>
+                            </div>
+                            <div>
+                                <p>30000</p>
+                                <p>3000</p><br>
+                                <p>27000</p>
+                            </div>
+                        </td>
+                        <td>배송완료</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="myInfo_ModalTable">
+                    <p class="myInfo_ModalTable_title">교환정보 입력</p>
+                    <tr>
+                        <td>반품유형</td>
+                        <td>
+            <span class="Modalradio">
+              <input type="radio" name="return" value="returnType"><label>단순 변심</label>
+              <input type="radio" name="return" value="returnType"><label>파손 및 불량</label>
+              <input type="radio" name="return" value="returnType"><label>주문실수</label>
+              <input type="radio" name="return" value="returnType"><label>기타</label>
+            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>사유입력</td>
+                        <td>
+                            <textarea name="" id=""></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>사진첨부(선택)</td>
+                        <td>
+                            <input type="file">
+                        </td>
+                    </tr>
+                </table>
+                <div class="modalButtons">
+                    <button type="button">교환신청</button>
+                    <button type="button" class="cancelBtn">취소</button>
+                </div>
+            </article>
+        </div>
+    </article>
+</div>
+<!-- 교환신청 모달 끝 -->

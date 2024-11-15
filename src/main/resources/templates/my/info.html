@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" th:href="@{/css/my/myInfo.css}" />
+  <link rel="stylesheet" th:href="@{/css/my/myInfo_info.css}" />
+
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <main>
+      <header th:replace="~{/include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{/my/my_aside.html}"></div>
+      <section class="myInfo_sec">
+        <div th:replace="~{/my/banner.html}"></div>
+        <article class="myInfo_Info myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>나의 설정</span></div>
+          <form class="myInfoForm json-form" id="infoForm" action="/lotteon/my/info" method="post">
+            <input type="hidden" name="memberInfoId" id="memberInfoId" th:value="${userDTO.memberInfo.memberInfoId}">
+            <table border="1">
+              <tr>
+                <td>사용자 ID</td>
+                <td>
+                  <span id="userId">[[${userDTO.uid}]]</span>
+                </td>
+              </tr>
+              <tr>
+                <td>비밀번호</td>
+                <td>
+                  <a th:href="@{/member/pass_change(uid=${userDTO.uid})}"><button type="button" class="register-btns">비밀번호 수정</button></a>
+                </td>
+              </tr>
+              <tr>
+                <td>이름</td>
+                <td>
+                  <span id="userName" th:text="${userDTO.memberInfo.name}"></span>
+                </td>
+              </tr>
+              <tr>
+                <td>이메일</td>
+                <td>
+                  <div style="display: flex; align-items: center;">
+                    <span id="email_display">[[${userDTO.memberInfo.email}]]</span>
+                    <input type="text" id="email_input" name="email" class="inputHp" style="display: none; margin-right: 10px; margin-left: 10px;" th:value="${userDTO.memberInfo.email}" />
+                    <button type="button" id="email_btn" class="register-btns" style="margin-left: 10px;">수정하기</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>휴대폰</td>
+                <td>
+                  <div style="display: flex; align-items: center;">
+                    <span id="hp_display">[[${userDTO.memberInfo.hp}]]</span>
+                    <input type="text" id="hp_input" name="hp" minlength="13" maxlength="13" class="inputHp" style="display: none; margin-right: 10px; margin-left: 10px;" th:value="${userDTO.memberInfo.hp}"/>
+                    <button type="button" id="hp_btn" class="register-btns" style="margin-left: 10px;">수정하기</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>주소</td>
+                <td>
+                  <input type="text" th:value="${userDTO.memberInfo.address.zipCode}" id="zip" name="zipCode" placeholder="우편번호" readonly />
+                  <button type="button" id="btnZip" class="register-btns">우편번호 찾기</button>
+                  <input type="text" id="addr1" name="addr1" th:value="${userDTO.memberInfo.address.addr1}" class="myInfo_address" placeholder="주소 검색" readonly />
+                  <input type="text" id="addr2" name="addr2" th:value="${userDTO.memberInfo.address.addr2}" class="myInfo_address" placeholder="상세주소 입력" />
+                </td>
+              </tr>
+              <tr>
+                <td>탈퇴</td>
+                <td>
+                  <button type="button" class="secessionBtn" onclick="quitUser()">탈퇴하기</button>
+                </td>
+              </tr>
+            </table>
+            <div class="Myinfo_modify">
+              <button type="submit">수정하기</button>
+            </div>
+          </form>
+        </article>
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{/include/footer.html}"></footer>
+</body>
+<script>
+
+  // 탈퇴하기
+  function quitUser() {
+    if(confirm("정말로 탈퇴하시겠습니까?")) {
+
+      // 탈퇴 요청 데이터(사용자 상태 변경)
+      const quitData = {
+        uid: document.getElementById("userId").innerText  // 사용자의 ID
+      };
+
+      console.log('quitData : ' + quitData.toString());
+
+      // AJAX 요청
+      fetch('/lotteon/my/info/quit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(quitData),
+      })
+      .then(response => {
+        if (response.ok) {
+          window.location.href="/lotteon/member/login?success=400";
+        } else {
+          alert("탈퇴 처리 중 오류가 발생했습니다.");
+          console.error('Error:', response.statusText);
+        }
+      })
+      .catch(error => {
+        alert("탈퇴 요청에 실패했습니다.");
+        console.error('Error:', error);
+      })
+
+    }
+
+
+
+  }
+
+
+  // 우편번호 검색 기능
+  document.getElementById('btnZip').onclick = function () {
+    new daum.Postcode({
+      oncomplete: function (data) {
+        document.getElementById('zip').value = data.zonecode;
+        document.getElementById('addr1').value = data.roadAddress || data.jibunAddress;
+        document.getElementById('addr2').focus();
+      }
+    }).open();
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+
+    // 이메일 수정하기 버튼 클릭 시 동작
+    const emailDisplay = document.getElementById('email_display');
+    const emailInput = document.getElementById('email_input');
+    const emailBtn = document.getElementById('email_btn');
+
+    emailBtn.addEventListener('click', function() {
+      if (emailInput.style.display === 'none') {
+        emailInput.value = emailDisplay.textContent; // 현재 이메일 값을 input에 설정
+        emailDisplay.style.display = 'none'; // span 숨기기
+        emailInput.style.display = 'block'; // input 보여주기
+        emailInput.focus();
+        emailBtn.textContent = '확인'; // 버튼 텍스트 변경
+        emailBtn.style.marginLeft = '10px'; // 좌측 여백 추가
+      } else {
+        emailDisplay.textContent = emailInput.value; // input의 값을 span에 설정
+        emailDisplay.style.display = 'block'; // span 보여주기
+        emailInput.style.display = 'none'; // input 숨기기
+        emailBtn.textContent = '수정하기'; // 버튼 텍스트 변경
+      }
+    });
+
+    // 휴대폰 수정하기 버튼 클릭 시 동작
+    const hpDisplay = document.getElementById('hp_display');
+    const hpInput = document.getElementById('hp_input');
+    const hpBtn = document.getElementById('hp_btn');
+
+    hpBtn.addEventListener('click', function() {
+      if (hpInput.style.display === 'none') {
+        hpInput.value = hpDisplay.textContent; // 현재 휴대폰 값을 input에 설정
+        hpDisplay.style.display = 'none'; // span 숨기기
+        hpInput.style.display = 'block'; // input 보여주기
+        hpInput.focus();
+        hpBtn.textContent = '확인'; // 버튼 텍스트 변경
+        hpBtn.style.marginLeft = '10px'; // 좌측 여백 추가
+      } else {
+        hpDisplay.textContent = hpInput.value; // input의 값을 span에 설정
+        hpDisplay.style.display = 'block'; // span 보여주기
+        hpInput.style.display = 'none'; // input 숨기기
+        hpBtn.textContent = '수정하기'; // 버튼 텍스트 변경
+      }
+    });
+
+    // 정보 수정
+    const infoForm = document.querySelector('#infoForm');
+    infoForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const updatedData = {
+        uid: document.getElementById("userId").value,
+        memberInfoId: document.getElementById("memberInfoId").value,
+        name: document.getElementById("userName").innerText,
+        email: document.getElementById("email_input").value,
+        hp: document.getElementById("hp_input").value,
+        address: {
+          zipCode: document.getElementById("zip").value,
+          addr1: document.getElementById("addr1").value,
+          addr2: document.getElementById("addr2").value
+        }
+      };
+
+      // AJAX로 수정 요청
+      fetch(`/lotteon/my/info/update`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      })
+              .then(response => {
+                if (response.ok) {
+                  alert("정상적으로 수정되었습니다.");
+                  location.reload(); // 페이지 새로 고침
+                } else {
+                  // 에러 처리
+                  console.error('Error updating user data:', response.statusText);
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+    });
+
+
+
+
+
+
+
+
+
+
+
+  });
+
+</script>
+
+
+</html>

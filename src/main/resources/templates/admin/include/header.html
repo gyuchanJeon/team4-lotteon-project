@@ -1,0 +1,13 @@
+<link rel="stylesheet" th:href="@{/css/admin/include/style_admin_header.css}">
+<header>
+    <div class="header-top">
+        <a th:href="@{/index}" class="logo">
+            <img th:src="@{'/uploads/config/' + ${info.headerLogo}}">
+        </a>
+        <p class="header-href">
+            <span th:if="${#authentication.principal.user.role == 'ADMIN'}">관리자님</span>
+            <span th:unless="${#authentication.principal.user.role == 'ADMIN'}">[[${#authentication.principal.user.sellerInfo.comName}]]<i class="loginRole">[ [[${#authentication.principal.user.role}]] ]</i> 님</span>
+            | <a th:href="@{/index}">HOME</a> | <a th:href="@{/member/logout}">로그아웃</a> | <a href="#" id="cs">고객센터</a>
+        </p>
+    </div>
+</header>

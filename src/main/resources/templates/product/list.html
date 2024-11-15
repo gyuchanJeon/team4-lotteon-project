@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <th:block th:replace="~{/include/common_head}"></th:block>
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
+    <!-- 기본 스타일 -->
+    <link rel="stylesheet" th:href="@{/css/product/product_common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product/style_product_list_common.css}"/>
+
+    <link id="pageStylesheet" rel="stylesheet" th:href="@{/css/product/style_product_list_grid.css}"/>
+    <script>
+        // CSS 파일을 동적으로 변경하는 함수
+       function changeStylesheet(fileName) {
+            const stylesheet = document.getElementById('pageStylesheet');
+            stylesheet.href = fileName;
+        }
+    </script>
+</head>
+<body>
+<div id="bannerTop" class="on">
+    <article th:each="banner : ${banners}" th:if="${banner.location == 'MAIN1'}" th:style="'background: ' + ${banner.background}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/config/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
+    </article>
+</div>
+<div id="wrapper">
+    <header th:replace="~{/include/header.html}"></header>
+    <main class="mainIn cf">
+        <aside th:replace="~{/main_aside.html}"></aside>
+        <!-- 카테고리/베스트 상품 영역 -->
+        <section class="product-list-section body-section">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a th:href="@{/product/list}">Home</a>
+                <!--카테고리에 따른 블럭추가-->
+                <th:block th:each="cate: ${categories}">
+                    &gt; <a th:href="@{'/product/list/' + ${cate.productCateId}}">[[${cate.name}]]</a>
+                </th:block>
+            </div>
+
+            <!-- 상품 목록 제목 -->
+            <h2 class="section-title">상품목록</h2>
+
+            <!-- 상품 정렬 옵션 -->
+            <div class="sort-options">
+                <div class="sort-left">
+                    <a th:href="@{'/product/list/' + ${cate} + '/sold'}" class="sort-link f">판매많은순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/lowPrice'}" class="sort-link">낮은가격순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/highPrice'}" class="sort-link">높은가격순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/highReview'}" class="sort-link">평점높은순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/manyReview'}" class="sort-link">후기많은순</a>
+                    <a th:href="@{'/product/list/' + ${cate} + '/recent'}" class="sort-link">최근등록순</a>
+                </div>
+
+                <div class="sort-view-options">
+                    <span class="view-count">VIEW</span>
+                    <a href="javascript:void(0);" onclick="changeStylesheet('/lotteon/css/product/style_product_list.css')" class="sort-linkRight">목록보기</a>
+                    <a href="javascript:void(1);" onclick="changeStylesheet('/lotteon/css/product/style_product_list_grid.css')" class="sort-linkRight">바둑보기</a>
+                </div>
+            </div>
+
+            <!-- 상품 목록 -->
+            <div class="product-list">
+                <div class="product-item" th:each="product : ${productDTOList}">
+                    <a th:href="@{/product/view(productId = ${product.productId})}">
+                    <div class="product-image">
+                        <img th:src="@{'/uploads/product/' + ${product.img1}}" alt="Product Image" />
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-name">[[${product.name}]]</h3>
+                        <p class="product-description">[[${product.description}]]</p>
+                        <div class="price-info">
+                            <th:block th:if="${product.discount} > 0">
+                                <span class="original-price">[[${product.price}]]</span>
+                                <span class="discount-rate">[[${product.discount}]]% ↓</span>
+                                <span class="product-price">[[${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0), 0, 0)}]]</span>
+                            </th:block>
+                            <th:block th:if="${product.discount} == 0">
+                                <span class="original-price"></span>
+                                <span class="discount-rate"></span>
+                                <span class="product-price">[[${product.price}]]</span>
+                            </th:block>
+                        </div>
+                        <div class="shipping-info">
+                            <th:block th:if="${product.deliveryFee} > 0">
+                                <span class="shipping-cost">배송비 [[${product.deliveryFee}]]원</span>
+                            </th:block>
+                            <th:block th:if="${product.deliveryFee} == 0">
+                                <span class="shipping-cost">무료배송</span>
+                            </th:block>
+                        </div>
+                    </div>
+                    <div class="seller-info">
+                        <p th:text="${product.getSellerInfoId().getComName()}">판매자</p>
+                        <th:block th:if="${product.getRating() >= 8}">
+                            <span class="seller-badge">고객만족우수</span>
+                        </th:block>
+                        <th:block th:unless="${product.getRating() >= 8}">
+                            <span class="seller-badge" style="visibility: hidden">고객만족우수</span>
+                        </th:block>
+                        <div class="rating">
+                            상품평
+                            <th:block th:with="
+                                      fullStars=${T(java.lang.Math).floor(product.getRating() / 2)},
+                                      halfStar=${product.getRating() % 2 == 1},
+                                      emptyStars=${5 - fullStars - (halfStar ? 1 : 0)}">
+                                <!-- 전체 별 -->
+                                <th:block th:if="${fullStars > 0}">
+                                    <th:block th:each="num : ${#numbers.sequence(1, fullStars)}">
+                                        <img th:src="@{/images/review/star.png}" alt="Full Star">
+                                    </th:block>
+                                </th:block>
+
+                                <!-- 반 별 -->
+                                <th:block th:if="${halfStar}">
+                                    <img th:src="@{/images/review/star_half.png}" alt="Half Star">
+                                </th:block>
+
+                                <!-- 회색 별 -->
+                                <th:block th:if="${emptyStars > 0}">
+                                    <th:block th:each="num : ${#numbers.sequence(1, emptyStars)}">
+                                        <img th:src="@{/images/review/star_gray.png}" alt="Gray Star">
+                                    </th:block>
+                                </th:block>
+
+                            </th:block>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <!-- 페이지네이션 -->
+            <div class="pagination">
+                <ul>
+                    <li><a href="#">&lt;</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">&gt;</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer th:replace="~{/include/footer.html}"></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <th:block th:replace="~{/include/common_head}"></th:block>
+
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" type="image/x-icon" href="../images/favicon.ico"/>
+
+    <!-- css -->
+    <link rel="stylesheet" th:href="@{/css/product/product_common.css}">
+    <link rel="stylesheet" th:href="@{/css/product/style_product_cart.css}"/>
+
+    <!-- ui 아이콘 -->
+    <script src="https://kit.fontawesome.com/20962f3e4b.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="bannerTop" class="on">
+    <article th:each="banner : ${banners}" th:if="${banner.location == 'MAIN1'}" th:style="'background: ' + ${banner.background}">
+        <a th:href="${banner.link}">
+            <img th:src="@{'/uploads/config/' + ${banner.img}}" alt="랜덤 배너 이미지"/>
+        </a>
+    </article>
+</div>
+<div id="wrapper">
+    <header th:replace="~{/include/header.html}"></header>
+    <main class="mainIn cf">
+        <aside th:replace="~{/main_aside.html}"></aside>
+        <!-- 장바구니 영역 -->
+        <section class="cart-section body-section">
+            <div class="breadcrumb">
+                <a href="#">Home</a> &gt;
+                <a href="#">장바구니</a> &gt;
+                <a href="#" class="location">장바구니</a>
+            </div>
+            <!-- 장바구니 제목 -->
+            <h2 class="section-title">장바구니</h2>
+
+            <!-- 장바구니 상품목록 -->
+            <div class="cart-">
+                <table class="cart-table">
+                    <colgroup>
+                        <col style="width: 3%" />
+                        <col style="width: 41%" />
+                        <col style="width: 8%" />
+                        <col style="width: 3%" />
+                        <col style="width: 10%" />
+                        <col style="width: 6%" />
+                        <col style="width: 8%" />
+                        <col style="width: 10%" />
+                        <!--<col style="width: 10%" />-->
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" name="cartItems" id="selectAll" onclick="toggleSelectAll(this)"></th>
+                        <th>상품정보</th>
+                        <th>옵션</th>
+                        <th>수량</th>
+                        <th>판매가</th>
+                        <th>할인</th>
+                        <th>포인트</th>
+                        <th>배송비</th>
+                       <!-- <th>총합</th>-->
+<!--                        <th>선택</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cart, i:${cartList}" th:id="'cart-item-' + ${cart.cartId}">
+                        <td><input type="checkbox" class="checkboxes order-checkbox" th:value="${cart.cartId}" onclick="toggleCheckbox(this)"></td>
+                        <td class="product-info">
+                            <a th:href="@{/product/view(productId = ${cart.productVariants.product.productId})}">
+                             <img th:src="@{'/uploads/product/' + ${cart.productVariants.product.getImg1()}}" alt="상품 사진" class="product-image">
+                            </a>
+                            <a th:href="@{/product/view(productId = ${cart.productVariants.product.productId})}">
+                                <div class="product-details">
+                                    <p class="product-name">[[${cart.productVariants.product.name}]]</p>
+                                </div>
+                            </a>
+                        </td>
+                        <td>
+                            <span id="variant-options" class="variant-options">
+                                <ul class="horizontal-list">
+                                    <li th:each="entry : ${cart.productVariants.options.entrySet()}">
+                                        <ul>
+                                            <li th:each="value : ${entry.value}" th:text="${value}"></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="quantity">
+                                <input type="number"
+                                       th:attr="id='quantity-' + ${cart.cartId}"
+                                       th:value="${cart.count}"
+                                       class="changeCount" />
+                            </div>
+                        </td>
+                        <td th:attr="id='price-' + ${cart.cartId}" th:text="${#numbers.formatInteger(
+                                                (cart.productVariants.price),
+                                                1, 'COMMA')}"></td>
+                        <td>[[${cart.productVariants.product.discount}]]%</td>
+                        <td>[[${cart.productVariants.product.point}]]p</td>
+                        <td th:attr="id='delivery-' + ${cart.cartId}" th:class="${cart.productVariants.product.deliveryFee == 0} ? 'shipping-info'"
+                            th:text="${cart.productVariants.product.deliveryFee == 0 ? '무료배송' : #numbers.formatInteger(cart.productVariants.product.deliveryFee, 3, 'COMMA') + '원'}">
+                        </td>
+                        <!--<td>
+                            <div class="price-info">
+                                &lt;!&ndash;<del>[[${#numbers.formatInteger(cart.productVariants.product.price, 3, 'COMMA') + '원'}]]</del>&ndash;&gt;
+                                <span class="discount-price" th:attr="id='total-' + ${cart.cartId}" th:text="${#numbers.formatInteger(
+                                                ((cart.productVariants.price
+                                                - (cart.productVariants.price * cart.productVariants.product.discount / 100))
+                                                * cart.count)
+                                                + (cart.productVariants.product.deliveryFee != 0 ? cart.productVariants.product.deliveryFee : 0),
+                                                1, 'COMMA')}"></span>원
+                            </div>
+                        </td>-->
+                    </tr>
+                    <!-- 장바구니가 비어있을 때 메시지 -->
+                    <tr th:if="${#lists.isEmpty(cartList)}" style="text-align: center;">
+                        <td colspan="9">
+                            장바구니가 비어 있습니다.
+                        </td>
+                    </tr>
+
+                    <!-- 장바구니가 비어있을 때 메시지(새로고침 하기 전) -->
+                    <tr id="empty-cart-message" style="display: none; text-align: center;">
+                        <td colspan="9">
+                            장바구니가 비어 있습니다.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- 선택지 영역 -->
+            <div class="cart-options">
+                <button class="delete-selected" onclick="deleteSelectedItems()">선택상품 삭제</button>
+            </div>
+
+            <!-- 결제 정보 -->
+            <aside class="checkout-summary">
+                <div class="checkout-details">
+                    <div class="checkout-row">
+                        <div class="checkout-column">
+                            <p>총 판매가</p>
+                            <span class="checkout-total-price">0원</span>
+                        </div>
+                        <p class="minus">-</p>
+                        <div class="checkout-column">
+                            <p>총 할인금액</p>
+                            <span class="checkout-total-discount">0원</span>
+                        </div>
+                        <p class="plus">+</p>
+                        <div class="checkout-column">
+                            <p>배송비</p>
+                            <span class="checkout-total-shipping">0원</span>
+                        </div>
+                    </div>
+                    <div class="checkout-row total">
+                        <p>총 결제예상금액</p>
+                        <span class="checkout-total-amount">0원</span>
+                    </div>
+                    <p class="shipping-notice">배송비는 쿠폰할인금액에 따라 변경될 수 있습니다.</p>
+                </div>
+                <div class="checkout-buttons">
+                    <button class="checkout-btn outlined" onclick="orderSelectedItems()">선택주문</button>
+                    <button class="checkout-btn filled" onclick="orderAllItems()">전체주문</button>
+                </div>
+            </aside>
+
+        </section>
+    </main>
+    <footer th:replace="~{/include/footer.html}"></footer>
+</div>
+</body>
+
+<script>
+
+    // 체크된 항목 개수 업데이트 함수
+    function updateSelectedCount() {
+        const selectedCount = document.querySelectorAll(".checkboxes:checked").length;
+        const selectOrderButton = document.querySelector(".checkout-btn.outlined");
+
+        // 선택된 개수로 버튼 텍스트 업데이트
+        if (selectedCount == 0) {
+            selectOrderButton.innerText = `선택주문`;
+        } else {
+            selectOrderButton.innerText = `선택주문(${selectedCount})`;
+        }
+
+    }
+
+    // 전체 선택 체크박스 클릭 시 전체 선택
+    function toggleSelectAll(selectAllCheckbox) {
+        // 체크박스를 모두 불러옴
+        const checkboxes = document.querySelectorAll(".checkboxes")
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+        updateSelectedCount(); // 선택 개수 업데이트
+        updateSummary();
+    }
+
+    // 개별 체크박스 클릭 시
+    function toggleCheckbox(checkbox) {
+        const checkboxes = document.querySelectorAll(".checkboxes");
+        const selectAllCheckbox = document.getElementById("selectAll");
+        const allChecked = Array.from(checkboxes).every(function (cb) {
+            return cb.checked;
+        });
+        selectAllCheckbox.checked = allChecked;
+        updateSelectedCount(); // 선택 개수 업데이트
+        updateSummary()
+
+    }
+
+    // 총 합계 계산
+    function updateSummary() {
+        let totalPrice = 0;
+        let totalDiscount = 0;
+        let totalShipping = 0;
+
+        // 선택된 체크박스에 대해 반복
+        document.querySelectorAll('.checkboxes:checked').forEach(checkbox => {
+            const cartId = checkbox.value;
+            console.log('cartId : ' + cartId);
+
+            // 선택한 항목의 가격, 할인율, 배송비, 수량 요소 가져오기
+            const priceElement = document.getElementById(`price-${cartId}`);
+            console.log('priceElement : ' + priceElement);
+            const discountElement = priceElement ? priceElement.nextElementSibling : null; // 할인 요소
+            const shippingElement = document.getElementById(`delivery-${cartId}`);
+            const quantityElement = document.getElementById(`quantity-${cartId}`);
+
+            // 가격을 0으로 초기화하여 가격이 없을 경우에도 계산이 진행되도록 설정
+            const price = priceElement ? Math.floor(parseInt(priceElement.innerText.replace(/[^0-9]/g, ''))) : 0;
+            const discountRate = discountElement ? Math.floor(parseInt(discountElement.innerText.replace(/[^0-9]/g, ''))) : 0;
+            const shippingFee = shippingElement && shippingElement.innerText !== '무료배송' ?
+                Math.floor(parseInt(shippingElement.innerText.replace(/[^0-9]/g, ''))) : 0;
+            const quantity = quantityElement ? Math.floor(parseInt(quantityElement.value)) : 0;
+
+            // 할인 금액 계산 후 내림 처리
+            const discountAmount = Math.floor(price * (discountRate / 100) * quantity);
+
+            // 총 판매가, 총 할인 금액, 총 배송비를 합산
+            totalPrice += price * quantity;
+            totalDiscount += discountAmount;
+            totalShipping += shippingFee;
+        });
+
+        // 계산된 합계 정보를 checkout-summary에 표시
+        document.querySelector('.checkout-total-price').textContent = `${Math.floor(totalPrice).toLocaleString()}원`;
+        document.querySelector('.checkout-total-discount').textContent = `${Math.floor(totalDiscount).toLocaleString()}원`;
+        document.querySelector('.checkout-total-shipping').textContent = `${Math.floor(totalShipping).toLocaleString()}원`;
+
+        // 총 결제 예상 금액 계산 및 표시
+        const totalAmount = Math.floor(totalPrice - totalDiscount + totalShipping);
+        document.querySelector('.checkout-row.total span').textContent = `${totalAmount.toLocaleString()}원`;
+    }
+
+
+    // 체크박스와 수량 필드에 이벤트 리스너 추가
+    document.querySelectorAll('.checkboxes').forEach(checkbox => {
+        checkbox.addEventListener('change', updateSummary);
+    });
+
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('input', updateSummary);
+    });
+
+
+
+
+    // 장바구니 항목 삭제
+    function deleteSelectedItems() {
+        const selectItems = Array.from(document.querySelectorAll(".checkboxes:checked")).map(cb => cb.value);
+        if (selectItems.length == 0) {
+            alert("삭제할 항목을 선택하세요.");
+            return;
+        }
+
+        // AJAX 요청 보내서 체크된 항목 삭제
+        fetch('/lotteon/product/cart/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({cartItems: selectItems})
+        })
+
+            .then(response => {
+                if (response.ok) {
+                    // 성공적으로 삭제 후 알림 표시
+                    alert("정상적으로 삭제되었습니다.");
+                    // 성공적으로 삭제된 체크박스의 항목을 DOM에서 제거
+                    selectItems.forEach(itemId => {
+                        const row = document.getElementById(`cart-item-${itemId}`);
+                        if (row) {
+                            row.remove(); // DOM에서 해당 항목을 제거
+                        }
+                    });
+
+                    // 장바구니가 비어 있는지 확인
+                    const remainingItems = document.querySelectorAll(".checkboxes").length;
+                    const emptyCartMessage = document.getElementById("empty-cart-message");
+                    if (remainingItems === 0) {
+                        emptyCartMessage.style.display = "table-row";   // 메시지 표시
+                        // 전체 선택 체크박스 체크 해제
+                        document.getElementById("selectAll").checked = false; // 체크 해제
+                    } else {
+                        emptyCartMessage.style.display = "none"; // 메시지 숨김
+                    }
+
+                } else {
+                    alert("삭제 중 오류가 발생했습니다.");
+                }
+            })
+            .catch(error => {
+                console.error("Error :" + error);
+                alert("삭제 중 오류가 발생했습니다.");
+            })
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        updateSelectedCount(); // 페이지 로드 시 초기 선택 개수 표시
+
+    });
+
+    function selectAllAndUpdate() {
+        const selectAllCheckbox = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll(".checkboxes");
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = true;
+        });
+        selectAllCheckbox.checked = true;
+
+        if (confirm('주문하기 창으로 넘어가시겠습니까?'))
+        {
+            updateSummary();
+            setTimeout(() => {
+                console.log("계산 중...");
+            }, 4000);  // 0.5초 후에 다시 시도
+
+        } else {
+            this.prefix();
+        }
+
+    }
+
+</script>
+
+<script>
+    // 선택된 항목을 서버에 전송하고 주문 페이지로 이동하는 함수
+    function orderSelectedItems() {
+        const selectedCartIds = Array.from(document.querySelectorAll(".checkboxes:checked")).map(cb => cb.value);
+        console.log('selectedCartIds : ' + selectedCartIds);
+
+        // 체크된 cartId와 수량 정보를 객체 배열로 만듦
+        const selectedItems = selectedCartIds.map(id => {
+            const countElement = document.querySelector(`#quantity-${id}`);
+            return {
+                cartId: parseInt(id),  // cartId를 key로 사용
+                count: countElement ? parseInt(countElement.value) : 0  // count를 value로 사용
+            };
+        });
+
+        console.log('selectedItems : ', selectedItems); // [{ "106": 2 }, { "107": 3 }]
+
+        if (selectedCartIds.length === 0) {
+            alert("선택 주문할 항목을 선택하세요.");
+            return;
+        }
+
+        fetch('/lotteon/product/cart/selected', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(selectedItems)
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "/lotteon/product/order";
+                } else {
+                    alert("주문 처리 중 오류가 발생했습니다.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("주문 처리 중 오류가 발생했습니다.");
+            });
+    }
+
+    // 전체 항목을 주문 페이지로 전송하는 함수
+    function orderAllItems() {
+        const allCartIds = Array.from(document.querySelectorAll(".checkboxes")).map(cb => cb.value);
+
+        // 체크된 cartId와 수량 정보를 객체 배열로 만듦
+        const selectedItems = allCartIds.map(id => {
+            const countElement = document.querySelector(`#quantity-${id}`);
+            return {
+                cartId: parseInt(id),  // cartId를 key로 사용
+                count: countElement ? parseInt(countElement.value) : 0  // count를 value로 사용
+            };
+        });
+
+        console.log('selectedItems : ', selectedItems); // [{ "106": 2 }, { "107": 3 }]
+
+        if (allCartIds.length === 0) {
+            alert("주문할 항목이 없습니다.");
+            return;
+        }
+
+        fetch('/lotteon/product/cart/selected', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(selectedItems)
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "/lotteon/product/order";
+                } else {
+                    alert("주문 처리 중 오류가 발생했습니다.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("주문 처리 중 오류가 발생했습니다.");
+            });
+    }
+</script>
+
+</html>
+

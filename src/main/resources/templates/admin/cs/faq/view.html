@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자주묻는질문 보기</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_view.css}"/>
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">자주묻는질문</a>
+            </div>
+            <h3>자주묻는질문 보기</h3>
+
+            <div class="form">
+                <div class="inquiry-section">
+                    <table class="inquiry-table">
+
+                        <tr>
+                            <td class="label">유형</td>
+                            <td>[[${board.cate.parent.name}]]&nbsp;-&nbsp;[[${board.cate.name}]]</td>
+                        </tr>
+                        <tr>
+                            <td class="label">제목</td>
+                            <td th:text="${board.title}"></td>
+                        </tr>
+                        <tr class="content">
+                            <td class="label">내용</td>
+                            <td th:text="${board.content}"></td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="buttons">
+                    <button class="delete-btn" disabled>삭제</button>
+                    <a th:href="@{/admin/cs/faq/modify/{boardId}(boardId=${board.boardId})}" class="modify-btn">수정</a>
+                    <a th:href="@{/admin/cs/faq/list}" class="back-btn">목록</a>
+                </div>
+            </div>
+
+        </section>
+        <!--/section-->
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

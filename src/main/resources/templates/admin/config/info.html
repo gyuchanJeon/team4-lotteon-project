@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>기본설정</title>
+
+  <!--공통 css 부분-->
+  <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+  <!--각 페이지(section) 개별 css-->
+  <link rel="stylesheet" th:href="@{/css/admin/style_admin_config_basic.css}"/>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+      const logoForm = document.querySelector('#logoForm');
+      logoForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(logoForm);
+        fetch(logoForm.action, {
+          method: 'POST',
+          body: formData
+        })
+                .then(response => {
+                  if (!response.ok) throw new Error('네트워크 오류 발생');
+                  return response.json();
+                })
+                .then(responseData => {
+                  alert('로고 수정이 완료되었습니다.');
+                  window.location.reload();
+                })
+                .catch(error => alert('로고 수정 중 오류가 발생했습니다.'));
+      });
+
+      const submitJsonForm = (form) => {
+        form.addEventListener('submit', function(event) {
+          event.preventDefault();
+
+          let isModified = false;
+
+          form.querySelectorAll('input[type="text"]').forEach(input => {
+            const originalValue = input.getAttribute('data-original');
+            const currentValue = input.value;
+            if (originalValue !== currentValue) {
+              isModified = true;
+            }
+          });
+
+          if (!isModified) {
+            alert('변경된 사항이 없습니다.');
+            return;
+          }
+
+          const isConfirmed = confirm('정말 수정하시겠습니까?');
+          if (!isConfirmed) return;
+
+          const formData = new FormData(form);
+          const jsonData = {};
+          formData.forEach((value, key) => jsonData[key] = value);
+
+          fetch(form.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonData),
+          })
+                  .then(response => {
+                    if (!response.ok) throw new Error('네트워크 오류 발생');
+                    return response.json();
+                  })
+                  .then(responseData => {
+                    alert('수정이 완료되었습니다.');
+                    window.location.reload();
+                  })
+                  .catch(error => alert('수정 중 오류가 발생했습니다.'));
+        });
+      };
+
+      // 일반 폼에 적용
+      const jsonForms = document.querySelectorAll('.json-form');
+      jsonForms.forEach(submitJsonForm);
+
+    });
+  </script>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+  <div id="wrapper">
+    <aside th:replace="~{/admin/include/aside.html}"></aside>
+    <!--section-->
+    <section>
+      <div class="breadcrumb">
+        <a href="#">Home</a> > <a href="#">환경설정</a> > <a href="#" class="location">기본설정</a>
+      </div>
+      <h3>기본설정</h3>
+
+      <div class="form">
+        <div class="version-header">
+          <h4>버전정보</h4>
+          <p class="sub-title">현재 사이트 버전입니다.</p>
+        </div>
+
+        <div class="inquiry-section">
+          <table class="inquiry-table">
+            <tr>
+              <td class="label">사이트 버전</td>
+              <td>
+                [[${appInfo.appVersion}]]
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="version-header">
+          <h4>사이트</h4>
+          <p class="sub-title">브라우저 탭, 헤더 및 푸터 노출 정보입니다</p>
+        </div>
+        <form class="json-form" id="infoForm" action="/lotteon/admin/config/info" method="post">
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">제목</td>
+                <td>
+                  <input type="text" name="title" th:value="${info.title}" th:attr="data-original=${info.title}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">부제</td>
+                <td>
+                  <input type="text" name="subTitle" th:value="${info.subTitle}" th:attr="data-original=${info.subTitle}"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>로고</h4>
+          <p class="sub-title">브라우저 탭, 헤더 및 푸터 노출 로고입니다</p>
+        </div>
+        <form id="logoForm" action="/lotteon/admin/config/logo" method="post" enctype="multipart/form-data">
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">헤더로고</td>
+                <td>
+                  <div class="file-upload file">
+                    <input type="file" id="headerLogo" name="headerLogo" />
+                    크기 370 x 76 권장
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">푸터로고</td>
+                <td>
+                  <div class="file-upload file">
+                    <input type="file" id="footerLogo" name="footerLogo"  />
+                    크기 155 x 36 권장
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">파비콘</td>
+                <td>
+                  <div class="file-upload file">
+                    <input type="file" id="favicon" name="favicon" />
+                    크기 32 x 32 권장
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>기업정보</h4>
+          <p class="sub-title">푸터에 노출되는 기업 정보입니다.</p>
+        </div>
+        <form class="json-form" id="companyForm" action="/lotteon/admin/config/company" method="post">
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">상호명</td>
+                <td>
+                  <input type="text" name="companyName" th:value="${info.companyName}" th:attr="data-original=${info.companyName}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">대표이사</td>
+                <td>
+                  <input type="text" name="companyCeo" th:value="${info.companyCeo}" th:attr="data-original=${info.companyCeo}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">사업자등록번호</td>
+                <td>
+                  <input type="text" name="companyBusinessNumber" th:value="${info.companyBusinessNumber}" th:attr="data-original=${info.companyBusinessNumber}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">통신판매업신고</td>
+                <td>
+                  <input type="text" name="mosaNumber" th:value="${info.mosaNumber}" th:attr="data-original=${info.mosaNumber}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">기본주소</td>
+                <td>
+                  <input type="text" name="companyAddress" th:value="${info.companyAddress}" th:attr="data-original=${info.companyAddress}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">상세주소</td>
+                <td>
+                  <input type="text" name="companyAddress2" th:value="${info.companyAddress2}" th:attr="data-original=${info.companyAddress2}"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>고객센터 정보</h4>
+          <p class="sub-title">푸터에 노출되는 고객센터 정보입니다.</p>
+        </div>
+        <form class="json-form" id="csForm" action="/lotteon/admin/config/cs" method="post">
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">전화번호</td>
+                <td>
+                  <input type="text" name="csHp" th:value="${info.csHp}" th:attr="data-original=${info.csHp}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">업무시간</td>
+                <td>
+                  <input type="text" name="csWorkingHours" th:value="${info.csWorkingHours}" th:attr="data-original=${info.csWorkingHours}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">이메일</td>
+                <td>
+                  <input type="text" name="csEmail" th:value="${info.csEmail}" th:attr="data-original=${info.csEmail}"/>
+                </td>
+              </tr>
+              <tr>
+                <td class="label">전자금융거래 분쟁담당</td>
+                <td>
+                  <input type="text" name="consumer" th:value="${info.consumer}" th:attr="data-original=${info.consumer}"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+
+        <div class="version-header">
+          <h4>카피라이트</h4>
+          <p class="sub-title">푸터에 노출되는 카피라이트 정보입니다.</p>
+        </div>
+        <form class="json-form" id="copyrightForm" action="/lotteon/admin/config/copyright" method="post">
+          <div class="inquiry-section">
+            <table class="inquiry-table">
+              <tr>
+                <td class="label">카피라이트</td>
+                <td>
+                  <input type="text" name="copyright" th:value="${info.copyright}" th:attr="data-original=${info.copyright}"/>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="buttons">
+            <button type="submit" class="write-btn">수정하기</button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <!-- /Section -->
+  </div>
+</main>
+
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문현황</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_order_list.css}"/>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">주문관리</a> >
+                <a href="#" class="location">주문현황</a>
+            </div>
+            <h3>주문현황</h3>
+            <div class="form">
+                <div class="search-bar">
+                    <select id="search-category" class="dropdown">
+                        <option>주문번호</option>
+                        <option>주문자</option>
+                        <option>주문자명</option>
+                    </select>
+                    <input type="text" placeholder="검색어 입력" class="search-input"/>
+                    <button class="search-btn">검색</button>
+                </div>
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 11%" />
+                        <col style="width: 14%" />
+                        <col style="width: 9%" />
+                        <col style="width: 15%" />
+                        <col style="width: 9%" />
+                        <col style="width: 9%" />
+                        <col style="width: 9%" />
+                        <col style="width: 10%" />
+                        <col style="width: 14%" />
+                        <col style="width: 10%" />
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>주문번호</th>
+                        <th>주문자</th>
+                        <th>주문자명</th>
+                        <th>상품명</th>
+                        <th>주문건수</th>
+                        <th>주문합계</th>
+                        <th>결제수단</th>
+                        <th>주문상태</th>
+                        <th>주문일</th>
+                        <th>배송</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="product : ${products}">
+                        <td>
+                            <a href="#" class="open-modal-btn" th:onclick="'openOrderDetailModal(' + ${product.order.orderId} + ')'" th:text="${product.order.orderId}"></a>
+                        </td>
+                        <td th:each="user : ${users}"
+                            th:if="${user.memberInfo != null and product.order != null and product.order.memberInfo != null and user.memberInfo.memberInfoId == product.order.memberInfo.memberInfoId}">
+                            <p th:text="${user.uid}"></p>
+                        </td>
+                        <td th:text="${product.order.memberInfo.getName()}">김유신</td>
+                        <td th:text="${not #lists.isEmpty(product.matchedOrderItems) ? product.matchedOrderItems[0].productVariant.product.name : '상품선택 안함'}">상품명</td>
+                        <td th:text="${not #lists.isEmpty(product.matchedOrderItems) ? #lists.size(product.matchedOrderItems) : '수량선택 안함'}">0</td>
+                        <td th:text="${#numbers.formatInteger(product.order.getTotalPrice(), 0, 'COMMA')}"></td>
+                        <td th:switch="${product.order.getPayment()}">
+                            <span th:case="1">카카오페이</span>
+                            <span th:case="2">토스</span>
+                            <span th:case="3">페이코</span>
+                            <span th:case="4">무통장입금</span>
+                            <span th:case="5">네이버페이</span>
+                        </td>
+                        <td th:switch="${product.order.getStatus()}">
+                            <span th:case="0">미결제상태</span>
+                            <span th:case="1">결제완료</span>
+                        </td>
+                        <td th:text="${#temporals.format(product.order.buyDate, 'yyyy-MM-dd HH:mm:ss')}">2024-11-11 18:11:29</td>
+                        <td>
+                            <a href="#"
+                               class="delivery-btn"
+                               th:classappend="${product.order.orderItems[0]?.delivery?.deliveryWaybill != null} ? 'disabled' : ''"
+                               th:style="${product.order.orderItems[0]?.delivery?.deliveryWaybill != null} ? 'color: gray; cursor: not-allowed; pointer-events: none;' : ''"
+                               th:data-order-id="${product.order.orderId}"
+                               th:data-recip-name="${product.order.recipName}"
+                               th:data-recip-zip="${product.order.recipZip}"
+                               th:data-recip-addr1="${product.order.recipAddr1}"
+                               th:data-recip-addr2="${product.order.recipAddr2}">
+                                배송하기
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <span class="page-btn" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a th:if="${currentPage > 0}"
+                           th:href="@{/admin/order/list(page=${currentPage - 1}, size=${products.size})}">이전</a>
+                        <span th:if="${currentPage == 0}">이전</span>
+                    </span>
+                    <span style="margin-top: 10px" th:with="startPage=${T(java.lang.Math).max(0, currentPage - 2)},
+                       endPage=${T(java.lang.Math).min(products.totalPages - 1, currentPage + 2)}">
+                        <span th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                              th:classappend="${currentPage == i} ? 'active'">
+                            <a class="page-num" th:href="@{/admin/order/list(page=${i}, size=${products.size})}"
+                               th:text="${i + 1}"></a>
+                        </span>
+                    </span>
+                        <span class="page-btn" th:classappend="${currentPage + 1 == products.totalPages} ? 'disabled'">
+                        <a th:if="${currentPage + 1 < products.totalPages}"
+                           th:href="@{/admin/order/list(page=${currentPage + 1}, size=${products.size})}">다음</a>
+                        <span th:if="${currentPage + 1 == products.totalPages}">다음</span>
+                    </span>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- 배송 등록 모달 -->
+<div id="versionRegisterModal" class="modal2">
+    <div class="modal-content2">
+        <div class="modal-header2">
+            <h4>배송입력</h4>
+            <span id="registerModalClose" class="close">&times;</span>
+        </div>
+        <div class="modal-body2">
+            <form id="versionRegisterForm">
+                <table class="modal-table2">
+                    <tr>
+                        <th>주문번호</th>
+                        <td><input type="text" id="versionInput" readonly></td>
+                    </tr>
+                    <tr>
+                        <th>수령인</th>
+                        <td><input type="text" id="recipientInput" required></td>
+                    </tr>
+                    <tr>
+                        <th>우편번호</th>
+                        <td><input type="text" id="zipcodeInput" required></td>
+                    </tr>
+                    <tr>
+                        <th>기본주소</th>
+                        <td><input type="text" id="addressInput" required></td>
+                    </tr>
+                    <tr>
+                        <th>상세주소</th>
+                        <td><input type="text" id="detailedAddressInput" required></td>
+                    </tr>
+                    <tr>
+                        <th>택배사</th>
+                        <td>
+                            <select id="deliveryCompany" class="dropdown">
+                                <option value="">택배사 선택</option>
+                                <option value="롯데택배">롯데택배</option>
+                                <option value="로젠택배">로젠택배</option>
+                                <option value="CJ대한통운">CJ대한통운</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>운송장번호</th>
+                        <td><input type="text" id="trackingNumberInput" placeholder="발급받은 택배사 송장번호 입력" required></td>
+                    </tr>
+                    <tr>
+                        <th>기타</th>
+                        <td>
+                            <textarea id="additionalInfo" placeholder="기타정보 입력" required></textarea>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer2">
+            <button id="registerConfirmBtn"  class="confirm-btn">등록하기</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 주문상세 모달 -->
+<div id="versionModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>주문상세</h4>
+            <span id="versionModalClose" class="close">&times;</span> <!-- id 추가 -->
+        </div>
+        <div class="modal-body">
+            <div>
+                <h2 class="sub-title">상품정보</h2>
+                <table class="product-info-table">
+                    <input type="hidden" id="orderId" name="orderId" />
+                    <colgroup>
+                        <col style="width: 10%">
+                        <col style="width: 7%">
+                        <col style="width: 9%">
+                        <col style="width: 10%">
+                        <col style="width: 9%">
+                        <col style="width: 8%">
+                        <col style="width: 6%">
+                        <col style="width: 7%">
+                        <col style="width: 7%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>상품이미지</th>
+                        <th>상품번호</th>
+                        <th>상품명</th>
+                        <th>판매자</th>
+                        <th>가격</th>
+                        <th>할인</th>
+                        <th>수량</th>
+                        <th>배송비</th>
+                        <th>결제금액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each=" product : ${products}" th:if="${product.order.orderId == 172}">
+                        <td><img src="product_image_1.jpg" alt="상품1" class="product-img"></td>
+                        <td th:text="${product.order?.productVariants?.variant_id ?: 'null'}"></td>
+                        <td th:text="${product.order?.productVariants?.product?.name ?: 'null'}"></td>
+                        <td id="sellerName" th:text="${product.order?.productVariants?.product?.sellerInfoId?.comName ?: 'null'}"></td>
+                        <td id="productPrice" th:text="${product.order?.productVariants?.price ?: 'null'}"></td>
+                        <td id="discount" th:text="${product.order?.productVariants?.product?.discount ?: 'null'} + '%'" ></td>
+                        <td>
+                            <!-- <span th:each="item : ${product.order?.orderItems}" th:text="${item ?: 'null'}" th:append="' '"></span> -->
+                            test
+                        </td>
+                        <td id="deliveryFee" th:text="${product.order?.productVariants?.product?.deliveryFee ?: 'null'}"></td>
+                        <td id="totalPrice" th:text="${product.order?.totalPrice ?: 'null'}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 금액 정보가 들어갈 박스 -->
+            <div class="total-info-box">
+                <div class="total-info-row">
+                    <span>총 상품금액</span>
+                    <span class="price-with-unit" id="total-info_price">107,000</span>
+                </div>
+                <div class="total-info-row">
+                    <span>총 할인금액</span>
+                    <span class="price-with-unit" id="total-info_discount">-7,100</span>
+                </div>
+                <div class="total-info-row">
+                    <span>배송비</span>
+                    <span class="price-with-unit" id="total-info_delivery">3,000</span>
+                </div>
+                <div class="total-info-row total-payment">
+                    <span>총 결제금액</span>
+                    <span>102,900</span>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="sub-title2">결제정보</h2>
+                <table class="pay-info-table">
+                    <colgroup>
+                        <col style="width: 13%;">
+                        <col style="width: 75%;">
+                    </colgroup>
+                    <tr>
+                        <th>주문번호</th>
+                        <td id="pay-orderId">
+                            10121211341
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>결제방법</th>
+                        <td id="pay-payment">
+                            신용카드 / 1234 **** **** 4432
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>주문자/연락처</th>
+                        <td id="pay-customer">
+                            김유신/010-1234-1234
+                        </td>
+                    </tr>
+                    <tr class="last-tr">
+                        <th>결제상태</th>
+                        <td class="clear">
+                            <div class="payment-status">
+                                <span id="pay-state">결제완료</span>
+                                <span class="total" id="pay-totalPrice">총 결제금액</span> <span class="total-amount price-with-unit">102,900</span>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h2 class="sub-title3">배송정보</h2>
+                <table class="delivery-info-table">
+                    <colgroup>
+                        <col style="width: 13%;">
+                        <col style="width: 75%;">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>수취인</th>
+                        <td id="recipName">
+                            김유신
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>연락처</th>
+                        <td id="recipHp">
+                            010-1234-1234
+                        </td>
+                    </tr>
+                    <tr class="last-tr">
+                        <th>배송지 주소</th>
+                        <td id="recipAddr">
+                            부산 부산진구 123-11 10층
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+<!-- 자바스크립트 코드 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('versionModal');
+        const closeModalBtn = document.getElementById('versionModalClose');
+
+        // a 태그에 open-modal-btn 클래스가 있을 때 모달 열기
+        document.querySelectorAll('a.open-modal-btn').forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault(); // 기본 동작(페이지 이동) 방지
+                modal.style.display = 'block';
+            });
+        });
+
+        // 닫기 버튼 클릭 시 모달 닫기
+        closeModalBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+
+        // 모달 외부 클릭 시 모달 닫기
+        window.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 배송하기 버튼 이벤트 추가
+        const deliveryButtons = document.querySelectorAll('.delivery-btn');
+
+        deliveryButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                // 버튼이 비활성화 상태라면 아무 작업도 하지 않음
+                if (button.classList.contains('disabled')) {
+                    alert('결제 완료된 주문만 배송 등록이 가능합니다.');
+                    return;
+                }
+
+                // 주문 정보 가져오기
+                const orderId = this.closest('tr').querySelector('td:nth-child(1) a').textContent.trim();
+                const recipientName = this.closest('tr').querySelector('td:nth-child(3)').textContent.trim();
+                const zipcode = button.getAttribute('data-recip-zip');
+                const address1 = button.getAttribute('data-recip-addr1');
+                const address2 = button.getAttribute('data-recip-addr2');
+
+                // 배송 입력 모달에 데이터 삽입
+                document.getElementById('versionInput').value = orderId || '';
+                document.getElementById('recipientInput').value = recipientName || '';
+                document.getElementById('zipcodeInput').value = zipcode; // 우편번호는 기본값
+                document.getElementById('addressInput').value = address1; // 기본 주소는 기본값
+                document.getElementById('detailedAddressInput').value = address2; // 상세 주소는 기본값
+                document.getElementById('additionalInfo').value = ''; // 기타 정보 기본값
+                document.getElementById('trackingNumberInput').value = ''; // 운송장 번호 기본값
+
+                // 모달 열기
+                document.getElementById('versionRegisterModal').style.display = 'block';
+            });
+        });
+
+        // 배송 등록 모달 닫기 버튼
+        const closeBtn = document.getElementById('registerModalClose');
+        closeBtn.addEventListener('click', function () {
+            document.getElementById('versionRegisterModal').style.display = 'none';
+        });
+
+        // 외부 클릭 시 모달 닫기
+        window.addEventListener('click', function (event) {
+            const modal = document.getElementById('versionRegisterModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // 여기서 "등록하기" 버튼 이벤트 추가
+        document.getElementById('registerConfirmBtn').onclick = async function () {
+            // 필요한 데이터만 객체로 구성
+            const orderId = document.getElementById('versionInput').value; // orderId 값을 가져옴
+            const orderData = {
+                deliveryCompany: document.getElementById('deliveryCompany').value,
+                deliveryWaybill: document.getElementById('trackingNumberInput').value
+            };
+
+            try {
+                const response = await fetch(`/lotteon/admin/order/delivery/save?orderId=${orderId}`, { // orderId를 쿼리 파라미터로 추가
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Error response text:', errorText);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('저장된 배송 정보:', data);
+                alert('배송 정보가 성공적으로 저장되었습니다.');
+            } catch (error) {
+                console.error('배송 정보 저장 중 오류 발생:', error);
+                alert('배송 정보 저장에 실패했습니다.');
+            }
+        };
+    });
+</script>
+</html>

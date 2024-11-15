@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기본설정</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_config_banner.css}"/>
+
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <!--section-->
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">환경설정</a> > <a href="#" class="location">배너관리</a>
+            </div>
+            <h3>배너관리</h3>
+            <div class="form">
+                <div class="tab-container">
+                    <a th:href="@{/admin/config/banner/MAIN1}" class="tab"
+                       th:classappend="${locationNow == 'MAIN1'} ? 'active' : ''">메인상단 배너</a>
+                    <a th:href="@{/admin/config/banner/MAIN2}" class="tab"
+                       th:classappend="${locationNow == 'MAIN2'} ? 'active' : ''">메인슬라이더 배너</a>
+                    <a th:href="@{/admin/config/banner/PRODUCT1}" class="tab"
+                       th:classappend="${locationNow == 'PRODUCT1'} ? 'active' : ''">상품 상세보기 배너</a>
+                    <a th:href="@{/admin/config/banner/MEMBER1}" class="tab"
+                       th:classappend="${locationNow == 'MEMBER1'} ? 'active' : ''">회원로그인 배너 </a>
+                    <a th:href="@{/admin/config/banner/MY1}" class="tab"
+                       th:classappend="${locationNow == 'MY1'} ? 'active' : ''">마이페이지 배너</a>
+                </div>
+                <div class="version-header">
+                    <th:block th:switch="${locationNow}">
+                        <h4 th:case="'MAIN1'">메인상단 배너</h4>
+                        <h4 th:case="'MAIN2'">메인슬라이더 배너</h4>
+                        <h4 th:case="'PRODUCT1'">상품 상세보기 배너</h4>
+                        <h4 th:case="'MEMBER1'">회원로그인 배너</h4>
+                        <h4 th:case="'MY1'">마이페이지 배너</h4>
+                        <h4 th:case="*">기타 배너</h4>
+                    </th:block>
+                </div>
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 1%">
+                        <col style="width: 7%">
+                        <col style="width: 9%">
+                        <col style="width: 14%">
+                        <col style="width: 10%">
+                        <col style="width: 8%">
+                        <col style="width: 8%">
+                        <col style="width: 7%">
+                        <col style="width: 7%">
+                        <col style="width: 10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
+                        <th>번호</th>
+                        <th>이미지</th>
+                        <th>배너정보</th>
+                        <th>배너위치</th>
+                        <th>시작일</th>
+                        <th>종료일</th>
+                        <th>시작시간</th>
+                        <th>종료시간</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="banner, index : ${configBanners}">
+                        <td><input type="checkbox" class="checkbox"></td>
+                        <td>[[${index.index+1}]]</td>
+                        <td><a th:href="@{'/uploads/config/' + ${banner.img}}"><img th:src="@{'/uploads/config/' + ${banner.img}}" alt="배너 사진" class="product-image"></a></td>
+                        <td><span>[[${banner.name}]]</span>
+                            <span>[[${banner.size}]]</span>
+                            <span>[[${banner.background}]]<span class="backColor" th:style="'background: ' + ${banner.background}">　　</span></span>
+                            <span><a th:href="${banner.link}">[[${banner.link}]]</a></span></td>
+                        <td>[[${banner.location}]]</td>
+                        <td>[[${banner.sDate}]]</td>
+                        <td>[[${banner.eDate}]]</td>
+                        <td>[[${banner.sTime}]]</td>
+                        <td>[[${banner.eTime}]]</td>
+                        <td>
+                            <th:block th:if="${banner.state} == 0">
+                                <button class="edit-btn">활성</button>
+                            </th:block>
+                            <th:blcok th:unless="${banner.state} == 0">
+                                <button class="deletebtn disableBtn">비활성</button>
+                            </th:blcok>
+                        </td>
+                        <input type="hidden" th:value="${banner.bannerId}" class="bannerId"/>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="buttons">
+                    <button class="delete-btn" id="deleteBtn">선택 삭제</button>
+                    <a href="#" id="openRegisterModalBtn" class="write-btn">배너등록</a>
+                </div>
+
+            </div>
+        </section>
+        <!-- /Section -->
+    </div>
+</main>
+
+<!-- 버전 등록 모달 -->
+<div id="versionRegisterModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>배너등록</h4>
+            <span id="registerModalClose" class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="versionRegisterForm" action="/lotteon/admin/config/banner" method="post" enctype="multipart/form-data">
+                <table class="modal-table">
+                    <tr>
+                        <th>배너이름</th>
+                        <td><input type="text" id="bannerName" placeholder="배너명을 입력하세요" name="name" required></td>
+                    </tr>
+                    <tr>
+                        <th>배경색</th>
+                        <td><input type="color" id="bannerBackground" name="background" required></td>
+                    </tr>
+                    <tr>
+                        <th>배너링크</th>
+                        <td><input type="text" id="bannerLink" placeholder="배너링크를 입력하세요" name="link" required></td>
+                    </tr>
+                    <tr>
+                        <th>배너위치</th>
+                        <td>
+                            <select id="bannerLocation" class="dropdown" name="location">
+                                <option>선택</option>
+                                <option>MAIN1</option>
+                                <option>MAIN2</option>
+                                <option>PRODUCT1</option>
+                                <option>MEMBER1</option>
+                                <option>MY1</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>배너크기</th>
+                        <td><input type="text" id="bannerSize" placeholder="배너위치를 선택하세요" name="size" readonly></td>
+                    </tr>
+                    <tr>
+                        <th>노출날짜</th>
+                        <td>
+                            <input type="date" id="startDate" class="date" name="sDate" required>
+                            ~
+                            <input type="date" id="endDate" class="date" name="eDate" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>노출시간</th>
+                        <td>
+                            <input type="time" id="startTime" class="date" name="sTime" required>
+                            ~
+                            <input type="time" id="endTime" class="date" name="eTime" step="600" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>배너파일</th>
+                        <td><input type="file" id="bannerImg" name="bannerImg" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="registerConfirmBtn" class="confirm-btn">등록하기</button>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+</html>
+<script>
+    // 버전 등록 모달 동작
+    document.addEventListener('DOMContentLoaded', function() {
+        var registerModal = document.getElementById("versionRegisterModal");
+        var registerBtn = document.getElementById("openRegisterModalBtn"); // 등록 버튼
+        var registerCloseBtn = document.getElementById("registerModalClose"); // 등록 모달 닫기 버튼
+
+        var confirmButton = document.getElementById("registerConfirmBtn");
+
+        // 등록 버튼 클릭 시 모달 열기
+        registerBtn.onclick = function() {
+            registerModal.style.display = "block";
+        };
+
+        // 닫기 버튼(X) 클릭 시 모달 닫기
+        registerCloseBtn.onclick = function() {
+            registerModal.style.display = "none";
+        };
+
+
+        // 모달 외부 클릭 시 모달 닫기
+        window.onclick = function(event) {
+            if (event.target == registerModal) {
+                registerModal.style.display = "none";
+            }
+        };
+
+        // 등록 확인 버튼 클릭 시
+        confirmButton.onclick = function() {
+            const formData = new FormData();
+
+            formData.append("name", document.getElementById("bannerName").value);
+            formData.append("size", document.getElementById("bannerSize").value);
+            formData.append("background", document.getElementById("bannerBackground").value);
+            formData.append("link", document.getElementById("bannerLink").value);
+            formData.append("location", document.getElementById("bannerLocation").value);
+            formData.append("sDate", document.getElementById("startDate").value);
+            formData.append("eDate", document.getElementById("endDate").value);
+            formData.append("sTime", document.getElementById("startTime").value);
+            formData.append("eTime", document.getElementById("endTime").value);
+
+            const fileInput = document.getElementById("bannerImg");
+            if (fileInput.files.length > 0) {
+                formData.append("bannerImg", fileInput.files[0]);
+            }
+            // 빈칸 체크
+            if (formData.get("name") &&
+                formData.get("size") &&
+                formData.get("background") &&
+                formData.get("link") &&
+                formData.get("location") &&
+                formData.get("sDate") &&
+                formData.get("eDate") &&
+                formData.get("sTime") &&
+                formData.get("eTime")) {
+
+
+                fetch('/lotteon/admin/config/banner', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(resp => resp.text())
+                    .then(data => {
+                        if (data.trim() === "success") {
+                            alert("배너 등록 성공!");
+                            const url = formData.get("location");
+                            // 추가 작업: 예를 들어 모달 닫기 등
+                            window.location.href = '/lotteon/admin/config/banner/'+url;
+                        } else {
+                            alert("배너 등록 실패!");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            } else {
+                alert("모든 필드를 입력해주세요.");
+            }
+        };
+
+        //체크 박스 기능
+        const selectAll = document.getElementById("selectAll");
+        const checkboxes = document.querySelectorAll('.checkbox');
+
+        selectAll.onclick = function(e) {
+            console.log("SELECT ALL");
+            selectAllCheck(e.target);
+        };
+
+        function selectAllCheck(selectAllCheckbox) {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
+
+
+        //활성화
+        const enableBtns = document.querySelectorAll('.edit-btn');
+        for (let enableBtn of enableBtns) {
+            enableBtn.onclick = function (e){
+                e.preventDefault();
+                const row = enableBtn.closest('tr');
+                const bannerId = parseInt(row.getElementsByClassName('bannerId')[0].value,10);
+                console.log(bannerId);
+
+                const jsonData = {
+                    "bannerId" : bannerId,
+                }
+
+
+                fetch('/lotteon/admin/config/banner/enable', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(resp => resp.text())
+                    .then(data => {
+                        if (data.trim() === "success") {
+                            location.reload();
+                        } else {
+                            alert("만료된 배너입니다!");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            }
+        }
+
+
+        //비활성
+        const disableBtns = document.querySelectorAll('.disableBtn');
+        for (let disableBtn of disableBtns) {
+            disableBtn.onclick = function (e){
+                e.preventDefault();
+                const row = disableBtn.closest('tr');
+                const bannerId = parseInt(row.getElementsByClassName('bannerId')[0].value,10);
+                console.log(bannerId);
+
+                const jsonData = {
+                    "bannerId" : bannerId,
+                }
+
+
+                fetch('/lotteon/admin/config/banner/disable', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(resp => resp.text())
+                    .then(data => {
+                        if (data.trim() === "success") {
+                            location.reload();
+                        } else {
+                            alert("실패했습니다!");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            }
+        }
+
+
+        //삭제
+        const deleteBtn = document.getElementById("deleteBtn");
+        deleteBtn.onclick = function (e){
+            e.preventDefault();
+
+            const selectedCheckboxes = document.querySelectorAll('.checkbox:checked');
+            console.log(selectedCheckboxes);
+
+            let selectedIds = [];
+
+            for (let checkbox of selectedCheckboxes) {
+                const row = checkbox.closest('tr');
+                const productNo = parseInt(row.getElementsByClassName('bannerId')[0].value,10);
+                console.log(productNo);
+                selectedIds.push(productNo);
+
+            }
+
+            if (selectedIds.length === 0) {
+                alert('삭제하려는 상품을 선택하세요.');
+                return;
+            }
+
+            if (!confirm('선택한 상품을 정말 삭제하시겠습니까?')) {
+                return;
+            }
+
+            fetch('/lotteon/admin/config/banner', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(selectedIds)
+            })
+                .then(resp => resp.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('삭제되었습니다.');
+                        location.reload();
+                    } else {
+                        alert('삭제에 실패했습니다.');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    alert('삭제 중 오류가 발생했습니다.');
+                });
+        }//삭제 끝
+
+        //시간 10분 조정
+        let endTime = document.getElementById("endTime");
+        endTime.addEventListener("focusout", e => {
+           console.log(endTime.value.substring(3,5));
+           endTime.value = endTime.value.substring(0,4) + "0";
+        });
+
+        //start시간 => 현재시간
+        document.getElementById('startDate').value = new Date().toISOString().substring(0, 10);
+        document.getElementById('startTime').value = new Date().toISOString().substring(11, 16);
+
+
+        //배너 위치에 따른 사이즈 조절
+        let bannerLocation = document.getElementById("bannerLocation");
+        let bannerSize= document.getElementById("bannerSize");
+        bannerLocation.addEventListener("focusout", e => {
+            switch (bannerLocation.value){
+                case "MAIN1":
+                    bannerSize.value = "1200x80"
+                    break;
+                case "MAIN2":
+                    bannerSize.value = "985x447"
+                    break;
+                case "MEMBER1":
+                    bannerSize.value = "1200x100"
+                    break;
+                case "MY1":
+                    bannerSize.value = "810x86"
+                    break;
+                case "PRODUCT1":
+                    bannerSize.value = "440x70"
+                    break;
+            }
+
+        });
+
+    });
+
+</script>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" th:href="@{/css/user/common.css}" />
+    <link rel="stylesheet" th:href="@{/css/member/join.css}" />
+</head>
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+    <main>
+        <div class="join_container">
+            <div class="lotteinfo">
+                <span class="info1">대한민국 1등 온라인 인터넷 쇼핑</span>
+                <span class="info2"><span class="info-detail">롯데 ON</span>에 오신 것을 환영합니다</span>
+            </div>
+            <div class="join_section">
+                <div class="custjoin">
+                    <div class="customer_join">일반 회원가입</div>
+                    <div class="joininfo">
+                        <span class="join1">개인구매회원 (외국인포함)</span>
+                        <span class="join2">만 14세 이상 가능</span>
+                    </div>
+                    <!-- 일반 회원가입을 클릭할 때 type=1 값을 전달 -->
+                    <a th:href="@{/member/signup(type='1')}" class="join-btn">회원가입</a>
+                </div>
+                <div class="selljoin">
+                    <div class="seller_join">판매 회원가입</div>
+                    <div class="joininfo">
+                        <span class="join1">사업자 판매회원</span>
+                        <span class="join4">사업자등록증을 보유한 회원</span>
+                    </div>
+                    <!-- 판매 회원가입을 클릭할 때 type=2 값을 전달 -->
+                    <a th:href="@{/member/signup(type='2')}" class="join-btn">회원가입</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{/include/footer.html}">
+    </footer>
+
+</body>
+
+</html>

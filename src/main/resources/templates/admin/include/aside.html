@@ -1,0 +1,147 @@
+<link rel="stylesheet" th:href="@{/css/admin/include/style_admin_aside.css}">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<aside>
+    <ul class="sidebar-menu">
+        <li sec:authorize="hasRole('ADMIN') or hasRole('member')">
+            <a href="#">환경설정</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/config/info}" data-menu="config">기본설정</a></li>
+                <li><a th:href="@{/admin/config/banner}" data-menu="config">배너관리</a></li>
+                <li><a th:href="@{/admin/config/policy}" data-menu="config">약관관리</a></li>
+                <li><a th:href="@{/admin/config/category}" data-menu="config">카테고리</a></li>
+                <li><a th:href="@{/admin/config/version}" data-menu="config">버전관리</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">상점관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/shop/list}" data-menu="shop">상점목록</a></li>
+                <li><a th:href="@{/admin/shop/sales}" data-menu="shop">매출현황</a></li>
+            </ul>
+        </li>
+        <li sec:authorize="hasRole('ADMIN') or hasRole('member')">
+            <a href="#">회원관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/member/list}" data-menu="member">회원목록</a></li>
+                <li><a th:href="@{/admin/member/point}" data-menu="member">포인트관리</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">상품관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/product/list}" data-menu="product">상품목록</a></li>
+                <li><a th:href="@{/admin/product/register}" data-menu="product">상품등록</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">주문관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/order/list}" data-menu="order">주문현황</a></li>
+                <li><a th:href="@{/admin/order/delivery}" data-menu="order">배송현황</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#">쿠폰관리</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/coupon/list}" data-menu="coupon">쿠폰목록</a></li>
+                <li><a th:href="@{/admin/coupon/issued}" data-menu="coupon">쿠폰발급현황</a></li>
+            </ul>
+        </li>
+        <li sec:authorize="hasRole('ADMIN') or hasRole('member')">
+            <a href="#">고객센터</a>
+            <ul class="submenu">
+                <li><a th:href="@{/admin/cs/notice/list}" data-menu="cs">공지사항</a></li>
+                <li><a th:href="@{/admin/cs/faq/list}" data-menu="cs">자주묻는질문</a></li>
+                <li><a th:href="@{/admin/cs/qna/list}" data-menu="cs">문의하기</a></li>
+                <li><a th:href="@{/admin/cs/recruit/list}" data-menu="cs">채용하기</a></li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+
+<script>
+    window.onload = function() {
+        const currentPath = window.location.pathname; // 현재 URL 경로
+        const activeMenu = localStorage.getItem('activeMenu'); // 저장된 활성 메뉴 가져오기
+
+        document.querySelectorAll('.sidebar-menu > li').forEach(function (menuItem) {
+            const submenu = menuItem.querySelector('.submenu');
+            let isActive = false; // 하위 메뉴가 활성화된 상태인지 여부
+
+            // 서브메뉴 항목 확인
+            if (submenu) {
+                submenu.querySelectorAll('li a').forEach(function (submenuItem) {
+                    const itemPath = submenuItem.getAttribute('href');
+                    if (currentPath.includes(itemPath)) {
+                        submenuItem.classList.add('active'); // 현재 페이지와 일치하는 메뉴에 active 클래스 추가
+                        isActive = true; // 하위 메뉴가 활성화됨
+                    }
+                });
+            }
+
+            // 하위 메뉴가 활성화된 경우 서브메뉴 펼치기
+            if (isActive || (activeMenu && submenu.querySelector(`a[data-menu="${activeMenu}"]`))) {
+                submenu.style.display = 'block'; // 서브메뉴 펼치기
+                menuItem.querySelector('a').classList.add('active'); // 부모 메뉴도 active 상태로 설정
+            }
+        });
+    };
+
+    // 서브메뉴 클릭 시 active 클래스 추가 및 저장
+    document.querySelectorAll('.sidebar-menu > li > .submenu > li > a').forEach(function (menuItem) {
+        menuItem.addEventListener('click', function (event) {
+            event.stopPropagation(); // 이벤트 전파 방지
+
+            // 모든 메뉴 항목에서 active 클래스 제거
+            document.querySelectorAll('.sidebar-menu .active').forEach(function (activeItem) {
+                activeItem.classList.remove('active');
+            });
+
+            // 클릭한 메뉴 항목에 active 클래스 추가
+            menuItem.classList.add('active');
+
+            // 모든 서브메뉴 닫기
+            document.querySelectorAll('.submenu').forEach(function (submenu) {
+                submenu.style.display = 'none';
+            });
+
+            // 클릭한 하위 메뉴의 부모 서브메뉴 펼치기
+            const parentSubmenu = menuItem.closest('.submenu');
+            if (parentSubmenu) {
+                parentSubmenu.style.display = 'block';
+            }
+
+            // 부모 메뉴 활성화
+            const parentMenu = parentSubmenu.closest('li').querySelector('a');
+            if (parentMenu) {
+                parentMenu.classList.add('active');
+            }
+
+            // 선택된 메뉴를 localStorage에 저장
+            localStorage.setItem('activeMenu', menuItem.getAttribute('data-menu'));
+        });
+    });
+
+    // 서브메뉴 보여주기 및 숨기기
+    document.querySelectorAll('.sidebar-menu > li').forEach(function (menuItem) {
+        menuItem.addEventListener('mouseenter', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.display = 'block';
+            }
+        });
+
+        menuItem.addEventListener('mouseleave', function () {
+            const submenu = menuItem.querySelector('.submenu');
+            if (!menuItem.querySelector('.active')) { // 활성화된 메뉴가 없으면 숨기기
+                submenu.style.display = 'none';
+            }
+        });
+    });
+
+
+</script>
+
+
+

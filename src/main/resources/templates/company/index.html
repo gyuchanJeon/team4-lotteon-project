@@ -1,0 +1,222 @@
+<!-- <block insert="~{/company/layout/_header.html}" xmlns="http://www.w3.org/1999/html"/>
+해더영역 
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, user-scalable=no">
+    <title>LotteON Inc. 상상하는 모든것</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../images/company/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/company/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/company/index.js"></script>
+    <script src="/js/company/header.js"></script>
+
+</head>
+<body>
+<div id="wrapper">
+    <header>
+        <div>
+            <a th:href="@{/index}"><img src="../images/company/header_logo.png" width="180" alt="로고"></a>
+            <ul>
+                <li><a th:href="@{/company/index}">home</a></li>
+                <li><a th:href="@{/company/culture}">기업문화</a></li>
+                <li><a th:href="@{/company/story}">소식과 이야기</a></li>
+                <li><a th:href="@{/company/recruit}">채용</a></li>
+                <li><a th:href="@{/company/media}">미디어</a></li>
+            </ul>
+        </div>
+    </header>
+<main id="index">
+    <div class="cover">
+        <div>
+            <p>
+                취향을, 브랜드를, 혜택을 발견하는 즐거움<br>
+                지금 롯데온에서 만나요
+            </p>
+        </div>
+    </div>
+    <section class="top-content">
+        <div>
+            <p>
+                쇼핑 좀 해본 사람들이 만든 플랫폼,<br>
+                롯데ON은 풍부한 오프라인 쇼핑 인프라, 온라인 쇼핑 노하우,<br>
+                IT기술로 세상에 없던 새로운 쇼핑 경험을 제공하고<br>
+                꼭 이용하고 싶은 온라인 쇼핑 플랫폼으로 발전하고 있어요.<br>
+            </p>
+        </div>
+    </section>
+    <section class="cs-content">
+        <div>
+            <p>
+                쇼핑을 새롭게, 세상을 이롭게 만들어나가요.
+            </p>
+        </div>
+    </section>
+    <section class="cs-section">
+        <div id="carouselExampleCaptions" class="carousel slide">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="../images/company/index_slide_1.png" class="d-block w-100" alt="슬라이드1">
+                    <div class="carousel-caption d-none d-md-block"><br>
+                        <p>
+                            고객이 원하고 만족하는<br>
+                            서비스를 만들어요</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="../images/company/index_slide_2.jpg" class="d-block w-100" alt="슬라이드2">
+                    <div class="carousel-caption d-none d-md-block">
+                        <p class="black-font">
+                            하이앤드테크로 온/오프라인<br>
+                            시너지를 만들어요
+                        </p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="../images/company/index_slide_3.jpg" class="d-block w-100" alt="슬라이드3">
+                    <div class="carousel-caption d-none d-md-block">
+                        <p>
+                            함께하는 성장,<br>
+                            세상을 더 이롭게 만들어요
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+    <section class="middel-section">
+        <div>
+            <p>
+                롯데ON은 이렇게 성장해가고 있어요.
+            </p>
+        </div>
+    </section>
+    <section class="table-section">
+        <div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>2024.07</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>AI 기반 개인화 추천형 광고 솔루션 ‘스마트매출업’ 론칭!</p>
+                        </td>
+                        <td>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2024.07</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>롯데온에서 ‘롯데면세점 도쿄 긴자점’ 상품 한 번에 쇼핑!</p>
+                        </td>
+                        <td>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2024.06</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>‘에센스(SSENSE)’ 공식 오픈으로 15만여 개 명품 한 번에 쇼핑!</p>
+                        </td>
+                        <td>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                </svg>
+                            </a>
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2024.06</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>나만의 똑똑한 쇼핑 도우미 ‘샬롯’ 재탄생!</p>
+                        </td>
+                        <td>
+                            <a href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section class="bottom-section">
+        <div>
+            <p>
+                국내 최초의 온라인 종합쇼핑몰로 출발해<br>
+                쇼핑 경험의 변화를 이끌어내고 있어요.
+            </p>
+        </div>
+        <div>
+            <img src="../images/company/company_history.png">
+        </div>
+    </section>
+    <section class="banner-section">
+        <div>
+            <a href="#"><img src="../images/company/company_banner.png"></a>
+        </div>
+    </section>
+
+    <!-- <block insert="~{/company/layout/_footer.html}"/>
+     푸터영역-->
+     <footer>
+        <div>
+            <img src="../images/company/footer_logo.png" alt="로고">
+            <p>
+                대표자 : 홍길동 사업자등록번호 : 123-45-67890 부산광역시 강남구 테헤란로 123 통신판매업 신고번호 : 제2021-부산강남-12345호<br>
+                개인정보보호책임자 : 김춘추 FAX : 02-1234-5678 help@LotteON.com
+            </p>
+        </div>
+    </footer>
+    </div>
+    </body>
+    </html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의하기 목록</title>
+
+    <!--공통 css 부분-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!--각 페이지(section) 개별 css-->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_list.css}"/>
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">문의하기</a>
+            </div>
+            <h3>문의하기 목록</h3>
+            <div class="form">
+                <div id="dropdown" class="table-controls">
+                    <select id="category1">
+                        <option value="1차 유형">1차 유형</option>
+                        <option th:each="cate : ${cate1}"
+                                th:value="${cate.boardCateId}"
+                                th:text="${cate.name}">
+                        </option>
+                    </select>
+
+                    <select name="cate" id="category2" required>
+                        <option value="2차 유형" disabled hidden selected>2차 유형</option>
+                    </select>
+                </div>
+
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 2%">
+                        <col style="width: 7%">
+                        <col style="width: 9%">
+                        <col style="width: 10%">
+                        <col style="width: 29%">
+                        <col style="width: 7%">
+                        <col style="width: 11%">
+                        <col style="width: 10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" class="chkbox-select-all"></th>
+                        <th>번호</th>
+                        <th>1차유형</th>
+                        <th>2차유형</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>상태</th>
+                    </tr>
+                    </thead>
+                    <tbody id="boardListBody">
+                    <tr th:each="board : ${boardList}">
+                        <td><input type="checkbox" class="chkbox" th:data-board-id="${board.boardId}"></td>
+                        <td th:text="${board.rowNumber}"></td>
+                        <td th:text="${board.cate.parent.name}"></td>
+                        <td th:text="${board.cate.name}"></td>
+                        <td class="title">
+                            <a th:href="@{/admin/cs/qna/view/{id}(id=${board.boardId})}" th:text="${board.title}"></a>
+                        </td>
+                        <td th:text="${board.user.uid}">chh**</td>
+                        <td th:text="${board.regDate}">00.00.00</td>
+                        <td class="st1" th:if="${board.state == 1}">답변완료</td>
+                        <td class="st2" th:if="${board.state == 0}">검토중</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="buttons">
+                    <button class="delete-btn" disabled>선택 삭제</button>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn"
+                            th:disabled="${currentPage == 0}"
+                            th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+                        이전
+                    </button>
+                    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+                    <button class="page-btn"
+                            th:disabled="${currentPage + 1 == totalPages}"
+                            th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+                        다음
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const selectAllCheckbox = document.querySelector('.chkbox-select-all');
+        const deleteSelectedButton = document.querySelector('.delete-btn');
+        const boardListBody = document.getElementById('boardListBody');
+        const initialHTML = boardListBody.innerHTML;
+        const category1Select = document.getElementById('category1');
+        const category2Select = document.getElementById('category2');
+
+        selectAllCheckbox.addEventListener('click', function () {
+            document.querySelectorAll('.chkbox').forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            toggleDeleteButtonState();
+        });
+
+        document.querySelectorAll('.chkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', toggleDeleteButtonState);
+        });
+
+        function toggleDeleteButtonState() {
+            const anyChecked = Array.from(document.querySelectorAll('.chkbox')).some(chk => chk.checked);
+            deleteSelectedButton.disabled = !anyChecked;
+        }
+
+        deleteSelectedButton.addEventListener('click', function () {
+            if (confirm('선택한 항목을 삭제하시겠습니까?')) {
+                const selectedBoardIds = Array.from(document.querySelectorAll('.chkbox'))
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.getAttribute('data-board-id'));
+
+                Promise.all(selectedBoardIds.map(boardId => {
+                    return fetch(`/lotteon/admin/cs/board/delete/${boardId}`, {
+                        method: 'DELETE',
+                        headers: {'Content-Type': 'application/json'}
+                    });
+                }))
+                    .then(responses => {
+                        if (responses.every(response => response.ok)) {
+                            alert('선택한 항목이 삭제되었습니다.');
+                            selectedBoardIds.forEach(boardId => {
+                                const row = document.querySelector(`.chkbox[data-board-id="${boardId}"]`).closest('tr');
+                                if (row) row.remove();
+                            });
+                        } else {
+                            alert('일부 항목 삭제에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('선택 삭제 중 오류 발생:', error);
+                        alert('삭제 중 오류가 발생했습니다.');
+                    });
+            }
+        });
+
+        function loadData(category1Id, category2Id) {
+            const selectedCategoryId = category2Id && category2Id !== "2차 유형" ? category2Id : category1Id;
+            if (selectedCategoryId === "1차 유형") {
+                loadInitialData();
+            } else {
+                fetchAndDisplayBoards(selectedCategoryId);
+            }
+        }
+
+        function loadInitialData() {
+            boardListBody.innerHTML = initialHTML;
+        }
+
+        category1Select.addEventListener('change', function () {
+            const parentId = this.value;
+            if (parentId === "1차 유형") {
+                loadInitialData();
+            } else {
+                updateCategory2(parentId);
+                loadData(parentId, "");
+            }
+        });
+
+        category2Select.addEventListener('change', function () {
+            loadData(category1Select.value, this.value);
+        });
+
+        function updateCategory2(parentId) {
+            category2Select.innerHTML = '<option value="2차 유형" disabled hidden selected>2차 유형</option>';
+            fetch(`/lotteon/cs/qna/subcategories/${parentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(subCategory => {
+                        const option = document.createElement('option');
+                        option.value = subCategory.boardCateId;
+                        option.text = subCategory.name;
+                        category2Select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching subcategories:', error));
+        }
+
+        function fetchAndDisplayBoards(cateId, page = 0, size = 8) {
+            fetch(`/lotteon/board/qna/${cateId}?page=${page}&size=${size}`)
+                .then(response => response.json())
+                .then(data => {
+                    boardListBody.innerHTML = '';
+                    // 데이터가 없을 때 메시지 표시
+                    if (data.content.length === 0) {
+                        const row = document.createElement('tr');
+                        const cell = document.createElement('td');
+                        cell.colSpan = 8; // 전체 컬럼을 차지하도록 설정
+                        cell.textContent = "조회할 글이 없습니다.";
+                        cell.classList.add("no-data-message"); // 스타일 추가를 위한 클래스
+                        row.appendChild(cell);
+                        boardListBody.appendChild(row);
+                        return;
+                    }
+
+                    const totalElements = data.totalElements; // 전체 항목 수
+                    data.content.forEach((board, index) => {
+                        const rowNumber = totalElements - (page * size + index); // 역순 번호 계산
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+
+                    <td><input type="checkbox" class="chkbox" data-board-id="${board.boardId}"></td>
+                    <td>${rowNumber}</td>
+                    <td>${board.cate.parent.name}</td>
+                    <td>${board.cate.name}</td>
+                    <td class="title">
+                        <a href="/admin/cs/qna/view/${board.boardId}">${board.title}</a>
+                    </td>
+                    <td>${board.user.uid}</td>
+                    <td>${board.regDate}</td>
+                    <td class="${board.state === 1 ? 'st1' : 'st2'}">
+                        ${board.state === 1 ? '답변완료' : '검토중'}
+                    </td>
+                `;
+                        boardListBody.appendChild(row);
+                    });
+                    updatePagination(data.totalPages, data.number);
+                })
+                .catch(error => console.error('게시물 목록을 가져오는 중 오류 발생:', error));
+        }
+// 카테고리 변경 시 데이터 로드
+        function loadData(category1Id, category2Id, page = 0) { // page 매개변수 추가
+            const selectedCategoryId = category2Id && category2Id !== "2차 유형" ? category2Id : category1Id;
+            if (selectedCategoryId === "1차 유형") {
+                loadInitialData();
+            } else {
+                fetchAndDisplayBoards(selectedCategoryId, page); // page 전달
+            }
+        }
+
+// 페이지네이션 업데이트
+        function updatePagination(totalPages, currentPage) {
+            const paginationDiv = document.querySelector('.pagination');
+            paginationDiv.innerHTML = '';
+
+            const prevButton = document.createElement('button');
+            prevButton.classList.add('page-btn');
+            prevButton.disabled = currentPage === 0;
+            prevButton.onclick = () => loadData(category1Select.value, category2Select.value, currentPage - 1);
+            prevButton.textContent = '이전';
+            paginationDiv.appendChild(prevButton);
+
+            for (let i = 0; i < totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.classList.add('page-num');
+                if (i === currentPage) pageButton.classList.add('active');
+                pageButton.textContent = i + 1;
+                pageButton.onclick = () => loadData(category1Select.value, category2Select.value, i);
+                paginationDiv.appendChild(pageButton);
+            }
+
+            const nextButton = document.createElement('button');
+            nextButton.classList.add('page-btn');
+            nextButton.disabled = currentPage + 1 === totalPages;
+            nextButton.onclick = () => loadData(category1Select.value, category2Select.value, currentPage + 1);
+            nextButton.textContent = '다음';
+            paginationDiv.appendChild(nextButton);
+        }
+    });
+</script>
+</html>

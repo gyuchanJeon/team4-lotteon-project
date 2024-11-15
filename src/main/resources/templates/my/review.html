@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!-- xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.thymeleaf.org/"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="stylesheet" th:href="@{/css/main/common.css}" />
+  <link rel="stylesheet" th:href="@{/css/my/myInfo.css}" />
+</head>
+
+<body>
+  <div id="wrapper">
+
+    <main>
+      <header th:replace="~{/include/my_header.html}"></header>
+      <!--어사이드-->
+      <div th:replace="~{/my/my_aside.html}"></div>
+
+      <section class="myInfo_sec">
+
+        <div th:replace="~{/my/banner.html}"></div>
+
+
+        <!-- 나의리뷰 -->
+        <article class="myInfo_Review myInfo_Article">
+          <div class="myInfo_ArticleTitle"><span>나의리뷰</span></div>
+          <table class="myInfo_ReviewTable myInfo_Table">
+            <colgroup>
+              <col style="width: 6%">
+              <col style="width: 29%">
+              <col style="width: 35%">
+              <col style="width: 15%">
+              <col style="width: 10%">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>상품명</th>
+                <th>내용</th>
+                <th>평점</th>
+                <th>작성일</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 반복 block -->
+              <tr th:each="review , i : ${reviews}">
+                <td>
+                  [[${i.index+1}]]
+                </td>
+                <td>
+                  [[${review.productVariants.product.name}]]
+                </td>
+                <td>
+                  [[${review.content}]]
+                </td>
+                <td>
+                  <th:block th:with="
+                      fullStars=${T(java.lang.Math).floor(review.getRating() / 2)},
+                      halfStar=${review.getRating() % 2 == 1},
+                      emptyStars=${5 - fullStars - (halfStar ? 1 : 0)}">
+
+                    <!-- 전체 별 -->
+                    <th:block th:if="${fullStars > 0}">
+                      <th:block th:each="num : ${#numbers.sequence(1, fullStars)}">
+                        <img th:src="@{/images/review/star.png}" alt="Full Star">
+                      </th:block>
+                    </th:block>
+
+                    <!-- 반 별 -->
+                    <th:block th:if="${halfStar}">
+                      <img th:src="@{/images/review/star_half.png}" alt="Half Star">
+                    </th:block>
+
+                    <!-- 회색 별 -->
+                    <th:block th:if="${emptyStars > 0}">
+                      <th:block th:each="num : ${#numbers.sequence(1, emptyStars)}">
+                        <img th:src="@{/images/review/star_gray.png}" alt="Gray Star">
+                      </th:block>
+                    </th:block>
+
+                  </th:block>
+                </td>
+                <td>[[${#strings.substring(review.regDate, 0, 10)}]]</td>
+              </tr>
+              <!-- 반복 블럭 끝 -->
+
+            </tbody>
+          </table>
+          <div class="pagination">
+            <button class="page-btn"
+                    th:disabled="${currentPage == 0}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage - 1} + '&size=8\''">
+              이전
+            </button>
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <button class="page-num"
+                                th:classappend="${i == currentPage} ? 'active'"
+                                th:onclick="'window.location.href=\'?page=' + ${i} + '&size=8\''"
+                                th:text="${i + 1}">1</button>
+                    </span>
+            <button class="page-btn"
+                    th:disabled="${currentPage + 1 == totalPages}"
+                    th:onclick="'window.location.href=\'?page=' + ${currentPage + 1} + '&size=8\''">
+              다음
+            </button>
+          </div>
+        </article>
+
+      </section>
+    </main>
+  </div>
+  <footer th:replace="~{/include/footer.html}"></footer>
+</body>
+
+</html>

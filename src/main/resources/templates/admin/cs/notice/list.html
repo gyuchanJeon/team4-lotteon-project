@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 목록</title>
+
+    <!-- 공통 css 부분 -->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_common.css}"/>
+    <!-- 각 페이지(section) 개별 css -->
+    <link rel="stylesheet" th:href="@{/css/admin/style_admin_article_list.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<header th:replace="~{/admin/include/header.html}"></header>
+<main>
+    <div id="wrapper">
+        <aside th:replace="~{/admin/include/aside.html}"></aside>
+        <section>
+            <div class="breadcrumb">
+                <a href="#">Home</a> > <a href="#">고객센터</a> > <a href="#" class="location">공지사항</a>
+            </div>
+            <h3>공지사항 목록</h3>
+            <div class="form">
+                <div id="dropdown" class="table-controls">
+                    <!-- 1차 유형 카테고리 (BoardCategory Enum) -->
+                    <select id="category1">
+                        <option th:value="8" th:text="전체">유형</option>
+                        <option th:each="cate : ${cates}"
+                                th:value="${cate.boardCateId}"
+                                th:text="${cate.name}"></option>
+                    </select>
+                </div>
+
+                <table class="inquiry-table">
+                    <colgroup>
+                        <col style="width: 2%">
+                        <col style="width: 6%">
+                        <col style="width: 9%">
+                        <col style="width: 28%">
+                        <col style="width: 7%">
+                        <col style="width: 6%">
+                        <col style="width: 13%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" class="chkbox-select-all"></th>
+                        <th>번호</th>
+                        <th>유형</th>
+                        <th>제목</th>
+                        <th>조회</th>
+                        <th>날짜</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody id="boardListBody">
+
+                    <!-- 데이터가 로드되기 전 이곳은 비어있음 -->
+
+                    </tbody>
+                </table>
+                <div class="buttons">
+                    <button class="delete-btn" disabled>선택 삭제</button>
+                    <a th:href="@{/admin/cs/notice/write}" class="write-btn">작성하기</a>
+                </div>
+                <div class="pagination">
+
+                    <button class="page-btn" id="prevPage" disabled>이전</button>
+                    <span id="pageNumbers"></span>
+                    <button class="page-btn" id="nextPage">다음</button>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="~{/admin/include/footer.html}"></footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const category1Select = document.getElementById('category1');
+        const boardListBody = document.getElementById('boardListBody');
+        const pageNumbers = document.getElementById('pageNumbers');
+        const prevButton = document.getElementById('prevPage');
+        const nextButton = document.getElementById('nextPage');
+        let currentPage = 0;
+        let totalPages = 0;
+
+        function loadBoards(cateId, page = 0, size = 8) {
+            fetch(`/lotteon/board/notice/${cateId}?page=${page}&size=8`)
+                .then(response => response.json())
+                .then(data => {
+                    boardListBody.innerHTML = '';
+                    if (data.content.length === 0) {
+                        const row = document.createElement('tr');
+                        const cell = document.createElement('td');
+                        cell.colSpan = 8; // 전체 컬럼을 차지하도록 설정
+                        cell.textContent = "조회할 글이 없습니다.";
+                        cell.classList.add("no-data-message"); // 스타일 추가를 위한 클래스
+                        row.appendChild(cell);
+                        boardListBody.appendChild(row);
+                        return;
+                    }
+
+                    const totalElements = data.totalElements; // 전체 항목 수
+                    data.content.forEach((board,index) => {
+
+                        const rowNumber = totalElements - (page * size + index); // 역순 번호 계산
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td><input type="checkbox" class="chkbox" data-board-id="${board.boardId}"></td>
+                            <td>${rowNumber}</td>
+                            <td>${board.cate.name}</td>
+                            <td class="title">
+                                <a href="/lotteon/admin/cs/notice/view/${board.boardId}">${board.title}</a>
+                            </td>
+                            <td>${board.user.uid}</td>
+                            <td>${board.regDate}</td>
+                            <td>
+                                <a href="/lotteon/admin/cs/notice/modify/${board.boardId}" class="edit-btn">수정</a>
+                                <button class="deletebtn" data-board-id="${board.boardId}">삭제</button>
+                            </td>
+                        `;
+                        boardListBody.appendChild(row);
+                    });
+                    totalPages = data.totalPages;
+                    updatePagination(page);
+                })
+                .catch(error => console.error('게시물 목록을 가져오는 중 오류 발생:', error));
+        }
+
+        function updatePagination(currentPage) {
+            pageNumbers.innerHTML = '';
+            prevButton.disabled = currentPage === 0;
+            nextButton.disabled = currentPage + 1 === totalPages;
+
+            // 이전 페이지 버튼 클릭 이벤트
+            prevButton.onclick = () => {
+                loadBoards(category1Select.value, currentPage - 1);
+            };
+
+            // 다음 페이지 버튼 클릭 이벤트
+            nextButton.onclick = () => {
+                loadBoards(category1Select.value, currentPage + 1);
+            };
+
+            // 페이지 번호 버튼 생성
+            for (let i = 0; i < totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.classList.add('page-num');
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.textContent = i + 1;
+                pageButton.onclick = () => loadBoards(category1Select.value, i);
+                pageNumbers.appendChild(pageButton);
+            }
+        }
+
+        // 페이지 로드 시 초기 데이터 로드
+        loadBoards(category1Select.value);
+
+        // 카테고리 변경 시 데이터 로드
+        category1Select.addEventListener('change', function() {
+            loadBoards(this.value);
+        });
+
+        // 선택 삭제 버튼 상태 업데이트
+        const selectAllCheckbox = document.querySelector('.chkbox-select-all');
+        const individualCheckboxes = document.querySelectorAll('.chkbox');
+        const deleteSelectedButton = document.querySelector('.delete-btn');
+
+        selectAllCheckbox.addEventListener('click', function() {
+            individualCheckboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            toggleDeleteButtonState();
+        });
+
+        individualCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', toggleDeleteButtonState);
+        });
+
+        function toggleDeleteButtonState() {
+            const anyChecked = Array.from(individualCheckboxes).some(chk => chk.checked);
+            deleteSelectedButton.disabled = !anyChecked;
+        }
+
+        deleteSelectedButton.addEventListener('click', function() {
+            if (confirm('선택한 항목을 삭제하시겠습니까?')) {
+                const selectedBoardIds = Array.from(individualCheckboxes)
+                    .filter(checkbox => checkbox.checked)
+                    .map(checkbox => checkbox.getAttribute('data-board-id'));
+
+                Promise.all(selectedBoardIds.map(boardId => {
+                    return fetch(`/lotteon/admin/cs/board/delete/${boardId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                }))
+                    .then(responses => {
+                        if (responses.every(response => response.ok)) {
+                            alert('선택한 항목이 삭제되었습니다.');
+                            selectedBoardIds.forEach(boardId => {
+                                const row = document.querySelector(`.chkbox[data-board-id="${boardId}"]`).closest('tr');
+                                row.remove();
+                            });
+                        } else {
+                            alert('일부 항목 삭제에 실패했습니다.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('선택 삭제 중 오류 발생:', error);
+                        alert('삭제 중 오류가 발생했습니다.');
+                    });
+            }
+        });
+
+        document.querySelectorAll('.deletebtn').forEach(button => {
+            button.addEventListener('click', function() {
+                const boardId = this.getAttribute('data-board-id');
+                if (confirm('이 게시물을 삭제하시겠습니까?')) {
+                    fetch(`/lotteon/admin/cs/board/delete/${boardId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                alert('게시물이 성공적으로 삭제되었습니다.');
+                                this.closest('tr').remove();
+                            } else {
+                                alert('게시물 삭제에 실패했습니다.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('삭제 중 오류 발생:', error);
+                            alert('삭제 중 오류가 발생했습니다.');
+                        });
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

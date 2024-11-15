@@ -1,0 +1,323 @@
+/* 초기화 */
+* {
+  margin: 0;
+  padding: 0;
+  font: normal 12px "Noto Sans CJK KR";
+}
+
+ul,
+ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #111;
+}
+input,
+textarea {
+  outline: none;
+}
+
+body{
+  overflow: auto;
+  height: 100%;
+}
+
+.logoArea {
+  margin-top: 29px;
+
+}
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: auto;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.login-container {
+  height: auto;
+  padding: 1px;
+  border-radius: 10px;
+  width: 777px;
+}
+
+.login-container2{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  width: 1000px;
+}
+
+.titlogin {
+  width: 607px;
+  text-align: center;
+  /* 텍스트를 가운데 정렬 */
+  margin : 0 auto;
+  padding-bottom: 11px;
+}
+.tit {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.login-form, .banner-section {
+  height: auto; /* 자식 요소에 고정된 높이 대신 자동 높이를 설정 */
+}
+
+.login-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 19px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #dfdfdf;
+  width: 100%;
+}
+
+
+.login-form {
+  display: flex;
+  width: 55%;
+  padding: 13px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  height: auto;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.login-input {
+  display: flex;
+  width: 92%;
+  padding: 10px;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  flex-direction: column;
+
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 9px;
+  margin-top: 9px;
+}
+
+.input-group input {
+
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  float: right;
+  width: 316px;
+  height: 50px;
+  padding: 0 16px;
+  background-color: #f5f5f5;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.loginbtn {
+  height: 58px;
+  width: 329px;
+  border: none;
+  line-height: 60px;  /* 버튼 텍스트의 세로 중앙 정렬 */
+  margin-top: 9px;
+  color: #fbf2ff;
+  background-color: #ef2a23;
+  border-radius: 10px;
+text-align: center;
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.options {
+  margin-top: 13px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  width: 384px;
+  margin-left: 11px;
+  margin-bottom: 30px;
+}
+
+.options span {
+  margin: 0 5px;
+  color: #888;
+}
+
+.options a {
+  text-decoration: none;
+  color: darkgray;
+}
+
+.banner-section {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  background-size: contain;
+  margin-top: 15px;
+  width: 1200px;
+}
+
+.banner-section img {
+  max-width: 100%;
+  height: auto;
+}
+
+.certifi_logo {
+
+  width: 732px;
+  height: 63px;
+  margin: 0 auto;
+  margin-top : 40px;
+}
+
+.certifi_logo img {
+  width: 100%;
+  height: auto;
+}
+
+.sociallogin_section{
+  display: flex;
+  justify-content: center;
+  width: 511px;
+  height: 72px;
+  flex-direction: row;
+  margin: 10px auto;
+  flex-wrap: wrap;
+}
+
+.kakao_login > img{
+  width: 53px;
+  height: 53px;
+  border: none;
+  background-size: 100% 100%;
+  margin: 10px 20px;
+  border-radius: 24px;
+  cursor: pointer;
+}
+.naver_login > img{
+  width: 53px;
+  height: 53px;
+  border: none;
+  background-size: 100% 100%;
+  margin: 10px 20px;
+  cursor: pointer;
+  border-radius: 27px;
+}
+.google_login > img{
+  width: 53px;
+  height: 53px;
+  border: none;
+  background-size: 100% 100%;
+  margin: 10px 20px;
+  cursor: pointer;
+}
+
+.social {
+  margin: 20px;
+  text-align: center;
+}
+
+.tit2 {
+  font-size: 17px;
+}
+
+.login_text {
+  text-align: center;
+}
+
+.tit3{
+  margin: 0 16px;
+}
+
+.tit4{
+  margin: 0px 36px;
+}
+
+.tit5{
+  margin: 0 22px;
+}
+
+footer {
+  width: 100%;
+  height: 192px;
+  background: #f8f8f8;
+  border-top: 1px solid #e9e9e9;
+  box-sizing: border-box;
+  float: right;
+}
+footer > ul {
+  width: 1200px;
+  height: 39px;
+  margin: 0 auto;
+  padding: 15px 0;
+  border-bottom: 1px solid #e9e9e9;
+  box-sizing: border-box;
+  text-align: center;
+}
+footer > ul > li {
+  display: inline-block;
+  font-weight: bold;
+  border-right: 1px solid #d7d7d7;
+  padding: 0 10px;
+}
+footer > ul > li:first-child {
+  border-left: 1px solid #d7d7d7;
+}
+
+footer > div {
+  width: 1200px;
+  height: auto;
+  padding-top: 20px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+footer p {
+  float: left;
+  height: 100%;
+  font-size: 11px;
+  line-height: 15px;
+  color: #676767;
+}
+footer p:nth-of-type(2) {
+  width: 300px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+footer p > strong {
+  display: inline-block;
+  padding: 6px 15px 7px 0;
+  color: #464646;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* 오른쪽 하단 상단 이동버튼 */
+#top {
+  position: fixed;
+  left: 50%;
+  bottom: 10px;
+  margin-left: 600px;
+  /* display: none; */
+  width: 42px;
+  height: 42px;
+  background-image: url("../../../templates/images/top.png");
+  border: none;
+  font-size: 0;
+  cursor: pointer;
+}
+
+.auto-login {
+  margin-right: 3px;
+}

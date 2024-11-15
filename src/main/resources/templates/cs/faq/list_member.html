@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>공지사항 목록</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}">
+  <link rel="stylesheet" th:href="@{/css/cs/cs_common.css}"/>
+  <link rel="stylesheet" th:href="@{/css/cs/faq_list.css}"/>
+</head>
+<body>
+<header th:replace="~{/include/header.html}"></header>
+
+
+<main>
+  <th:block th:replace="~{/cs/aside/aside_faq.html}"></th:block>
+
+    <div class="faq-Table">
+      <div class="thead">가입</div>
+      <table>
+        <!-- th:each 기본 3개 출력 / 더보기 시 10개 -->
+        <tr class="faq">
+          <td><a th:href="@{/cs/faq/view}"><img class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+        </tr>
+        <tr class="faq">
+          <td><a th:href="@{/cs/faq/view}"><img class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+        </tr>
+        <tr class="faq">
+          <td><a th:href="@{/cs/faq/view}"><img class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+        </tr>
+        <tr class="last-Tr">
+          <td class="showMoreOrLess">
+            <button id="showLess">간단히보기</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="faq-Table">
+      <div class="thead">탈퇴</div>
+      <table>
+        <tr class="faq">
+          <td><a th:href="@{/cs/faq/view}"><img  class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+        </tr>
+        <tr class="faq">
+          <td><a th:href="@{/cs/faq/view}"><img  class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+        </tr>
+        <tr class="faq">
+          <td><a th:href="@{/cs/faq/view}"><img  class="qimage" th:src="@{/images/cs/Q.png}" alt="Q">개인회원과 법인회원에 차이가 있나요 ?</a></td>
+        </tr>
+        <tr class="last-Tr">
+          <td class="showMoreOrLess">
+            <button id="showMore">더보기</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </section>
+</main>
+<footer th:replace="~{/include/footer.html}"></footer>
+</body>
+</html>

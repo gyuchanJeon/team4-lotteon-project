@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" th:href="@{/css/member/register.css}" />
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<header th:replace="~{/include/mem_header.html}"></header>
+<body>
+    <main>
+        <div>
+            <h2 class="titregister">
+                <span class="tit">회원가입</span>
+            </h2>
+        </div>
+        <div class="main-wrapper">
+
+            <div class="main-box">
+                <section class="register">
+                    <form th:action="@{/member/register}" method="post">
+                        <table border="1">
+
+                            <input type="hidden" name="role" value="member" />
+                            <tr>
+                                <td>아이디</td>
+                                <td>
+                                    <input type="text" name="uid" class="inputUid" placeholder="아이디 입력" required/> <button type="button" id="btnCheckUid" data-type="uid" class="register-btns">중복확인</button>
+                                    <span class="option"> 영문, 숫자 4~12자 설정</span>
+                                    <span class="resultId desc" id="resultUid"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호</td>
+                                <td>
+                                    <input type="password" name="pass" class="inputPass" placeholder="비밀번호 입력"/>  <span class="option"> 영문, 숫자, 특수문자 8~12자 설정</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>비밀번호 확인</td>
+                                <td>
+                                    <input type="password" name="pass2" class="inputPass" placeholder="비밀번호 확인 입력"/>
+                                    <span class="resultPass desc" id="resultPass"></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table border="1">
+                            <tr>
+                                <td>이름</td>
+                                <td>
+                                    <input type="text" name="memberInfo.name" placeholder="이름 입력"/>
+                                    <span class="resultName"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>성별</td>
+                                <td>
+                                    <div class="gender-selection">
+                                        <label>
+                                            <input type="radio" name="memberInfo.gender" value="0" checked>남
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="memberInfo.gender" value="1">여
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>이메일</td>
+                                <td>
+                                    <input type="email" name="memberInfo.email" class="inputEmail" placeholder="이메일 입력"/>
+                                    <button type="button" id="btnCheckEmail" data-type="uid" class="register-btns">이메일 인증</button>
+                                    <div class="auth" style="display:none">
+                                        <input type="text" name="auth" class="inputEmailCode" placeholder="인증번호 입력"/>
+                                        <button type="button" id="btnCheckEmailCode" class="register-btns">확인</button>
+                                    </div>
+                                    <span id="resultEmail" class="resultEmail desc"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>휴대폰</td>
+                                <td>
+                                    <input type="text" name="memberInfo.hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" class="inputHp" />
+                                    <button type="button" id="btnCheckHp" data-type="uid" class="register-btns">휴대폰 인증</button>
+                                    <span id="resultHp" class="resultHp desc"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>주소</td>
+                                <td>
+                                    <div>
+                                        <input type="text" name="memberInfo.address.zipCode" id="zip" placeholder="우편번호 검색 클릭" class="addr" readonly/>
+                                    </div>
+                                    <div>
+                                        <input type="text" name="memberInfo.address.addr1" id="addr1" placeholder="기본주소 검색" class="addr" readonly/>
+                                    </div>
+                                    <div>
+                                        <input type="text" name="memberInfo.address.addr2" id="addr2" placeholder="상세주소 입력"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                <div class="registerButton">
+                    <input type="submit" value="회원가입" class="regBtn"/>
+                </div>
+            </form>
+            </section>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{/include/footer.html}">
+    </footer>
+</body>
+
+<th:block layout:fragment="script">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        //유효성 검사에 사용할 상태변수
+        let isUidOk   = false;
+        let isPassOk  = false;
+        let isNameOk  = false;
+        let isNickOk  = false;
+        let isEmailOk = false;
+        let isHpOk    = false;
+
+        // 유효성 검사에 사용할 정규표현식
+        const reUid   = /^[a-z]+[a-z0-9]{4,19}$/g;
+        const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
+        const reName  = /^[가-힣]{2,10}$/
+        const reNick  = /^[a-zA-Zㄱ-힣0-9][a-zA-Zㄱ-힣0-9]*$/;
+        const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Helper functions
+            async function fetchGet(url) {
+                try {
+                    const response = await fetch(url);
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    return { result: 0 };
+                }
+            }
+
+            async function fetchPost(url, data) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    return { result: 0 };
+                }
+            }
+
+            function showResultInvalid(element, message) {
+                element.textContent = message;
+                element.style.color = 'red';
+                element.style.display = 'block';
+            }
+
+            function showResultValid(element, message) {
+                element.textContent = message;
+                element.style.color = 'green';
+                element.style.display = 'block';
+            }
+
+            // UID 중복 확인 기능
+            const btnCheckUid = document.getElementById('btnCheckUid');
+            const inputUid = document.querySelector('.inputUid');
+            const resultUid = document.getElementById('resultUid');
+
+            btnCheckUid.addEventListener('click', async function () {
+                const uidValue = inputUid.value.trim();
+                if (!uidValue.match(/^[a-z]+[a-z0-9]{4,19}$/g)) {
+                    showResultInvalid(resultUid, '아이디 형식이 맞지 않습니다.');
+                    return;
+                }
+
+                const data = await fetchGet(`/lotteon/member/uid/${uidValue}`);
+                if (data.result > 0) {
+                    showResultInvalid(resultUid, '이미 사용 중인 아이디입니다.');
+                } else {
+                    showResultValid(resultUid, '사용 가능한 아이디입니다.');
+                }
+            });
+
+            // 비밀번호 확인 기능
+            const inputPasses = document.getElementsByClassName('inputPass');
+            const resultPass = document.getElementById('resultPass');
+
+            if (inputPasses.length > 1) {
+                inputPasses[1].addEventListener('focusout', () => {
+                    if (inputPasses[0].value === inputPasses[1].value) {
+                        if (!inputPasses[0].value.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/)) {
+                            showResultInvalid(resultPass, '비밀번호 형식에 맞지 않습니다.');
+                        } else {
+                            showResultValid(resultPass, '사용 가능한 비밀번호입니다.');
+                        }
+                    } else {
+                        showResultInvalid(resultPass, '비밀번호가 일치하지 않습니다.');
+                    }
+                });
+            }
+
+            // 우편번호 검색 기능
+            document.getElementById('zip').onclick = function () {
+                new daum.Postcode({
+                    oncomplete: function (data) {
+                        document.getElementById('zip').value = data.zonecode;
+                        document.getElementById('addr1').value = data.roadAddress || data.jibunAddress;
+                        document.getElementById('addr2').focus();
+                    }
+                }).open();
+            };
+
+            // Email verification
+            const btnCheckEmail = document.getElementById('btnCheckEmail');
+            const inputEmail = document.querySelector('.inputEmail');
+            const resultEmail = document.getElementById('resultEmail');
+            const authDiv = document.querySelector('.auth');
+
+            btnCheckEmail.addEventListener('click', async function () {
+                const emailValue = inputEmail.value.trim();
+
+                if (!emailValue.match(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i)) {
+                    showResultInvalid(resultEmail, '이메일 형식이 맞지 않습니다.');
+                    return;
+                }
+
+                const data = await fetchGet(`/lotteon/member/email/${emailValue}`);
+
+                if (data.result > 0) {
+                    showResultInvalid(resultEmail, '이미 사용 중인 이메일입니다.');
+                } else {
+                    showResultValid(resultEmail, '인증코드가 발송되었습니다.');
+                    authDiv.style.display = 'block';
+                }
+            });
+
+            // Check email verification code
+            const btnCheckEmailCode = document.getElementById('btnCheckEmailCode');
+            const inputEmailCode = document.querySelector('.inputEmailCode');
+
+            btnCheckEmailCode.addEventListener('click', async function () {
+                const code = inputEmailCode.value.trim();
+
+                if (!code) {
+                    showResultInvalid(resultEmail, '인증코드를 입력해주세요.');
+                    return;
+                }
+
+                const data = await fetchPost('/lotteon/member/email', { code });
+
+                if (data.result) {
+                    showResultValid(resultEmail, '이메일이 인증되었습니다.');
+                } else {
+                    showResultInvalid(resultEmail, '인증코드가 일치하지 않습니다.');
+                }
+            });
+
+            // 휴대폰 중복 확인 기능
+            const btnCheckHp = document.getElementById('btnCheckHp');
+            const inputHp = document.querySelector('.inputHp');
+            const resultHp = document.getElementById('resultHp');
+
+            // 휴대폰 유효성 검사 정규식
+            const reHp = /^01(?:0|1|[6-9])-(?:\d{3,4})-\d{4}$/;
+
+            btnCheckHp.addEventListener('click', async function () {
+                const hpValue = inputHp.value.trim();
+
+                if (!reHp.test(hpValue)) {
+                    showResultInvalid(resultHp, '휴대폰 형식이 맞지 않습니다.');
+                    return;
+                }
+
+                const data = await fetchGet(`/lotteon/member/hp/${hpValue}`);
+
+                if (data.result > 0) {
+                    showResultInvalid(resultHp, '이미 사용중인 휴대폰 입니다.');
+                } else {
+                    showResultValid(resultHp, '사용 가능한 휴대폰 입니다.');
+                }
+            });
+
+        });
+    </script>
+</th:block>
+</html>
